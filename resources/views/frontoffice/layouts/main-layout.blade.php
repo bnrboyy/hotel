@@ -34,13 +34,13 @@
                         <a class="nav-link active me-2 fs-6" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-2 fs-6" href="#">ห้องพัก</a>
+                        <a class="nav-link me-2 fs-6" href="{{ route('rooms') }}">ห้องพัก</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link me-2 fs-6" href="{{ route('facilities') }}">สิ่งอำนวยความสะดวก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-2 fs-6" href="#">ติดต่อเรา</a>
+                        <a class="nav-link me-2 fs-6" href="{{ route('contactus') }}">ติดต่อเรา</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link me-2 fs-6" href="{{ route('about') }}">เกี่ยวกับเรา</a>

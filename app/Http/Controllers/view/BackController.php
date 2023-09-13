@@ -7,5 +7,7 @@ use Illuminate\Http\Request;
 
 class BackController extends Controller
 {
-    //
+    public function loginPage() {
+        return view('backoffice.login');
+    }
 }

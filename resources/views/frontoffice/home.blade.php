@@ -276,7 +276,7 @@
         <div class="swiper swiper-testimonials">
             <div class="swiper-wrapper">
                 <div class="swiper-slide bg-white p-4">
-                    <div class="profile d-flex align-ltems-center mb-3 align-items-center">
+                    <div class="profile d-flex align-ltems-center mb-3 align-items-center mb-3">
                         <i class="bi bi-star-fill fs-3"></i>
                         <h5 class="m-0 ms-2">Random User1</h5>
                     </div>
@@ -293,7 +293,41 @@
                     </div>
                 </div>
                 <div class="swiper-slide bg-white p-4">
-                    <div class="profile d-flex align-ltems-center mb-3 align-items-center">
+                    <div class="profile d-flex align-ltems-center mb-3 align-items-center mb-3">
+                        <i class="bi bi-star-fill fs-3"></i>
+                        <h5 class="m-0 ms-2">Random User2</h5>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Rem aut temporibus quisquam autem mollitia reiciendis esse iste,
+                        earum nisi velit?
+                    </p>
+                    <div class="rating">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-half text-warning"></i>
+                    </div>
+                </div>
+                <div class="swiper-slide bg-white p-4">
+                    <div class="profile d-flex align-ltems-center mb-3 align-items-center mb-3">
+                        <i class="bi bi-star-fill fs-3"></i>
+                        <h5 class="m-0 ms-2">Random User3</h5>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Rem aut temporibus quisquam autem mollitia reiciendis esse iste,
+                        earum nisi velit?
+                    </p>
+                    <div class="rating">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-half text-warning"></i>
+                    </div>
+                </div>
+                <div class="swiper-slide bg-white p-4">
+                    <div class="profile d-flex align-ltems-center mb-3 align-items-center mb-3">
                         <i class="bi bi-star-fill fs-3"></i>
                         <h5 class="m-0 ms-2">Random User1</h5>
                     </div>
@@ -310,7 +344,7 @@
                     </div>
                 </div>
                 <div class="swiper-slide bg-white p-4">
-                    <div class="profile d-flex align-ltems-center mb-3 align-items-center">
+                    <div class="profile d-flex align-ltems-center mb-3 align-items-center mb-3">
                         <i class="bi bi-star-fill fs-3"></i>
                         <h5 class="m-0 ms-2">Random User1</h5>
                     </div>
@@ -400,6 +434,7 @@
             centeredSlides: true,
             slidesPerView: "auto",
             slidesPerView: 3,
+            loop:true,
             coverflowEffect: {
                 rotate: 50,
                 stretch: 0,

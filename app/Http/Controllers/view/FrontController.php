@@ -18,4 +18,12 @@ class FrontController extends Controller
     public function aboutPage(Request $request) {
         return view('frontoffice.about');
     }
+
+    public function contactPage(Request $request) {
+        return view('frontoffice.contactus');
+    }
+
+    public function roomPage(Request $request) {
+        return view('frontoffice.rooms');
+    }
 }

@@ -1,14 +1,3 @@
-:root {
-    --teal: #2ec1aC;
-    --teal_hover: #279e8c;
-}
-
-.h-line {
-    width: 150px;
-    margin: 0 auto;
-    height: 1.7px;
-}
-
 .pop {
     cursor: pointer;
 }
