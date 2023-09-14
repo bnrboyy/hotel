@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* views */
+
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 Route::get('/facilities', [FrontController::class, 'facilitiesPage'])->name('facilities');
 Route::get('/about', [FrontController::class, 'aboutPage'])->name('about');
@@ -28,20 +29,26 @@ Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
 
 /* Route middleware users */
 Route::middleware('auth:web')->group(function () {
-
 });
 
 
 Route::prefix('admin')->group(function () {
     /* Views */
-    Route::get('/', [BackController::class, 'loginPage'])->name('admin-login');
+    // Route::get('/', [BackController::class, 'loginPage'])->name('login');
+    Route::get('/', [BackController::class, 'adminPage'])->name('admin-login');
 
     /* Controllers */
-    Route::get('/signin', [AdminController::class, 'signIn'])->name('signin');
+    Route::post('/signin', [AdminController::class, 'signIn']);
+    Route::post('/register', [AdminController::class, 'register']);
 
 
     /* Route middleware admin */
-    Route::middleware('auth:admin')->group(function () {
+    Route::middleware('auth-admin:admin')->group(function () {
+        /* Views */
+        // Route::get('/dashboard', [BackController::class, 'dashboardPage'])->name('dashboard');
 
+        /* Controllers */
+        Route::get('/logout', [AdminController::class, 'onLogout']);
+        Route::get('/managerooms', [BackController::class, 'managerooms'])->name('managerooms');
     });
 });
