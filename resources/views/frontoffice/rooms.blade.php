@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="my-5 px-4">
-        <h1 class="fw-bold h-font text-center">OUR ROOMS</h1>
+        <h1 class="fw-bold text-center">OUR ROOMS</h1>
         <div class="h-line bg-dark"></div>
     </div>
 

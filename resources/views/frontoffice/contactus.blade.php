@@ -7,7 +7,7 @@
 @section('content')
     <div class="head-title">
         <div class="my-5 px-4">
-            <h1 class="fw-bold h-font text-center">CONTACT US</h1>
+            <h1 class="fw-bold text-center">CONTACT US</h1>
             <div class="h-line bg-dark"></div>
             <p class="text-center mt-3">
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.

@@ -7,7 +7,7 @@
 @section('content')
     <div class="head-title">
         <div class="my-5 px-4">
-            <h1 class="fw-bold h-font text-center">ABOUT US</h1>
+            <h1 class="fw-bold text-center">ABOUT US</h1>
             <div class="h-line bg-dark"></div>
             <p class="text-center mt-3">
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <h2 class="my-5 fw-bold h-font text-center">MANAGEMENT TEAM</h2>
+    <h2 class="my-5 fw-bold text-center">MANAGEMENT TEAM</h2>
     <div class="container px-4  py-4">
         <div class="swiper manage-swiper">
             <div class="swiper-wrapper">

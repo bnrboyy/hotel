@@ -22,7 +22,7 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-2 shadow-sm sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand me-5 fw-bold fs-2 h-font" href="{{ route('home') }}">Hotel Booking</a>
+            <a class="navbar-brand me-5 fw-bold fs-2" href="{{ route('home') }}">Hotel Booking</a>
             <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -175,7 +175,7 @@
     <footer class="footer-container bg-white mt-auto">
         <div class="row">
             <div class="col-lg-4 p-4">
-                <h1 class="h-font fw-bold fs-2 mb-2">Hotel Booking</h1>
+                <h1 class="fw-bold fs-2 mb-2">Hotel Booking</h1>
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Sunt aspernatur enim magnam tenetur optio adipisci consequuntur non odio,

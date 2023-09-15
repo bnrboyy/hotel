@@ -76,7 +76,7 @@
     </div>
 
     <!-- UR ROOMS -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">OUR ROOMS</h2>
 
     <div class="container">
         <div class="row">
@@ -238,7 +238,7 @@
     </div>
 
     <!-- FACILITIES -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR FACILITIES</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">OUR FACILITIES</h2>
 
     <div class="container">
         <div class="row justify-content-evenly px-lg-0 px-md-0 px-5">
@@ -270,7 +270,7 @@
     </div>
 
     <!-- Testimonials -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">TESTTIMONIALS</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">TESTTIMONIALS</h2>
 
     <div class="container">
         <div class="swiper swiper-testimonials">
@@ -366,7 +366,7 @@
     </div>
 
     <!-- REACH US -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REACH US</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">REACH US</h2>
 
     <div class="container">
         <div class="row">
