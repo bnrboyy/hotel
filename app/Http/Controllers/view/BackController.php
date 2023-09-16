@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\view;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,11 +14,33 @@ class BackController extends Controller
         $page = $request->page;
         $user = Auth::guard('admin')->user();
 
+        $site_settings = Settings::where(['id' => 1])->get()->first();
+
         if ($user) {
-            return view('backoffice.dashboard');
+
+            switch($page) {
+                case 'settings':
+                    return view('backoffice.settings', ['site' => $site_settings]);
+                    break;
+
+                case 'rooms':
+                    return view('backoffice.rooms');
+                    break;
+
+                case 'users':
+                    return view('backoffice.users');
+                    break;
+
+                default:
+                    return view('backoffice.dashboard');
+                    break;
+
+
+            }
+        } else {
+            return view('backoffice.login');
         }
 
-        return view('backoffice.login');
     }
 
     public function dashboardPage(Request $request)

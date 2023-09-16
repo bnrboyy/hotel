@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    <h2 class="fs-5">Dashboard</h2>
+    <h2 class="fs-5">Users</h2>
     <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. At fuga quidem ut beatae porro! Mollitia
         repellat magnam animi fuga ipsum vitae cupiditate qui repudiandae rem architecto porro, maiores
@@ -18,6 +18,5 @@
 @endsection
 
 @section('script')
-    <script>
-    </script>
+
 @endsection

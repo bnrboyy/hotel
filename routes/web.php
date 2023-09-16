@@ -49,6 +49,14 @@ Route::prefix('admin')->group(function () {
 
         /* Controllers */
         Route::get('/logout', [AdminController::class, 'onLogout']);
-        Route::get('/managerooms', [BackController::class, 'managerooms'])->name('managerooms');
+        Route::post('/updatesite', [AdminController::class, 'onUpdateSite']);
+        Route::post('/updateshutdown', [AdminController::class, 'onUpdateShutdown']);
+
+
+
+
+
+
+        // Route::get('/managerooms', [BackController::class, 'managerooms'])->name('managerooms');
     });
 });
