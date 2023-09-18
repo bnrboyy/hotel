@@ -50,6 +50,16 @@ input[type=number] {
     transition: .5s;
 }
 
+.main-container {
+    height: 100vh !important;
+    overflow: hidden;
+}
+
+.dashboard-content {
+    height: 100vh !important;
+    padding-bottom: 4rem !important;
+    overflow: auto;
+}
 
 
 

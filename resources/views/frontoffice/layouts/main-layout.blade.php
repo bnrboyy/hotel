@@ -21,7 +21,7 @@
 
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-2 shadow-sm sticky-top">
-        <div class="container-fluid">
+        <div class="nav-container container-fluid">
             <a class="navbar-brand me-5 fw-bold fs-2" href="{{ route('home') }}">Hotel Booking</a>
             <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -31,19 +31,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active me-2 fs-6" aria-current="page" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link me-2 fs-6" data-slug="/" aria-current="page" href="{{ route('home') }}">หน้าหลัก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-2 fs-6" href="{{ route('rooms') }}">ห้องพัก</a>
+                        <a class="nav-link me-2 fs-6" data-slug="/rooms" href="{{ route('rooms') }}">ห้องพัก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-2 fs-6" href="{{ route('facilities') }}">สิ่งอำนวยความสะดวก</a>
+                        <a class="nav-link me-2 fs-6" data-slug="/facilities" href="{{ route('facilities') }}">สิ่งอำนวยความสะดวก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-2 fs-6" href="{{ route('contactus') }}">ติดต่อเรา</a>
+                        <a class="nav-link me-2 fs-6" data-slug="/contactus" href="{{ route('contactus') }}">ติดต่อเรา</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-2 fs-6" href="{{ route('about') }}">เกี่ยวกับเรา</a>
+                        <a class="nav-link me-2 fs-6" data-slug="/about" href="{{ route('about') }}">เกี่ยวกับเรา</a>
                     </li>
                 </ul>
                 <div class="d-flex">
@@ -175,32 +175,30 @@
     <footer class="footer-container bg-white mt-auto">
         <div class="row">
             <div class="col-lg-4 p-4">
-                <h1 class="fw-bold fs-2 mb-2">Hotel Booking</h1>
+                <h1 class="fw-bold fs-2 mb-2">{{ $shareSite->site_title }}</h1>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Sunt aspernatur enim magnam tenetur optio adipisci consequuntur non odio,
-                    explicabo laboriosam.
+                    {{ $shareSite->site_about }}
                 </p>
             </div>
             <div class="col-lg-4 p-4">
-                <h4 class="mb-3">Links</h4>
+                <h4 class="mb-3">หน้า</h4>
                 <div class="d-flex flex-column">
-                    <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a>
-                    <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Rooms</a>
-                    <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Facilities</a>
-                    <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Contact Us</a>
-                    <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">About</a>
+                    <a href="{{ route('home') }}" class="d-inline-block mb-2 text-dark text-decoration-none">หน้าหลัก</a>
+                    <a href="{{ route('rooms') }}" class="d-inline-block mb-2 text-dark text-decoration-none">ห้องพัก</a>
+                    <a href="{{ route('facilities') }}" class="d-inline-block mb-2 text-dark text-decoration-none">สิ่งอำนวยความสะดวก</a>
+                    <a href="{{ route('contactus') }}" class="d-inline-block mb-2 text-dark text-decoration-none">ติดต่อเรา</a>
+                    <a href="{{ route('about') }}" class="d-inline-block mb-2 text-dark text-decoration-none">เกี่ยวกับเรา</a>
                 </div>
             </div>
             <div class="col-lg-4 p-4">
-                <h4 class="mb-3">Follow Us</h4>
-                <a href="" class="d-inline-block mb-2 text-dark text-decoration-none mb-2">
+                <h4 class="mb-3">ติดตามเรา</h4>
+                <a href="{{ $shareContact->line }}" target="_blank" class="d-inline-block mb-2 text-dark text-decoration-none mb-2">
                     <i class="bi bi-line me-1"></i> Line
                 </a><br>
-                <a href="" class="d-inline-block mb-2 text-dark text-decoration-none mb-2">
+                <a href="{{ $shareContact->fb }}" target="_blank" class="d-inline-block mb-2 text-dark text-decoration-none mb-2">
                     <i class="bi bi-facebook me-1"></i> Facebook
                 </a><br>
-                <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">
+                <a href="{{ $shareContact->ig }}" target="_blank" class="d-inline-block mb-2 text-dark text-decoration-none">
                     <i class="bi bi-instagram me-1"></i> Instagram
                 </a><br>
             </div>
@@ -212,6 +210,8 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <script src="/js/frontoffice/main-layout.js"></script>
 
     @yield('scripts')
 </body>

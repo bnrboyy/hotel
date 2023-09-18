@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backoffice\AdminController;
+use App\Http\Controllers\backoffice\SettingController;
 use App\Http\Controllers\view\BackController;
 use App\Http\Controllers\view\FrontController;
 use Illuminate\Support\Facades\Route;
@@ -49,9 +50,11 @@ Route::prefix('admin')->group(function () {
 
         /* Controllers */
         Route::get('/logout', [AdminController::class, 'onLogout']);
-        Route::post('/updatesite', [AdminController::class, 'onUpdateSite']);
-        Route::post('/updateshutdown', [AdminController::class, 'onUpdateShutdown']);
+        Route::post('/updatesite', [SettingController::class, 'onUpdateSite']);
+        Route::post('/updateshutdown', [SettingController::class, 'onUpdateShutdown']);
+        Route::post('/updatecontact', [SettingController::class, 'onUpdateContact']);
 
+        Route::get('/getcontact', [SettingController::class, 'getContact']);
 
 
 

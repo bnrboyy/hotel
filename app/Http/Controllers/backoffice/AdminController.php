@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\backoffice;
 
 use App\Http\Controllers\Controller;
-use App\Models\Settings;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,75 +64,4 @@ class AdminController extends Controller
         }
     }
 
-    public function onUpdateSite(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'site_title' => 'required',
-            'site_about' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendErrorValidators('Invalid params', $validator->errors());
-        }
-
-        try {
-            DB::beginTransaction();
-
-            Settings::where(['id' => $request->site_id])->update([
-                'site_title' => $request->site_title,
-                'site_about' => $request->site_about,
-            ]);
-
-            DB::commit();
-            return response([
-                'message' => 'ok',
-                'status' => true,
-                'description' => 'Site has been updated successfully.'
-            ], 200);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response([
-                'message' => 'error',
-                'status' => false,
-                'errorMessage' => $e->getMessage()
-            ], 500);
-        }
-
-    }
-
-    public function onUpdateShutdown(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'isChecked' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendErrorValidators('Invalid params', $validator->errors());
-        }
-
-        try {
-            DB::beginTransaction();
-
-            Settings::where(['id' => $request->site_id])->update([
-                'shutdown' => $request->isChecked,
-            ]);
-
-            DB::commit();
-            return response([
-                'message' => 'ok',
-                'status' => true,
-                'description' => 'Shutdown has been updated successfully.'
-            ], 200);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response([
-                'message' => 'error',
-                'status' => false,
-                'errorMessage' => $e->getMessage()
-            ], 500);
-        }
-
-    }
 }

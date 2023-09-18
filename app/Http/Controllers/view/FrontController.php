@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\view;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class FrontController extends Controller
@@ -20,7 +21,9 @@ class FrontController extends Controller
     }
 
     public function contactPage(Request $request) {
-        return view('frontoffice.contactus');
+        $contact_settings = Contact::where(['id' => 1])->get()->first();
+
+        return view('frontoffice.contactus', ['contact' => $contact_settings]);
     }
 
     public function roomPage(Request $request) {

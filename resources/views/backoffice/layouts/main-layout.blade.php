@@ -4,7 +4,7 @@
 <head>
     @include('backoffice.layouts.header')
     @yield('style')
-    <link rel="stylesheet" href="css/backoffice/dashboard.css">
+    <link rel="stylesheet" href="css/backoffice/main-admin.css">
     <title>admin</title>
 </head>
 
@@ -27,12 +27,14 @@
                 <li class="users"><a href="javascript:getPage('users')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-people"
                             style="font-size: 20px;"></i> Users</a></li>
+                <li class="carousel"><a href="javascript:getPage('carousel')"
+                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-images"
+                            style="font-size: 20px;"></i> Carousel</a></li>
                 <li class="settings"><a href="javascript:getPage('settings')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-sliders"
                             style="font-size: 20px;"></i> Settings</a></li>
             </ul>
             <hr class="h-color mx-2">
-
         </div>
 
         <div class="content">
@@ -41,7 +43,7 @@
                     <div class="d-flex justify-content-between d-md-none d-block align-items-center">
                         <button class="btn px-1 py-0 open-btn me-2"><i class="bi bi-list"
                                 style="font-size: 30px;"></i></button>
-                        <a href="#" class="navbar-brand fs-4"><span
+                        <a href="/admin" class="navbar-brand fs-4"><span
                                 class="bg-dark rounded px-2 py-0 text-white">CL</span></a>
                     </div>
 
@@ -58,7 +60,7 @@
                                     </div>
                                 </div>
                                 <button onclick="onLogout()"
-                                    class="action w-100 h-25 bg-dark text-light d-flex gap-2 align-items-center justify-content-center">
+                                    class="action w-100 h-25 bg-dark text-light d-flex gap-2 align-items-center justify-content-center" style="border: none;">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span class="">ออกจากระบบ</span>
                                 </button>
@@ -69,6 +71,7 @@
             </nav>
 
             <div class="dashboard-content container-fluid px-3 pt-4">
+
                 @yield('content')
 
             </div>
@@ -128,6 +131,11 @@
     @include('backoffice.layouts.scripts')
 
     <script>
+
+        const queryString = window.location.search;
+        const params = new URLSearchParams(queryString);
+        const paramValue = params.get('page');
+
         function activeMenu() {
             $(".sidebar ul li").on('click', function() {
                 $(this).addClass('active');
@@ -136,29 +144,19 @@
         }
 
         document.querySelectorAll('.sidebar ul li').forEach(function(el, ind) {
-            const queryString = window.location.search;
-            const params = new URLSearchParams(queryString);
-            const paramValue = params.get('page');
 
             if ((el.className === paramValue) || (!paramValue && el.className === "")) {
                 el.classList.add('active')
             } else {
                 el.classList.remove('active')
-
             }
         })
 
         function getPage(_page) {
-            const queryString = window.location.search;
-            const params = new URLSearchParams(queryString);
-            const paramValue = params.get('page');
 
-            if ((_page === paramValue) || (_page === "" && !paramValue)) {
-                return false;
-            }
+            if ((_page === paramValue) || (_page === "" && !paramValue)) return false;
 
             activeMenu();
-
             if (_page) {
                 window.location.href = `/admin?page=${_page}`
             } else {

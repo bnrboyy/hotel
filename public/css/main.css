@@ -50,7 +50,28 @@ input[type=number] {
     transition: .5s;
 }
 
+ul li a {
+    position: relative;
+}
 
+ul li a:after {
+    content: "";
+    position: absolute;
+    background-color: var(--teal);
+    height: 3px;
+    width: 0;
+    left: 0;
+    bottom: -3px;
+    transition: 0.4s;
+}
+
+ul li a:hover:after {
+    width: 100%;
+}
+
+.nav-active {
+    border-bottom: 3.5px solid var(--teal);
+}
 
 
 

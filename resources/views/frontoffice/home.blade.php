@@ -76,7 +76,7 @@
     </div>
 
     <!-- UR ROOMS -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">OUR ROOMS</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ห้องพัก</h2>
 
     <div class="container">
         <div class="row">
@@ -232,7 +232,7 @@
             </div>
 
             <div class="col-lg-12 text-center mt-5">
-                <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
+                <a href="{{ route('rooms') }}" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูห้องเพิ่มเติม >>></a>
             </div>
         </div>
     </div>
@@ -263,8 +263,7 @@
                 <h4 class="mt-3">Wifi</h4>
             </div>
             <div class="col-lg-12 text-center mt-5">
-                <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Facilities
-                    >>></a>
+                <a href="{{ route('facilities') }}" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูเพิ่มเติม >>></a>
             </div>
         </div>
     </div>

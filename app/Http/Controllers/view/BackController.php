@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\view;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,17 @@ class BackController extends Controller
         $user = Auth::guard('admin')->user();
 
         $site_settings = Settings::where(['id' => 1])->get()->first();
+        $contact_settings = Contact::where(['id' => 1])->get()->first();
 
         if ($user) {
 
-            switch($page) {
+            switch ($page) {
                 case 'settings':
-                    return view('backoffice.settings', ['site' => $site_settings]);
+                    return view('backoffice.settings', [
+                        'site' => $site_settings,
+                        'contact' => $contact_settings,
+                    ]);
+
                     break;
 
                 case 'rooms':
@@ -31,16 +37,17 @@ class BackController extends Controller
                     return view('backoffice.users');
                     break;
 
+                case 'carousel':
+                    return view('backoffice.carousel');
+                    break;
+
                 default:
                     return view('backoffice.dashboard');
                     break;
-
-
             }
         } else {
             return view('backoffice.login');
         }
-
     }
 
     public function dashboardPage(Request $request)
