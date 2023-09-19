@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backoffice\AdminController;
+use App\Http\Controllers\backoffice\CarouselController;
 use App\Http\Controllers\backoffice\SettingController;
 use App\Http\Controllers\view\BackController;
 use App\Http\Controllers\view\FrontController;
@@ -35,7 +36,6 @@ Route::middleware('auth:web')->group(function () {
 
 Route::prefix('admin')->group(function () {
     /* Views */
-    // Route::get('/', [BackController::class, 'loginPage'])->name('login');
     Route::get('/', [BackController::class, 'adminPage'])->name('admin-login');
 
     /* Controllers */
@@ -56,10 +56,10 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/getcontact', [SettingController::class, 'getContact']);
 
+        Route::get('/carousel/{id}', [CarouselController::class, 'getById']);
+        Route::post('/carousel/create', [CarouselController::class, 'create']);
+        Route::post('/carousel/update', [CarouselController::class, 'update']);
+        Route::delete('/carousel/delete', [CarouselController::class, 'delete']);
 
-
-
-
-        // Route::get('/managerooms', [BackController::class, 'managerooms'])->name('managerooms');
     });
 });

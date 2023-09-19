@@ -10,24 +10,11 @@
         <!-- Swiper -->
         <div class="swiper swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <img src="/images/carousel/1.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/carousel/2.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/carousel/3.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/carousel/4.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/carousel/5.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/carousel/6.png" class="w-100 d-block" />
-                </div>
+                @foreach ($slide_img as $slide)
+                    <div class="swiper-slide" style="max-height: 585px;">
+                        <img src="{{ $slide->image }}" class="h-100 d-block" style="object-fit: fill;"/>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
