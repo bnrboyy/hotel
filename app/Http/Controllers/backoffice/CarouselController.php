@@ -7,6 +7,8 @@ use App\Models\Carousel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class CarouselController extends Controller
@@ -29,11 +31,10 @@ class CarouselController extends Controller
 
         if (isset($files['image'])) {
             /* Upload Image */
-            $newFolder = "upload/frontoffice/carousel/";
+            $newFolder = "upload/backoffice/carousel/";
             $image = $this->uploadImage($newFolder, $files['image'], "newcarousel", "", "");
         }
 
-        dd($image);
         try {
 
             $newData = Carousel::create([
@@ -47,7 +48,7 @@ class CarouselController extends Controller
                 'status' => true,
                 'description' => 'Carousel has been created successfully.',
                 'data' => $newData,
-            ], 200);
+            ], 201);
         } catch (Exception $e) {
             return response([
                 'message' => 'error',
@@ -60,7 +61,14 @@ class CarouselController extends Controller
     public function delete(Request $request)
     {
         try {
-            Carousel::where(['id' => $request->id])->delete();
+            $carousel = Carousel::where(['id' => $request->id])->get()->first();
+
+            /* Delete file. */
+            if (file_exists($carousel->image)) {
+                File::delete($carousel->image);
+            }
+
+            $carousel->delete();
 
             return response([
                 'message' => 'ok',

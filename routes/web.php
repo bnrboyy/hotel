@@ -3,6 +3,7 @@
 use App\Http\Controllers\backoffice\AdminController;
 use App\Http\Controllers\backoffice\CarouselController;
 use App\Http\Controllers\backoffice\SettingController;
+use App\Http\Controllers\frontoffice\LeaveMessageController;
 use App\Http\Controllers\view\BackController;
 use App\Http\Controllers\view\FrontController;
 use Illuminate\Support\Facades\Route;
@@ -61,5 +62,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/carousel/update', [CarouselController::class, 'update']);
         Route::delete('/carousel/delete', [CarouselController::class, 'delete']);
 
+        Route::post('/leavemessage', [LeaveMessageController::class, 'createMessage']);
+        Route::get('/messageone/{msg_id}', [LeaveMessageController::class, 'getMessageById']);
+        Route::get('/message/delete/{msg_id}', [LeaveMessageController::class, 'deleteMessage']);
     });
 });

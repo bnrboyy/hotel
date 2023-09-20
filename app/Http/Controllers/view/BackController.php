@@ -5,6 +5,7 @@ namespace App\Http\Controllers\view;
 use App\Http\Controllers\Controller;
 use App\Models\Carousel;
 use App\Models\Contact;
+use App\Models\LeaveMessage;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,16 @@ class BackController extends Controller
         $contact_settings = Contact::where(['id' => 1])->get()->first();
 
         /* Carousel page */
-        $carousel = Carousel::orderBy('priority', 'ASC')->get()->all();
+        $carousel = Carousel::orderBy('priority', 'ASC')->get();
+
+        /* Message page */
+        $messages = LeaveMessage::orderBy('send_date', 'DESC')->get();
+
+        foreach ($messages as $message) {
+            $msg = $message->message;
+            $submsg = substr($msg, 0, 40);
+            $message->submsg = $submsg;
+        }
 
         if ($user) {
 
@@ -40,6 +50,10 @@ class BackController extends Controller
 
                 case 'users':
                     return view('backoffice.users');
+                    break;
+
+                case 'messages':
+                    return view('backoffice.messages', ['messages' => $messages]);
                     break;
 
                 case 'carousel':

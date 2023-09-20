@@ -141,7 +141,17 @@ class SettingController extends Controller
             ], 404);
         }
 
-        $contact = [$data->address, $data->gmap, $data->phone1, $data->phone2, $data->email, $data->line, $data->fb, $data->ig, $data->iframe];
+        $contact = [
+            $data->address,
+            $data->gmap,
+            $data->phone1,
+            $data->phone2,
+            $data->email,
+            $data->line,
+            $data->fb,
+            $data->ig,
+            $data->iframe
+        ];
 
         return response([
             'message' => 'ok',
