@@ -16,7 +16,7 @@
                         #ข้อความทั้งหมด
                     </h5>
                 </div>
-                <table id="example" class="table table-striped" style="width:100%">
+                <table id="messages" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
                             <th>วันที่ส่ง</th>

@@ -1,4 +1,4 @@
-new DataTable("#example");
+new DataTable("#messages");
 
 const formMsg = document.querySelectorAll(".form-msg");
 const btn_modal = document.querySelector(".btn-modal");

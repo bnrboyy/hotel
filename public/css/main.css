@@ -33,13 +33,13 @@
 }
 
 .custom-bg {
-    background-color: var(--teal);
-    border: 1px solid var(--teal);
+    background-color: var(--teal) !important;
+    border: 1px solid var(--teal) !important;
 }
 
 .custom-bg:hover {
-    background-color: var(--teal_hover);
-    border-color: var(--teal_hover);
+    background-color: var(--teal_hover) !important;
+    border-color: var(--teal_hover) !important;
 }
 
 /* Chrome, Safari, Edge, Opera */

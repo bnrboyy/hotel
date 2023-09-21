@@ -5,6 +5,8 @@ namespace App\Http\Controllers\view;
 use App\Http\Controllers\Controller;
 use App\Models\Carousel;
 use App\Models\Contact;
+use App\Models\Facilitie;
+use App\Models\Feature;
 use App\Models\LeaveMessage;
 use App\Models\Settings;
 use Illuminate\Http\Request;
@@ -26,6 +28,10 @@ class BackController extends Controller
 
         /* Message page */
         $messages = LeaveMessage::orderBy('send_date', 'DESC')->get();
+
+        /* Feature&Fac page */
+        $features = Feature::orderBy('id', 'ASC')->get();
+        $facilities = Facilitie::orderBy('id', 'ASC')->get();
 
         foreach ($messages as $message) {
             $msg = $message->message;
@@ -54,6 +60,13 @@ class BackController extends Controller
 
                 case 'messages':
                     return view('backoffice.messages', ['messages' => $messages]);
+                    break;
+
+                case 'features_fac':
+                    return view('backoffice.features-fac', [
+                        'features' => $features,
+                        'facilities' => $facilities,
+                    ]);
                     break;
 
                 case 'carousel':

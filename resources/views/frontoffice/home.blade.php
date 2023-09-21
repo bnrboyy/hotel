@@ -12,7 +12,7 @@
             <div class="swiper-wrapper">
                 @foreach ($slide_img as $slide)
                     <div class="swiper-slide" style="max-height: 585px;">
-                        <img src="{{ $slide->image }}" class="h-100 d-block" style="object-fit: fill;"/>
+                        <img src="{{ $slide->image }}" class="w-100 h-100 d-block" style="object-fit: fill;"/>
                     </div>
                 @endforeach
             </div>
@@ -225,30 +225,16 @@
     </div>
 
     <!-- FACILITIES -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">OUR FACILITIES</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">สิ่งอำนวยความสะดวกของเรา</h2>
 
     <div class="container">
         <div class="row justify-content-evenly px-lg-0 px-md-0 px-5">
-            <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-                <img src="images/facilities/1.svg" width="80px">
-                <h4 class="mt-3">Wifi</h4>
-            </div>
-            <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-                <img src="images/facilities/2.svg" width="80px">
-                <h4 class="mt-3">Wifi</h4>
-            </div>
-            <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-                <img src="images/facilities/3.svg" width="80px">
-                <h4 class="mt-3">Wifi</h4>
-            </div>
-            <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-                <img src="images/facilities/4.svg" width="80px">
-                <h4 class="mt-3">Wifi</h4>
-            </div>
-            <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-                <img src="images/facilities/5.svg" width="80px">
-                <h4 class="mt-3">Wifi</h4>
-            </div>
+            @foreach ($facilities as $fac)
+                <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+                    <img src="{{ $fac->icon }}" width="80px">
+                    <h4 class="mt-3">{{ $fac->name }}</h4>
+                </div>
+            @endforeach
             <div class="col-lg-12 text-center mt-5">
                 <a href="{{ route('facilities') }}" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูเพิ่มเติม >>></a>
             </div>
@@ -256,7 +242,7 @@
     </div>
 
     <!-- Testimonials -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">TESTTIMONIALS</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">รีวิวจากผู้เข้าพัก</h2>
 
     <div class="container">
         <div class="swiper swiper-testimonials">
@@ -352,7 +338,7 @@
     </div>
 
     <!-- REACH US -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">REACH US</h2>
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ติดต่อเรา</h2>
 
     <div class="container">
         <div class="row">

@@ -6,77 +6,22 @@
 
 @section('content')
     <div class="my-5 px-4">
-        <h1 class="fw-bold text-center">OUR FACILITIES</h1>
-        <div class="h-line bg-dark"></div>
-        <p class="text-center mt-3">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Odit provident ea facere maxime illum harum reprehenderit impedit est tempore accusamus!
-            Lorem ipsum dolor, <br> sit amet consectetur adipisicing elit. Recusandae neque iure voluptas,
-            possimus magni placeat necessitatibus exercitationem quisquam quis libero.
-        </p>
+        <h1 class="fw-bold text-center">สิ่งอำนวยความสะดวกทั้งหมด</h1>
+        <div class="h-line bg-dark" style="width: 355px !important;"></div>
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-5 px-4">
-                <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="images/facilities/3.svg" width="40px">
-                        <h4 class="m-0">Wifi</h4>
+            @foreach ($facilities as $fac)
+                <div class="col-lg-4 col-md-6 mb-5 px-4">
+                    <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
+                        <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                            <img src="{{ $fac->icon }}" width="80px">
+                            <h4 class="m-0">{{ $fac->name }}</h4>
+                        </div>
+                        <p>{{ $fac->description }}</p>
                     </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio exercitationem veritatis assumenda,
-                         labore deserunt qui quas laborum repudiandae corporis animi?</p>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-5 px-4">
-                <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="images/facilities/3.svg" width="40px">
-                        <h4 class="m-0">Wifi</h4>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio exercitationem veritatis assumenda,
-                         labore deserunt qui quas laborum repudiandae corporis animi?</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-5 px-4">
-                <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="images/facilities/3.svg" width="40px">
-                        <h4 class="m-0">Wifi</h4>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio exercitationem veritatis assumenda,
-                         labore deserunt qui quas laborum repudiandae corporis animi?</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-5 px-4">
-                <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="images/facilities/3.svg" width="40px">
-                        <h4 class="m-0">Wifi</h4>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio exercitationem veritatis assumenda,
-                         labore deserunt qui quas laborum repudiandae corporis animi?</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-5 px-4">
-                <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="images/facilities/3.svg" width="40px">
-                        <h4 class="m-0">Wifi</h4>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio exercitationem veritatis assumenda,
-                         labore deserunt qui quas laborum repudiandae corporis animi?</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-5 px-4">
-                <div class="bg-white rounded shadow p-4 border-top border-4 border-dark pop">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="images/facilities/3.svg" width="40px">
-                        <h4 class="m-0">Wifi</h4>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio exercitationem veritatis assumenda,
-                         labore deserunt qui quas laborum repudiandae corporis animi?</p>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 

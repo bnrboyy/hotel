@@ -7,7 +7,7 @@
     <title>Hotel Booking</title>
 </head>
 
-<body class="bg-light">
+<body class="bg-light" style="overflow-x: hidden; min-height: 100vh !important">
 
     <!-- Navbar -->
     @include('frontoffice.layouts.navbar')
