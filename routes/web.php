@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\backoffice\AdminController;
 use App\Http\Controllers\backoffice\CarouselController;
+use App\Http\Controllers\backoffice\FeatureAndFacController;
 use App\Http\Controllers\backoffice\SettingController;
 use App\Http\Controllers\frontoffice\LeaveMessageController;
 use App\Http\Controllers\view\BackController;
@@ -64,6 +65,19 @@ Route::prefix('admin')->group(function () {
 
         Route::post('/leavemessage', [LeaveMessageController::class, 'createMessage']);
         Route::get('/messageone/{msg_id}', [LeaveMessageController::class, 'getMessageById']);
-        Route::get('/message/delete/{msg_id}', [LeaveMessageController::class, 'deleteMessage']);
+        Route::delete('/message/delete/{msg_id}', [LeaveMessageController::class, 'deleteMessage']);
+
+        /* Feature & Facilities */
+        Route::post('/feature/create', [FeatureAndFacController::class, 'createFeature']);
+        Route::get('/featureone/{id}', [FeatureAndFacController::class, 'getFeatureById']);
+        Route::post('/feature/update', [FeatureAndFacController::class, 'updateFeature']);
+
+        Route::post('/fac/create', [FeatureAndFacController::class, 'createFac']);
+        Route::get('/facone/{id}', [FeatureAndFacController::class, 'getFacById']);
+
+        Route::patch('/updatefacdisplay/{id}', [FeatureAndFacController::class, 'updateFacDisplay']);
+        Route::patch('/updatefeaturedisplay/{id}', [FeatureAndFacController::class, 'updateFeatureDisplay']);
+        Route::delete('/deletefac/{id}', [FeatureAndFacController::class, 'deleteFac']);
+        Route::delete('/deletefeature/{id}', [FeatureAndFacController::class, 'deleteFeature']);
     });
 });

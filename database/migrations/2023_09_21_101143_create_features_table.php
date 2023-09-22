@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('display')->default(true);
+            $table->integer('priority');
             $table->timestamps();
         });
 
@@ -26,21 +27,25 @@ return new class extends Migration
              'id' => 1,
              'name' => 'เตียงเดี่ยว',
              'display' => true,
+             'priority' => 1,
             ],
             [
              'id' => 2,
              'name' => 'เตียงคู่',
              'display' => true,
+             'priority' => 2,
             ],
             [
              'id' => 3,
              'name' => 'ห้องน้ำในตัวห้อง',
              'display' => true,
+             'priority' => 3,
             ],
             [
              'id' => 4,
              'name' => 'ห้องน้ำนอกตัวห้อง',
              'display' => true,
+             'priority' => 4,
             ],
         ]);
     }

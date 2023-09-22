@@ -58,7 +58,7 @@ function onUpdateContact(event) {
                     showConfirmButton: false,
                     timer: 1500,
                 }).then(() => {
-                    window.location.href = "/admin?page=settings";
+                    window.location.reload();
                 });
             }
         })

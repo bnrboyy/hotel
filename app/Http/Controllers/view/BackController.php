@@ -30,8 +30,8 @@ class BackController extends Controller
         $messages = LeaveMessage::orderBy('send_date', 'DESC')->get();
 
         /* Feature&Fac page */
-        $features = Feature::orderBy('id', 'ASC')->get();
-        $facilities = Facilitie::orderBy('id', 'ASC')->get();
+        $features = Feature::orderBy('priority', 'ASC')->get();
+        $facilities = Facilitie::orderBy('priority', 'ASC')->get();
 
         foreach ($messages as $message) {
             $msg = $message->message;

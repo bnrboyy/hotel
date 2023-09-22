@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('icon');
-            $table->text('description')->nullable();
             $table->boolean('display')->default(true);
+            $table->integer('priority');
             $table->timestamps();
         });
 
@@ -28,64 +28,72 @@ return new class extends Migration
              'id' => 1,
              'name' => 'Wifi',
              'icon' => '/images/facilities/wifi-svgrepo.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 1,
             ],
             [
              'id' => 2,
              'name' => 'โทรทัศน์',
              'icon' => '/images/facilities/television.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 2,
+
             ],
             [
              'id' => 3,
              'name' => 'แอร์',
              'icon' => '/images/facilities/5.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 3,
+
             ],
             [
              'id' => 4,
              'name' => 'พัดลม',
              'icon' => '/images/facilities/fan.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 4,
+
             ],
             [
              'id' => 5,
              'name' => 'ตู้เย็น',
              'icon' => '/images/facilities/freezer.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 5,
+
             ],
             [
              'id' => 6,
              'name' => 'อ่างอาบน้ำ',
              'icon' => '/images/facilities/bath-tub.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 6,
+
             ],
             [
              'id' => 7,
              'name' => 'ตู้เสิ้อผ้า',
              'icon' => '/images/facilities/wardrobe.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 7,
+
             ],
             [
              'id' => 8,
              'name' => 'โต๊ะเครื่องแป้ง',
              'icon' => '/images/facilities/dressing-table.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 8,
+
             ],
             [
              'id' => 9,
              'name' => 'โต๊ะทำงาน',
              'icon' => '/images/facilities/desk-furniture.svg',
-             'description' => '',
              'display' => true,
+             'priority' => 9,
+
             ],
 
         ]);

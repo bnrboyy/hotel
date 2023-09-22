@@ -21,7 +21,7 @@ function getMessage(_el, _id) {
 
 function deleteMessage(_el, _id) {
     axios
-        .get(`/admin/message/delete/${_id}`)
+        .delete(`/admin/message/delete/${_id}`)
         .then(({ data }) => {
             if (data.status) {
                 const row = _el.closest("tr");

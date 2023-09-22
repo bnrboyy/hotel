@@ -12,7 +12,7 @@ class FrontController extends Controller
 {
     public function getHome(Request $request)
     {
-        $facilities = Facilitie::where(['display' => 1])->orderBy('id', 'ASC')->limit(5)->get();
+        $facilities = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->limit(5)->get();
         $carousel = Carousel::where(['display' => 1])->orderBy('priority', 'ASC')->get()->all();
 
         return view('frontoffice.home', [
@@ -23,7 +23,7 @@ class FrontController extends Controller
 
     public function facilitiesPage(Request $request)
     {
-        $facilities = Facilitie::where(['display' => 1])->orderBy('id', 'ASC')->get();
+        $facilities = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->get();
 
         return view('frontoffice.facilities', [
             'facilities' => $facilities,
