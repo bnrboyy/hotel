@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class FeatureAndFacController extends Controller
 {
@@ -46,6 +47,133 @@ class FeatureAndFacController extends Controller
         }
     }
 
+    public function createFac(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|required',
+            'priority' => 'required',
+            'image' => 'required|image',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendErrorValidators('Invalid params', $validator->errors());
+        }
+
+        $files = $request->allFiles();
+        $image = "";
+
+        if (isset($files['image'])) {
+            /* Upload Image */
+            $newFolder = "upload/backoffice/fac/";
+            $image = $this->uploadImage($newFolder, $files['image'], "newfac", "", "");
+        }
+
+        try {
+            $newData = Facilitie::create([
+                'name' => $request->name,
+                'icon' => $image,
+                'priority' => (int)$request->priority,
+                'display' => true,
+            ]);
+
+            return response([
+                'message' => 'ok',
+                'status' => true,
+                'description' => 'Facities has been created successfully.',
+                'data' => $newData,
+            ], 201);
+        } catch (Exception $e) {
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getFacById(Request $request, $id)
+    {
+        try {
+            $fac = Facilitie::where(['id' => $id])->get()->first();
+
+            if (!$fac) {
+                return response([
+                    'message' => 'error',
+                    'status' => false,
+                    'description' => 'Facilitie not found!.'
+                ], 404);
+            }
+
+            return response([
+                'message' => 'ok',
+                'status' => true,
+                'description' => 'Get facilitie success.',
+                'data' => $fac,
+            ], 200);
+        } catch (Exception $e) {
+
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateFac(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'fac_id' => 'numeric|required',
+            'name' => 'string|required',
+            'priority' => 'required',
+            'image' => 'image',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendErrorValidators('Invalid params', $validator->errors());
+        }
+
+        $files = $request->allFiles();
+        $image = "";
+
+        if (isset($files['image'])) {
+            /* Upload Image */
+            $newFolder = "upload/backoffice/fac/";
+            $image = $this->uploadImage($newFolder, $files['image'], "fac", "", "");
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $data = $request->all();
+            $fac = Facilitie::find($request->fac_id);
+
+            if (!$fac) {
+                return response()->json(['message' => 'Facilitie not found'], 404);
+            }
+
+            if (isset($files['image'])) $fac->icon = $image;
+
+            $fac->name = $request->name;
+            $fac->priority = $request->priority;
+            $fac->save();
+
+            DB::commit();
+            return response([
+                'message' => 'ok',
+                'status' => true,
+                'description' => 'Facilities has been updated successfully.'
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getFeatureById(Request $request, $id)
     {
         try {
@@ -62,7 +190,7 @@ class FeatureAndFacController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Get carousel success.',
+                'description' => 'Get feature success.',
                 'data' => $feature,
             ], 200);
         } catch (Exception $e) {
@@ -176,7 +304,14 @@ class FeatureAndFacController extends Controller
 
     public function deleteFac(Request $request, $id)
     {
+
+
         $facilities = Facilitie::where('id', $id)->delete();
+
+        /* Delete file. */
+        if (file_exists($facilities->icon)) {
+            File::delete($facilities->icon);
+        }
 
         return response([
             'message' => 'ok',

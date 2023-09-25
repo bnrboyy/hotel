@@ -27,7 +27,7 @@ return new class extends Migration
             [
              'id' => 1,
              'name' => 'Wifi',
-             'icon' => '/images/facilities/wifi-svgrepo.svg',
+             'icon' => '/images/facilities/wifi.svg',
              'display' => true,
              'priority' => 1,
             ],

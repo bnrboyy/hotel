@@ -33,6 +33,10 @@ class BackController extends Controller
         $features = Feature::orderBy('priority', 'ASC')->get();
         $facilities = Facilitie::orderBy('priority', 'ASC')->get();
 
+        /* Rooms page */
+        $features_room = Feature::where(['display' => 1])->orderBy('priority', 'ASC')->get();
+        $facilities_room = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->get();
+
         foreach ($messages as $message) {
             $msg = $message->message;
             $submsg = substr($msg, 0, 40);
@@ -51,7 +55,7 @@ class BackController extends Controller
                     break;
 
                 case 'rooms':
-                    return view('backoffice.rooms');
+                    return view('backoffice.rooms', ['features' => $features_room, 'facilities' => $facilities_room]);
                     break;
 
                 case 'users':

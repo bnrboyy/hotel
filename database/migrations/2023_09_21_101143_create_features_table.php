@@ -47,6 +47,24 @@ return new class extends Migration
              'display' => true,
              'priority' => 4,
             ],
+            [
+             'id' => 5,
+             'name' => 'มีระเบียง',
+             'display' => true,
+             'priority' => 5,
+            ],
+            [
+             'id' => 6,
+             'name' => 'มีที่เขี่ยบุหรี่',
+             'display' => true,
+             'priority' => 6,
+            ],
+            [
+             'id' => 7,
+             'name' => 'ห้องปลอดบุหรี่',
+             'display' => true,
+             'priority' => 7,
+            ],
         ]);
     }
 

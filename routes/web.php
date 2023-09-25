@@ -74,6 +74,7 @@ Route::prefix('admin')->group(function () {
 
         Route::post('/fac/create', [FeatureAndFacController::class, 'createFac']);
         Route::get('/facone/{id}', [FeatureAndFacController::class, 'getFacById']);
+        Route::post('/fac/update', [FeatureAndFacController::class, 'updateFac']);
 
         Route::patch('/updatefacdisplay/{id}', [FeatureAndFacController::class, 'updateFacDisplay']);
         Route::patch('/updatefeaturedisplay/{id}', [FeatureAndFacController::class, 'updateFeatureDisplay']);
