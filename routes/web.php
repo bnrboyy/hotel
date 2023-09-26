@@ -3,6 +3,7 @@
 use App\Http\Controllers\backoffice\AdminController;
 use App\Http\Controllers\backoffice\CarouselController;
 use App\Http\Controllers\backoffice\FeatureAndFacController;
+use App\Http\Controllers\backoffice\RoomController;
 use App\Http\Controllers\backoffice\SettingController;
 use App\Http\Controllers\frontoffice\LeaveMessageController;
 use App\Http\Controllers\view\BackController;
@@ -80,5 +81,13 @@ Route::prefix('admin')->group(function () {
         Route::patch('/updatefeaturedisplay/{id}', [FeatureAndFacController::class, 'updateFeatureDisplay']);
         Route::delete('/deletefac/{id}', [FeatureAndFacController::class, 'deleteFac']);
         Route::delete('/deletefeature/{id}', [FeatureAndFacController::class, 'deleteFeature']);
+
+        /* Rooms */
+        Route::post('/room/create', [RoomController::class, 'createRoom']);
+        Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
+        Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);
+        Route::post('/room/update', [RoomController::class, 'updateRoom']);
+
+
     });
 });

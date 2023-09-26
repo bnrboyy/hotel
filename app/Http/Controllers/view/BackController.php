@@ -8,6 +8,7 @@ use App\Models\Contact;
 use App\Models\Facilitie;
 use App\Models\Feature;
 use App\Models\LeaveMessage;
+use App\Models\Room;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,7 @@ class BackController extends Controller
         $facilities = Facilitie::orderBy('priority', 'ASC')->get();
 
         /* Rooms page */
+        $rooms = Room::orderBy('created_at', 'ASC')->get();
         $features_room = Feature::where(['display' => 1])->orderBy('priority', 'ASC')->get();
         $facilities_room = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->get();
 
@@ -55,7 +57,12 @@ class BackController extends Controller
                     break;
 
                 case 'rooms':
-                    return view('backoffice.rooms', ['features' => $features_room, 'facilities' => $facilities_room]);
+                    return view('backoffice.rooms', [
+                        'features' => $features_room,
+                        'facilities' => $facilities_room,
+                        'rooms' => $rooms,
+                    ]);
+
                     break;
 
                 case 'users':
