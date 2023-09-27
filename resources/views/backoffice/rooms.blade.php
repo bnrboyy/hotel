@@ -2,6 +2,7 @@
 
 @section('style')
     <link rel="stylesheet" href="css/backoffice/rooms.css">
+    <link rel="stylesheet" href="css/preview-img.css">
 @endsection
 
 @section('content')
@@ -56,7 +57,8 @@
                                         <button class="btn-modal btn btn-warning shadow-none" data-bs-toggle="modal"
                                             onclick="getRoom('{{ $room->id }}')" data-bs-target="#roomedit-s"><i
                                                 class="bi bi-pencil-square"></i></button>
-                                        <button class="btn btn-info shadow-none"><i class="bi bi-images"></i></button>
+                                        <button class="btn-modal btn btn-info shadow-none" data-bs-toggle="modal"
+                                            data-bs-target="#images-s"><i class="bi bi-images"></i></button>
                                         <button class="btn btn-danger shadow-none" onclick="deleteMessage()"><i
                                                 class="bi bi-trash-fill"></i></button>
                                     </div>
@@ -83,13 +85,15 @@
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
                                     <label class="form-label" style="font-weight: 500;">ชื่อ</label>
-                                    <input name="name" type="text" class="form-control form-room text-center shadow-none" required>
+                                    <input name="name" type="text"
+                                        class="form-control form-room text-center shadow-none" required>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
                                     <label class="form-label" style="font-weight: 500;">ราคา</label>
-                                    <input name="price" type="number" class="form-control form-room text-center shadow-none"
+                                    <input name="price" type="number"
+                                        class="form-control form-room text-center shadow-none"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                         onKeyPress="if(this.value.length>=8) return false;" required>
                                 </div>
@@ -130,7 +134,8 @@
                                 @foreach ($features as $feature)
                                     <div class="col-md-3 mb-2">
                                         <label>
-                                            <input class="form-check-input feature-checked shadow-none" type="checkbox" value="{{ $feature->id }}">
+                                            <input class="form-check-input feature-checked shadow-none" type="checkbox"
+                                                value="{{ $feature->id }}">
                                             {{ $feature->name }}
                                         </label>
                                     </div>
@@ -144,7 +149,8 @@
                                 @foreach ($facilities as $fac)
                                     <div class="col-md-3 mb-2">
                                         <label>
-                                            <input class="form-check-input fac-checked shadow-none" type="checkbox" value="{{ $fac->id }}">
+                                            <input class="form-check-input fac-checked shadow-none" type="checkbox"
+                                                value="{{ $fac->id }}">
                                             {{ $fac->name }}
                                         </label>
                                     </div>
@@ -157,8 +163,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button onclick="closeModal()" type="button" class="btn-close-modal btn btn-secondary shadow-none"
-                            data-bs-dismiss="modal">ยกเลิก</button>
+                        <button onclick="closeModal()" type="button"
+                            class="btn-close-modal btn btn-secondary shadow-none" data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn custom-bg text-white shadow-none">บันทึก</button>
                     </div>
                 </div>
@@ -171,7 +177,7 @@
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog d-flex justify-content-center">
             <form onsubmit="return updateRoom(event)">
-                <div class="modal-content" style="width: 663px;">
+                <div class="modal-content" style="width: 665px;">
                     <div class="modal-header">
                         <h5 class="modal-title">เพิ่มห้องพัก</h5>
                     </div>
@@ -180,14 +186,16 @@
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
                                     <label class="form-label" style="font-weight: 500;">ชื่อ</label>
-                                    <input name="name" id="room-name" type="text" class="form-control form-room text-center shadow-none" required>
+                                    <input name="name" id="room-name" type="text"
+                                        class="form-control form-room text-center shadow-none" required>
                                     <input name="room_id" id="room-id" type="hidden">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
                                     <label class="form-label" style="font-weight: 500;">ราคา</label>
-                                    <input name="price" id="room-price" type="number" class="form-control form-room text-center shadow-none"
+                                    <input name="price" id="room-price" type="number"
+                                        class="form-control form-room text-center shadow-none"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                         onKeyPress="if(this.value.length>=8) return false;" required>
                                 </div>
@@ -228,7 +236,8 @@
                                 @foreach ($features as $feature)
                                     <div class="col-md-3 mb-2">
                                         <label>
-                                            <input class="form-check-input featureedit-checked shadow-none" type="checkbox" value="{{ $feature->id }}">
+                                            <input class="form-check-input featureedit-checked shadow-none"
+                                                type="checkbox" value="{{ $feature->id }}">
                                             {{ $feature->name }}
                                         </label>
                                     </div>
@@ -242,7 +251,8 @@
                                 @foreach ($facilities as $fac)
                                     <div class="col-md-3 mb-2">
                                         <label>
-                                            <input class="form-check-input facedit-checked shadow-none" type="checkbox" value="{{ $fac->id }}">
+                                            <input class="form-check-input facedit-checked shadow-none" type="checkbox"
+                                                value="{{ $fac->id }}">
                                             {{ $fac->name }}
                                         </label>
                                     </div>
@@ -251,13 +261,66 @@
                         </div>
                         <div class="mt-3">
                             <label class="form-label" style="font-weight: 500;">รายละเอียดห้อง</label>
-                            <textarea name="description" class="form-control form-room shadow-none" rows="5" style="resize: none;"></textarea>
+                            <textarea name="description" id="room-des" class="form-control form-room shadow-none" rows="5"
+                                style="resize: none;"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button onclick="closeModal()" type="button" class="btn-close-modal btn btn-secondary shadow-none"
-                            data-bs-dismiss="modal">ยกเลิก</button>
+                        <button onclick="closeModal()" type="button"
+                            class="btn-close-modal btn btn-secondary shadow-none" data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn custom-bg text-white shadow-none">บันทึก</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Room image Modal -->
+    <div class="modal fade" id="images-s" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form onsubmit="return createFac(event)">
+                <div class="modal-content" style="min-height: 665px; ">
+                    <div class="modal-header">
+                        <h5 class="modal-title">เพิ่มรูปภาพ</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-6">
+                                <div class="group-image mb-3">
+                                    <figure class="image-upload shadow bg-white">
+                                        <input onchange="previewImg(0)" class="img-input" id="file1" type="file"
+                                            name="image" id="image" accept="image/jpeg, image/png, image/jpg"
+                                            required>
+                                        <img class="" src="/images/carousel/no-image.png" id="preview-img"
+                                            alt="" style="width: 100%;">
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" style="max-height: 500px; overflow: auto;">
+                            <table class="table">
+                                <thead class="table-dark">
+                                  <tr>
+                                    <th scope="col">รูปภาพ</th>
+                                    <th scope="col">รูปภาพเริ่มต้น</th>
+                                    <th scope="col">ลบ</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td style="width:250px;">Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeModal()"
+                            class="btn-close-modal btn btn-secondary shadow-none" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn custom-bg text-white shadow-none">เพิ่มรูปภาพ</button>
                     </div>
                 </div>
             </form>
@@ -267,4 +330,5 @@
 
 @section('script')
     <script src="/js/backoffice/rooms.js"></script>
+    <script src="/js/preview-img.js"></script>
 @endsection

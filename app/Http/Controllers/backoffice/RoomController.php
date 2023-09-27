@@ -118,6 +118,25 @@ class RoomController extends Controller
         try {
             DB::beginTransaction();
 
+            $room = Room::where(['id' => $request->room_id])->first();
+
+            if (!$room) {
+                return response([
+                    'message' => 'error',
+                    'status' => false,
+                    'description' => 'Room not found!.'
+                ], 404);
+            }
+
+            $room->name = $request->name;
+            $room->price = $request->price;
+            $room->adult = $request->adult;
+            $room->children = $request->children;
+            $room->description = $request->description;
+            $room->area = $request->area;
+            $room->feature_ids = $feature_ids;
+            $room->fac_ids = $fac_ids;
+            $room->save();
 
             DB::commit();
             return response([

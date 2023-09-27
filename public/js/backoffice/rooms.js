@@ -17,6 +17,7 @@ const room_price = document.querySelector("#room-price");
 const room_adult = document.querySelector("#room-adult");
 const room_children = document.querySelector("#room-children");
 const room_area = document.querySelector("#room-area");
+const room_des = document.querySelector("#room-des");
 
 room_checked.forEach((room) => {
     const isChecked = room.getAttribute("isChecked");
@@ -111,6 +112,7 @@ function getRoom(_id) {
             room_children.value = room.children;
             room_area.value = room.area;
             room_id.value = room.id;
+            room_des.value = room.description;
 
             features_edit.forEach((fea) => {
                 room.feature_ids.forEach((fea_id) => {
