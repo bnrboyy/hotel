@@ -87,6 +87,7 @@ Route::prefix('admin')->group(function () {
         Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
         Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);
         Route::post('/room/update', [RoomController::class, 'updateRoom']);
+        Route::get('/gallery/{id}', [RoomController::class, 'getGalleryById']);
 
 
     });

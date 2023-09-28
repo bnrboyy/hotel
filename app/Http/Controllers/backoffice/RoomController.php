@@ -183,4 +183,8 @@ class RoomController extends Controller
             ], 500);
         }
     }
+
+    public function getGalleryById($id) {
+        dd($id);
+    }
 }

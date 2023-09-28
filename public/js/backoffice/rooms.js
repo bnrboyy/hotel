@@ -31,7 +31,11 @@ function validateRoom(fea_length, fac_length, ind = 0) {
         if (fea_length === 0) {
             select_feature[ind].classList.add("border", "border-danger", "p-2");
         } else {
-            select_feature[ind].classList.remove("border", "border-danger", "p-2");
+            select_feature[ind].classList.remove(
+                "border",
+                "border-danger",
+                "p-2"
+            );
         }
 
         if (fac_length === 0) {
@@ -179,6 +183,27 @@ function updateRoom(event) {
     }
 }
 
+function getGallery(_id) {
+    axios.get(`admin/gallery/${_id}`)
+}
+
+function addImage(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    axios
+        .post("/admin/room/addimage")
+        .then(({ data }) => {
+            console.log(data)
+        })
+        .catch((err) => {
+            close_modal.forEach((btn) => btn.click());
+            toastr.error("Error");
+        });
+}
+
 function closeModal() {
     facs.forEach((fac) => (fac.checked = false));
     features.forEach((fea) => (fea.checked = false));
@@ -186,6 +211,10 @@ function closeModal() {
     facs_edit.forEach((fac) => (fac.checked = false));
     features_edit.forEach((fea) => (fea.checked = false));
 
-    select_fac.forEach(fac => fac.classList.remove("border", "border-danger", "p-2"))
-    select_feature.forEach(feature => feature.classList.remove("border", "border-danger", "p-2"))
+    select_fac.forEach((fac) =>
+        fac.classList.remove("border", "border-danger", "p-2")
+    );
+    select_feature.forEach((feature) =>
+        feature.classList.remove("border", "border-danger", "p-2")
+    );
 }
