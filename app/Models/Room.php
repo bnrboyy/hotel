@@ -12,4 +12,9 @@ class Room extends Model
     protected $table = 'rooms';
     protected $primaryKey = 'id';
     protected $guarded = [];
+
+    public function gallery()
+    {
+        return $this->hasMany(Gallery::class, 'room_id', 'id')->orderBy('default', 'DESC');
+    }
 }

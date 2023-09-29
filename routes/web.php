@@ -83,11 +83,14 @@ Route::prefix('admin')->group(function () {
         Route::delete('/deletefeature/{id}', [FeatureAndFacController::class, 'deleteFeature']);
 
         /* Rooms */
-        Route::post('/room/create', [RoomController::class, 'createRoom']);
-        Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
         Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);
-        Route::post('/room/update', [RoomController::class, 'updateRoom']);
         Route::get('/gallery/{id}', [RoomController::class, 'getGalleryById']);
+        Route::post('/room/create', [RoomController::class, 'createRoom']);
+        Route::post('/room/update', [RoomController::class, 'updateRoom']);
+        Route::post('/room/addimage', [RoomController::class, 'addImage']);
+        Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
+        Route::patch('/updategaldefault/{id}', [RoomController::class, 'updateGalleryDefault']);
+        Route::delete('/deletegal/{id}', [RoomController::class, 'deleteGallery']);
 
 
     });

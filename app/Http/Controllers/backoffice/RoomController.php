@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\backoffice;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
 use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class RoomController extends Controller
@@ -184,7 +186,124 @@ class RoomController extends Controller
         }
     }
 
-    public function getGalleryById($id) {
-        dd($id);
+    public function getGalleryById($id)
+    {
+        $room = Room::find($id);
+        $gallery = $room->gallery;
+
+        return response([
+            'message' => 'ok',
+            'status' => true,
+            'data' => [
+                'gallery' => $gallery,
+                'room' => $room,
+            ],
+        ]);
+    }
+
+    public function addImage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'numeric|required',
+            'image' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendErrorValidators('Invalid params', $validator->errors());
+        }
+
+        $files = $request->allFiles();
+        $image = "";
+
+        if (isset($files['image'])) {
+            /* Upload Image */
+            $newFolder = "upload/backoffice/room/";
+            $image = $this->uploadImage($newFolder, $files['image'], "newroom", "", "");
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $room = Room::where(['id' => $request->room_id])->first();
+
+            if (!$room) {
+                return response([
+                    'message' => 'error',
+                    'status' => false,
+                    'description' => 'Room not found!.'
+                ], 404);
+            }
+
+            $gallery = new Gallery();
+            $gallery->room_id = $room->id;
+            $gallery->image = $image;
+            $gallery->default = 0;
+            $gallery->save();
+
+            DB::commit();
+            return response([
+                'message' => 'ok',
+                'status' => true,
+                'description' => 'Add image successfully.',
+                'data' => $gallery,
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteGallery($id)
+    {
+        $gal = Gallery::where('id', $id)->first();
+
+        /* Delete file. */
+        if (file_exists($gal->image)) {
+            File::delete($gal->image);
+        }
+
+        $gal->delete();
+
+        return response([
+            'message' => 'ok',
+            'status' => true,
+            'description' => "Gallery has been deleted successfully.",
+        ], 200);
+    }
+
+    public function updateGalleryDefault(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+
+            Gallery::where(['room_id' => $request->room_id, 'default' => 1])->update(['default' => 0]);
+
+            $data = $request->only(['default']);
+            $gal = Gallery::find($id);
+
+            if (!$gal) {
+                return response()->json(['message' => 'Gallery not found'], 404);
+            }
+
+            $gal->update($data);
+
+            DB::commit();
+            return response([
+                'message' => 'ok',
+                'status' => true,
+                'description' => 'Gallery has been updated successfully.'
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -198,7 +198,7 @@
                                         <input onchange="previewImg()" class="img-input" id="file1" type="file"
                                             name="image" id="image" accept="image/jpeg, image/png, image/jpg"
                                             required>
-                                        <img class="" src="/images/carousel/no-image.png" id="preview-img"
+                                        <img class="" src="/images/rooms/thumbnail.jpg" id="preview-img"
                                             alt="" style="width: 100%;">
                                     </figure>
                                 </div>
@@ -245,7 +245,7 @@
                                     <figure class="image-upload shadow bg-white">
                                         <input onchange="previewEditFac()" class="img-input" id="file1" type="file"
                                             name="image" id="image" accept="image/jpeg, image/png, image/jpg">
-                                        <img class="" src="/images/carousel/no-image.png" id="preview-img"
+                                        <img class="" src="/images/rooms/thumbnail.jpg" id="preview-img"
                                             alt="" style="width: 100%;">
                                     </figure>
                                 </div>

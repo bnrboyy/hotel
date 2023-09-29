@@ -19,6 +19,12 @@ const room_children = document.querySelector("#room-children");
 const room_area = document.querySelector("#room-area");
 const room_des = document.querySelector("#room-des");
 
+const room_id_edit = document.querySelector("#room-id-edit");
+const preview_img = document.querySelector("#preview-img");
+const img_input = document.querySelector(".img-input");
+const tbody = document.querySelector("#tbody");
+const modal_title = document.querySelector("#m-title");
+
 room_checked.forEach((room) => {
     const isChecked = room.getAttribute("isChecked");
     if (parseInt(isChecked) === 1) {
@@ -183,8 +189,39 @@ function updateRoom(event) {
     }
 }
 
-function getGallery(_id) {
-    axios.get(`admin/gallery/${_id}`)
+function deleteRoom(_id) {
+    console.log(_id)
+}
+
+async function getGallery(_id) {
+    const response = await axios.get(`admin/gallery/${_id}`)
+    const room = response.data.data.room;
+    const gallery = response.data.data.gallery;
+
+    modal_title.innerText = room.name;
+    room_id_edit.value = room.id;
+
+    let html = "";
+    gallery.forEach(gal => {
+        html += `<tr id="gal-image">
+                    <td style="width:250px;">
+                        <img src="${gal.image}" width=200 height=115 >
+                    </td>
+                    <td class="text-center align-middle">
+                        <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                            <input onchange="updateGalDefault(${gal.id}, this.checked, this)" galid="${gal.id}" class="form-check-input image-checked shadow-none" ${gal.default?"checked":""}
+                                type="checkbox"id="image-toggle" style="cursor: pointer;">
+                        </div>
+                    </td>
+                    <td class="text-center align-middle">
+                        <button type="button" onclick="deleteGal(this, ${gal.id})" class="btn btn-danger shadow-none"><i
+                            class="bi bi-trash-fill"></i></button>
+                    </td>
+                </tr> `;
+    })
+
+    tbody.innerHTML = html;
+
 }
 
 function addImage(event) {
@@ -194,14 +231,112 @@ function addImage(event) {
     const formData = new FormData(form);
 
     axios
-        .post("/admin/room/addimage")
+        .post("/admin/room/addimage", formData)
         .then(({ data }) => {
-            console.log(data)
+            toastr.success("เพิ่มรูปภาพสำเร็จ");
+            preview_img.src = '/images/rooms/thumbnail.jpg';
+            img_input.value = "";
+            const gal = data.data;
+            let html = `
+                        <tr id="gal-image">
+                            <td style="width:250px;">
+                                <img src="${gal.image}" width=200 height=115 >
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                    <input onchange="updateGalDefault(${gal.id}, this.checked, this)" galid="${gal.id}" class="form-check-input image-checked shadow-none" ${gal.default?"checked":""}
+                                        type="checkbox"id="image-toggle" style="cursor: pointer;">
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" onclick="deleteGal(this, ${gal.id})" class="btn btn-danger shadow-none"><i
+                                    class="bi bi-trash-fill"></i></button>
+                            </td>
+                        </tr>
+            `;
+
+            tbody.insertAdjacentHTML("beforeend", html);
         })
         .catch((err) => {
+            preview_img.src = '/images/rooms/thumbnail.jpg';
+            img_input.value = "";
             close_modal.forEach((btn) => btn.click());
             toastr.error("Error");
         });
+}
+
+function deleteGal(_el, _id) {
+    const url = `/admin/deletegal/`;
+    onDelete(_el, _id, url);
+}
+
+function onDelete(_el, _id, _url) {
+    Swal.fire({
+        text: "คุณต้องการลบใช่หรือไม่",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .delete(`${_url}${_id}`)
+                .then(({ data }) => {
+                    if (data.status) {
+                        const row = _el.closest("tr");
+                        toastr.success("ลบสำเร็จ");
+                        if (row) {
+                            // Get the table to which the row belongs
+                            const table = row.closest("table");
+                            // Delete the row from the table
+                            table.deleteRow(row.rowIndex);
+                        }
+                    }
+                })
+                .catch((err) => {
+                    toastr.error("Error");
+                });
+        }
+    });
+}
+
+function updateGalDefault(_id, _checked, _el) {
+    const gal = document.querySelectorAll('#gal-image');
+    const galList = document.querySelectorAll('#image-toggle')
+    const room_id = room_id_edit.value;
+    if (_checked) {
+        axios
+            .patch(`/admin/updategaldefault/${_id}`, {
+                default: true,
+                room_id: room_id,
+            })
+            .then(({ data }) => {
+                if (data.status) {
+                    galList.forEach(g => {
+                        if (parseInt(g.getAttribute('galid')) === parseInt(_id)) {
+                            g.checked = true;
+                        } else {
+                            g.checked = false;
+                        }
+                    })
+                }
+        })
+        .catch((err) => console.log(err));
+    } else {
+        axios
+            .patch(`/admin/updategaldefault/${_id}`, {
+                default: false,
+                room_id: room_id,
+            })
+            .then(({ data }) => {
+                if (data.status) {
+                    //
+                }
+        })
+        .catch((err) => console.log(err));
+    }
 }
 
 function closeModal() {
@@ -217,4 +352,7 @@ function closeModal() {
     select_feature.forEach((feature) =>
         feature.classList.remove("border", "border-danger", "p-2")
     );
+
+    preview_img.src = '/images/rooms/thumbnail.jpg';
+    img_input.value = "";
 }

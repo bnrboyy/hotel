@@ -254,7 +254,7 @@ function previewEditFac() {
 
 function closeModal() {
     file[0].value = "";
-    img[0].src = "/images/carousel/no-image.png";
+    img[0].src = "/images/rooms/thumbnail.jpg";
     faci_name[0].value = "";
     faci_priority[0].value = "";
 }

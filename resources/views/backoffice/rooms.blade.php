@@ -59,7 +59,7 @@
                                                 class="bi bi-pencil-square"></i></button>
                                         <button onclick="getGallery('{{ $room->id }}')" class="btn-modal btn btn-info shadow-none" data-bs-toggle="modal"
                                             data-bs-target="#images-s"><i class="bi bi-images"></i></button>
-                                        <button class="btn btn-danger shadow-none" onclick="deleteMessage()"><i
+                                        <button class="btn btn-danger shadow-none" onclick="deleteRoom({{ $room->id }})"><i
                                                 class="bi bi-trash-fill"></i></button>
                                     </div>
                                 </td>
@@ -281,8 +281,8 @@
         <div class="modal-dialog">
             <form onsubmit="return addImage(event)">
                 <div class="modal-content" style="min-height: 665px; ">
-                    <div class="modal-header">
-                        <h5 class="modal-title">รูปภาพ</h5>
+                    <div class="modal-header d-flex justify-content-center">
+                        <h5 class="modal-title m-title" id="m-title"></h5>
                     </div>
                     <div class="modal-body">
                         <div class="row d-flex justify-content-center">
@@ -292,11 +292,11 @@
                                         <input onchange="previewImg(0)" class="img-input" id="file1" type="file"
                                             name="image" id="image" accept="image/jpeg, image/png, image/jpg"
                                             required>
-                                        <img class="" src="/images/carousel/no-image.png" id="preview-img"
+                                        <img class="" src="/images/rooms/thumbnail.jpg" id="preview-img"
                                             alt="" style="width: 100%;">
                                     </figure>
                                 </div>
-                                <input type="hidden" name="room_id" value="">
+                                <input id="room-id-edit" type="hidden" name="room_id" value="">
                                 <button type="submit" class="btn custom-bg text-white shadow-none mb-3"
                                     style="">เพิ่มรูปภาพ</button>
                             </div>
@@ -311,37 +311,7 @@
                                         <th scope="col">ลบ</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="width:250px;">
-                                            <img src="/images/facilities/wifi.svg" width=200>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <div class="form-check form-switch d-flex align-items-center justify-content-center">
-                                                <input isChecked=""class="form-check-input image-checked shadow-none"
-                                                    type="checkbox"id="image-toggle" style="cursor: pointer;">
-                                            </div>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <button class="btn btn-danger shadow-none"><i
-                                                class="bi bi-trash-fill"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width:250px;">
-                                            <img src="/images/facilities/wifi.svg" width=200>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <div class="form-check form-switch d-flex align-items-center justify-content-center">
-                                                <input isChecked=""class="form-check-input image-checked shadow-none"
-                                                    type="checkbox"id="image-toggle" style="cursor: pointer;">
-                                            </div>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <button class="btn btn-danger shadow-none"><i
-                                                class="bi bi-trash-fill"></i></button>
-                                        </td>
-                                    </tr>
+                                <tbody id="tbody">
                                 </tbody>
                             </table>
                         </div>
