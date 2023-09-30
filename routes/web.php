@@ -28,6 +28,7 @@ Route::get('/facilities', [FrontController::class, 'facilitiesPage'])->name('fac
 Route::get('/about', [FrontController::class, 'aboutPage'])->name('about');
 Route::get('/contactus', [FrontController::class, 'contactPage'])->name('contactus');
 Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
+Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('room-details');
 
 /* Controllers */
 

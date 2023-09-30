@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Image;
 
 class RoomController extends Controller
 {
@@ -216,9 +217,23 @@ class RoomController extends Controller
         $image = "";
 
         if (isset($files['image'])) {
+            // $image = $request->file('image');
+
+            // กำหนดขนาดที่ต้องการ (เช่น 640x360)
+            $width = 1920;
+            $height = 1080;
+
+            // ปรับขนาดรูปภาพ
+            $resizedImage = Image::make($files['image'])->resize($width, $height);
+
+            $path = public_path('upload/'); // กำหนดพาธที่จะบันทึกไฟล์
+            $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
+            $resizedImage->save($path . $filename);
+
+            dd($resizedImage);
             /* Upload Image */
-            $newFolder = "upload/backoffice/room/";
-            $image = $this->uploadImage($newFolder, $files['image'], "newroom", "", "");
+            // $newFolder = "upload/backoffice/room/";
+            // $image = $this->uploadImage($newFolder, $files['image'], "newroom", "", "");
         }
 
         try {

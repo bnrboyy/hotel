@@ -62,162 +62,62 @@
         </div>
     </div>
 
-    <!-- UR ROOMS -->
+    <!-- OUR ROOMS -->
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ห้องพัก</h2>
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-md-6 my-3">
-                <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-                    <img src="images/rooms/1.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h4>Room 1</h4>
-                        <h5 class="mb-4">฿ 450 / วัน</h5>
-                        <div class="features mb-4">
-                            <h5 class="mb-1">Features</h5>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                2 Rooms
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                1 Bathroom
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                1 Sofa
-                            </span>
+            @foreach ($rooms as $room)
+                <div class="col-lg-4 col-md-6 my-3">
+                    <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
+                        <div style="max-width: 350px;">
+                            <div class="swiper swiper-gallery">
+                                <div class="swiper-wrapper">
+                                    @foreach ($room->gallery as $slide)
+                                        <div class="swiper-slide" style="max-height: 198px; max-wight: 350px;">
+                                            <img src="{{ $slide->image }}" class="card-img-top"height=198>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
-                        <div class="facilities mb-4">
-                            <h5 class="mb-1">Facilities</h5>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                Wifi
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                โทรทัศน์
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                แอร์
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                ตู้เย็น
-                            </span>
-                        </div>
-                        <div class="rating mb-4">
-                            <h5 class="mb-1">Rating</h5>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-half text-warning"></i>
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">ดูรายละเอียด</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 my-3">
-                <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-                    <img src="images/rooms/1.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h4>Room 1</h4>
-                        <h5 class="mb-4">฿ 450 / วัน</h5>
-                        <div class="features mb-4">
-                            <h5 class="mb-1">Features</h5>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                2 Rooms
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                1 Bathroom
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                1 Sofa
-                            </span>
-                        </div>
-                        <div class="facilities mb-4">
-                            <h5 class="mb-1">Facilities</h5>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                Wifi
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                โทรทัศน์
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                แอร์
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                ตู้เย็น
-                            </span>
-                        </div>
-                        <div class="rating mb-4">
-                            <h5 class="mb-1">Rating</h5>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-half text-warning"></i>
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">ดูรายละเอียด</a>
+                        <div class="card-body">
+                            <h4>{{ $room->name }}</h4>
+                            <h5 class="mb-4">฿ {{ $room->price }} / วัน</h5>
+                            <div class="features mb-4">
+                                <h5 class="mb-1">คุณสมบัติห้อง</h5>
+                                @foreach ($room->features as $fea)
+                                    <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">
+                                        {{ $fea->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            <div class="facilities mb-4">
+                                <h5 class="mb-1">สิ่งอำนวยความสะดวก</h5>
+                                @foreach ($room->facs as $fac)
+                                    <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">
+                                        {{ $fac->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            {{-- <div class="rating mb-4">
+                                <h5 class="mb-1">ระดับความพึงพอใจ</h5>
+                                <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-half text-warning"></i>
+                                </span>
+                            </div> --}}
+                            <div class="d-flex justify-content-evenly mb-2">
+                                <a href="#" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
+                                <a href="/roomdetails?id={{ $room->id }}" class="btn btn-sm btn-outline-dark shadow-none">รายละเอียด</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 my-3">
-                <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-                    <img src="images/rooms/1.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h4>Room 1</h4>
-                        <h5 class="mb-4">฿ 450 / วัน</h5>
-                        <div class="features mb-4">
-                            <h5 class="mb-1">Features</h5>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                2 Rooms
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                1 Bathroom
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                1 Sofa
-                            </span>
-                        </div>
-                        <div class="facilities mb-4">
-                            <h5 class="mb-1">Facilities</h5>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                Wifi
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                โทรทัศน์
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                แอร์
-                            </span>
-                            <span class="badge rounded-pill bg-light text-wrap fs-6 text-dark">
-                                ตู้เย็น
-                            </span>
-                        </div>
-                        <div class="rating mb-4">
-                            <h5 class="mb-1">Rating</h5>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-half text-warning"></i>
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">ดูรายละเอียด</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
             <div class="col-lg-12 text-center mt-5">
                 <a href="{{ route('rooms') }}" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูห้องเพิ่มเติม >>></a>
             </div>
@@ -242,7 +142,7 @@
     </div>
 
     <!-- Testimonials -->
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">รีวิวจากผู้เข้าพัก</h2>
+    {{-- <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">รีวิวจากผู้เข้าพัก</h2>
 
     <div class="container">
         <div class="swiper swiper-testimonials">
@@ -335,7 +235,7 @@
             </div>
             <div class="swiper-pagination"></div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- REACH US -->
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ติดต่อเรา</h2>
@@ -391,6 +291,16 @@
     <script>
         //
         var swiper = new Swiper(".swiper-container", {
+            spaceBetween: 30,
+            effect: "fade",
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            }
+        });
+
+        var swiper = new Swiper(".swiper-gallery", {
             spaceBetween: 30,
             effect: "fade",
             loop: true,

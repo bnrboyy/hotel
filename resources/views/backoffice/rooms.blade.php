@@ -84,14 +84,14 @@
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
-                                    <label class="form-label" style="font-weight: 500;">ชื่อ</label>
+                                    <label class="form-label" style="font-weight: 500;">ชื่อห้อง</label>
                                     <input name="name" type="text"
                                         class="form-control form-room text-center shadow-none" required>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
-                                    <label class="form-label" style="font-weight: 500;">ราคา</label>
+                                    <label class="form-label" style="font-weight: 500;">ราคา/คืน</label>
                                     <input name="price" type="number"
                                         class="form-control form-room text-center shadow-none"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '');"
@@ -185,7 +185,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
-                                    <label class="form-label" style="font-weight: 500;">ชื่อ</label>
+                                    <label class="form-label" style="font-weight: 500;">ชื่อห้อง</label>
                                     <input name="name" id="room-name" type="text"
                                         class="form-control form-room text-center shadow-none" required>
                                     <input name="room_id" id="room-id" type="hidden">
@@ -193,7 +193,7 @@
                             </div>
                             <div class="col-lg-6 col-12">
                                 <div class="mt-3">
-                                    <label class="form-label" style="font-weight: 500;">ราคา</label>
+                                    <label class="form-label" style="font-weight: 500;">ราคา/คืน</label>
                                     <input name="price" id="room-price" type="number"
                                         class="form-control form-room text-center shadow-none"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '');"

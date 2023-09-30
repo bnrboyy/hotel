@@ -22,9 +22,9 @@
                 <li class="nav-item">
                     <a class="nav-link me-2 fs-6" data-slug="/contactus" href="{{ route('contactus') }}">ติดต่อเรา</a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link me-2 fs-6" data-slug="/about" href="{{ route('about') }}">เกี่ยวกับเรา</a>
-                </li>
+                </li> --}}
             </ul>
             <div class="d-flex">
                 {{-- <button class="btn btn-outline-success shadow-none">Search</button> --}}
