@@ -1,4 +1,4 @@
-<footer class="footer-container bg-white mt-auto">
+<footer class="footer-container bg-white mt-auto shadow-sm">
     <div class="row">
         <div class="col-lg-4 p-4">
             <h1 class="fw-bold fs-2 mb-2">{{ $shareSite->site_title }}</h1>

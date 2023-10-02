@@ -27,34 +27,33 @@
                     <i class="bi bi-building-fill-check fs-3 me-2"></i>
                     <h5 class="">ตรวจสอบห้องว่าง</h5>
                 </div>
-                <form>
+                <form onsubmit="return searchrooms(event)">
                     <div class="row align-items-end">
                         <div class="col-lg-3">
-                            <label class="form-label" style="font-weight: 500;">Check-in</label>
-                            <input type="date" class="form-control shadow-none pointer" required>
+                            <label class="form-label" style="font-weight: 500;">เช็คอิน</label>
+                            <input type="date" name="checkin" min="{{ date('Y-m-d') }}" id="date-checkin" class="form-control shadow-none pointer" required>
                         </div>
                         <div class="col-lg-3">
-                            <label class="form-label" style="font-weight: 500;">Check-out</label>
-                            <input type="date" class="form-control shadow-none pointer" required>
+                            <label class="form-label" style="font-weight: 500;">เช็คเอ้าท์</label>
+                            <input type="date" name="checkout" id="date-checkout" class="form-control shadow-none pointer" required disabled>
                         </div>
                         <div class="col-lg-3">
-                            <label class="form-label" style="font-weight: 500;">Adult</label>
-                            <select class="form-select shadow-none pointer">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <label class="form-label" style="font-weight: 500;">ผู้ใหญ่/คน</label>
+                            <select class="form-select shadow-none pointer text-center" id="select-adult" name="adult" required>
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
                             </select>
                         </div>
                         <div class="col-lg-2">
-                            <label class="form-label" style="font-weight: 500;">Children</label>
-                            <select class="form-select shadow-none pointer">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <label class="form-label" style="font-weight: 500;">เด็ก/คน</label>
+                            <select class="form-select shadow-none pointer text-center" id="select-children" name="children" required>
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
                             </select>
                         </div>
                         <div class="col-lg-1 mt-3">
-                            <button type="submit" class="btn text-white shadow-none custom-bg">Submit</button>
+                            <button type="submit" class="btn text-white shadow-none custom-bg">ค้นหา</button>
                         </div>
                     </div>
                 </form>
@@ -111,7 +110,7 @@
                                 </span>
                             </div> --}}
                             <div class="d-flex justify-content-evenly mb-2">
-                                <a href="#" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
+                                <a href="{{ route('rooms') }}" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
                                 <a href="/roomdetails?id={{ $room->id }}" class="btn btn-sm btn-outline-dark shadow-none">รายละเอียด</a>
                             </div>
                         </div>
@@ -237,7 +236,7 @@
         </div>
     </div> --}}
 
-    <!-- REACH US -->
+    <!-- Contact US -->
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ติดต่อเรา</h2>
 
     <div class="container">
@@ -249,7 +248,7 @@
             </div>
             <div class="col-lg-4 col-md-4">
                 <div class="bg-white p-4 rounded mb-4">
-                    <h4>Call Us</h4>
+                    <h4>โทร</h4>
                     <a href="tel: +669900099" class="d-inline-block mb-2 text-decoration-none text-dark">
                         <i class="bi bi-telephone-fill me-1"></i>+669900099
                     </a>
@@ -259,7 +258,7 @@
                     </a>
                 </div>
                 <div class="bg-white p-4 rounded mb-4">
-                    <h4>Follow Us</h4>
+                    <h4>ติดตามเรา</h4>
                     <a href="" class="d-inline-block mb-3">
                         <span class="badge bg-light text-dark fs-6 p-2">
                             <i class="bi bi-line me-1"></i>
@@ -289,7 +288,6 @@
 
 @section('scripts')
     <script>
-        //
         var swiper = new Swiper(".swiper-container", {
             spaceBetween: 30,
             effect: "fade",
@@ -343,4 +341,6 @@
             }
         });
     </script>
+
+    <script src="js/frontoffice/home.js"></script>
 @endsection

@@ -11,6 +11,7 @@ use App\Models\Gallery;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -66,24 +67,34 @@ class FrontController extends Controller
 
     public function roomPage(Request $request)
     {
-        $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
 
-        foreach ($rooms as $room) {
-            $fea_ids = explode(', ', $room->feature_ids);
-            $fac_ids = explode(', ', $room->fac_ids);
-
-            $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
-            $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
-            $gallery = $room->gallery;
-
-            $room->features = $features;
-            $room->facs = $facs;
-            $room->gallery = $gallery;
-        }
-
-        return view('frontoffice.rooms', [
-            'rooms' => $rooms,
+        $validator = Validator::make($request->all(), [
+            'checkin' => 'string|required',
+            'checkout' => 'string|required',
+            'adult' => 'numeric|required',
+            'children' => 'numeric|required',
         ]);
+
+        if ($validator->fails()) {
+            $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
+
+            foreach ($rooms as $room) {
+                $fea_ids = explode(', ', $room->feature_ids);
+                $fac_ids = explode(', ', $room->fac_ids);
+
+                $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
+                $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
+                $gallery = $room->gallery;
+
+                $room->features = $features;
+                $room->facs = $facs;
+                $room->gallery = $gallery;
+            }
+
+            return view('frontoffice.rooms', [
+                'rooms' => $rooms,
+            ]);
+        }
     }
 
     public function roomDetailsPage(Request $request)

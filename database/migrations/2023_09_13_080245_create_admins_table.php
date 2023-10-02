@@ -33,6 +33,13 @@ return new class extends Migration
              'password' => '$2y$10$NWqZXU3U7OgUO7XTl9UC0eqDeSRZMof2/xOQ2N.SUlIE6pD2uMd2y', /* ASDqwe123 */
              'email' => "admin@example.com",
             ],
+            [
+             'id' => 2,
+             'display_name' => 'Admin1',
+             'username' => 'admin1@gmail.com',
+             'password' => '$2y$10$xi9r9XV0lsLPQpFtYK5A7udQDxhumgZPhQihmsLqd/Ry0lj2tZOc.', /* asdqwe123 */
+             'email' => "admin1@gmail.com",
+            ],
         ]);
     }
 

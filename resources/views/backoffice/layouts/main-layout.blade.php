@@ -20,25 +20,25 @@
 
             <ul class="list-unstyled px-2">
                 <li class=""><a href="javascript:getPage('')" class="text-decoration-none px-3 py-2 d-block"><i
-                            class="bi bi-house-door" style="font-size: 20px;"></i> Dashboard</a></li>
+                            class="bi bi-house-door" style="font-size: 20px;"></i> แผงควบคุม</a></li>
                 <li class="rooms"><a href="javascript:getPage('rooms')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-hospital"
-                            style="font-size: 20px;"></i> Rooms</a></li>
+                            style="font-size: 20px;"></i> จัดการห้องพัก</a></li>
                 <li class="users"><a href="javascript:getPage('users')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-people"
-                            style="font-size: 20px;"></i> Users</a></li>
+                            style="font-size: 20px;"></i> จัดการผู้ใช้งาน</a></li>
                 <li class="messages"><a href="javascript:getPage('messages')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-chat-right-text"
-                            style="font-size: 20px;"></i> Messages</a></li>
+                            style="font-size: 20px;"></i> ข้อความ</a></li>
                 <li class="features_fac"><a href="javascript:getPage('features_fac')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-ui-checks-grid"
-                            style="font-size: 20px;"></i> Features & Facilities</a></li>
+                            style="font-size: 20px;"></i> คุณสมบัติ & ความสะดวก</a></li>
                 <li class="carousel"><a href="javascript:getPage('carousel')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-images"
-                            style="font-size: 20px;"></i> Carousel</a></li>
+                            style="font-size: 20px;"></i> ภาพโฆษณา</a></li>
                 <li class="settings"><a href="javascript:getPage('settings')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-sliders"
-                            style="font-size: 20px;"></i> Settings</a></li>
+                            style="font-size: 20px;"></i> ตั้งค่าระบบ</a></li>
             </ul>
             <hr class="h-color mx-2">
         </div>

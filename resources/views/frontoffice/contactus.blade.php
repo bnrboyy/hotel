@@ -7,8 +7,8 @@
 @section('content')
     <div class="head-title">
         <div class="my-5 px-4">
-            <h1 class="fw-bold text-center">CONTACT US</h1>
-            <div class="h-line bg-dark"></div>
+            <h1 class="fw-bold text-center">ติดต่อเรา</h1>
+            <div class="h-line bg-dark" style="width: 100px"></div>
         </div>
     </div>
 

@@ -13,6 +13,7 @@
     min-width: 250px;
     max-width: 250px;
     transition: all 0.4s;
+    z-index: 999;
 }
 
 .content {
@@ -131,7 +132,7 @@ div.frofile-card .action span {
         margin-left: -250px;
         position: fixed;
         min-height: 100vh;
-        z-index: 1;
+        z-index: 999;
     }
 
     #side_nav.active {

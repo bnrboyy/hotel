@@ -8,8 +8,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Image;
 
 class CarouselController extends Controller
 {
@@ -30,9 +30,24 @@ class CarouselController extends Controller
         $image = "";
 
         if (isset($files['image'])) {
+
+            $width = 1920;
+            $height = 590;
+            // ปรับขนาดรูปภาพ
+            $resizedImage = Image::make($files['image'])->resize($width, $height);
+
+            $path = 'upload/backoffice/carousel/'; // กำหนดพาธที่จะบันทึกไฟล์
+            $path_upload = public_path($path); // กำหนดพาธที่จะบันทึกไฟล์
+            $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
+            $resizedImage->save($path_upload . $filename);
+
+            if ($resizedImage) {
+                $image = $path . $filename;
+            }
+
             /* Upload Image */
-            $newFolder = "upload/backoffice/carousel/";
-            $image = $this->uploadImage($newFolder, $files['image'], "newcarousel", "", "");
+            // $newFolder = "upload/backoffice/carousel/";
+            // $image = $this->uploadImage($newFolder, $files['image'], "newcarousel", "", "");
         }
 
         try {
@@ -132,9 +147,24 @@ class CarouselController extends Controller
         $image = "";
 
         if (isset($files['image'])) {
+
+            $width = 1920;
+            $height = 590;
+            // ปรับขนาดรูปภาพ
+            $resizedImage = Image::make($files['image'])->resize($width, $height);
+
+            $path = 'upload/backoffice/carousel/'; // กำหนดพาธที่จะบันทึกไฟล์
+            $path_upload = public_path($path); // กำหนดพาธที่จะบันทึกไฟล์
+            $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
+            $resizedImage->save($path_upload . $filename);
+
+            if ($resizedImage) {
+                $image = $path . $filename;
+            }
+
             /* Upload Image */
-            $newFolder = "upload/backoffice/carousel/";
-            $image = $this->uploadImage($newFolder, $files['image'], "carousel", "", "");
+            // $newFolder = "upload/backoffice/carousel/";
+            // $image = $this->uploadImage($newFolder, $files['image'], "carousel", "", "");
         }
 
         try {

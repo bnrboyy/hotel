@@ -31,41 +31,56 @@ return new class extends Migration
                 'id' => 1,
                 'room_id' => 1,
                 'image' => '/images/rooms/1.jpg',
+                'default' => 1,
             ],
             [
                 'id' => 2,
                 'room_id' => 1,
                 'image' => '/images/rooms/2.png',
+                'default' => 0,
+
             ],
             [
                 'id' => 3,
                 'room_id' => 2,
                 'image' => '/images/rooms/2.png',
+                'default' => 1,
+
             ],
             [
                 'id' => 4,
                 'room_id' => 2,
                 'image' => '/images/rooms/3.png',
+                'default' => 0,
+
             ],
             [
                 'id' => 5,
                 'room_id' => 3,
                 'image' => '/images/rooms/5.png',
+                'default' => 1,
+
             ],
             [
                 'id' => 6,
                 'room_id' => 3,
                 'image' => '/images/rooms/6.png',
+                'default' => 0,
+
             ],
             [
                 'id' => 7,
                 'room_id' => 3,
                 'image' => '/images/rooms/7.png',
+                'default' => 0,
+
             ],
             [
                 'id' => 8,
                 'room_id' => 3,
                 'image' => '/images/rooms/4.png',
+                'default' => 0,
+
             ],
 
         ]);

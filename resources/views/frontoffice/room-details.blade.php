@@ -73,7 +73,7 @@
             </div>
 
             <div class="col-12 px-4">
-                <div class="mb-4">
+                <div class="mb-4 mt-3">
                     <h5>รายละเอียดห้อง</h5>
                     <p>{{ $room->description }}</p>
                 </div>

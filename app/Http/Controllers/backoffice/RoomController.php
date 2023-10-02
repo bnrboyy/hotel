@@ -218,19 +218,19 @@ class RoomController extends Controller
 
         if (isset($files['image'])) {
             // $image = $request->file('image');
-
-            // กำหนดขนาดที่ต้องการ (เช่น 640x360)
             $width = 1920;
             $height = 1080;
-
             // ปรับขนาดรูปภาพ
             $resizedImage = Image::make($files['image'])->resize($width, $height);
 
-            $path = public_path('upload/'); // กำหนดพาธที่จะบันทึกไฟล์
+            $path = 'upload/backoffice/room/'; // กำหนดพาธที่จะบันทึกไฟล์
+            $path_upload = public_path($path); // กำหนดพาธที่จะบันทึกไฟล์
             $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
-            $resizedImage->save($path . $filename);
+            $resizedImage->save($path_upload . $filename);
 
-            dd($resizedImage);
+            if ($resizedImage) {
+                $image = $path . $filename;
+            }
             /* Upload Image */
             // $newFolder = "upload/backoffice/room/";
             // $image = $this->uploadImage($newFolder, $files['image'], "newroom", "", "");
