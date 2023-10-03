@@ -19,12 +19,12 @@ return new class extends Migration
             $table->string('address');
             $table->string('gmap');
             $table->string('phone1');
-            $table->string('phone2')->nullable();
+            $table->string('phone2')->nullable()->default(null);
             $table->string('email');
-            $table->string('fb')->nullable();
-            $table->string('line')->nullable();
-            $table->string('ig')->nullable();
-            $table->text('iframe')->nullable();
+            $table->string('fb')->nullable()->default(null);
+            $table->string('line')->nullable()->default(null);
+            $table->string('ig')->nullable()->default(null);
+            $table->text('iframe')->nullable()->default(null);
 
             $table->timestamps();
         });

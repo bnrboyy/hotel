@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\view;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Carousel;
 use App\Models\Contact;
 use App\Models\Facilitie;
@@ -75,31 +76,50 @@ class FrontController extends Controller
             'children' => 'numeric|required',
         ]);
 
-        if ($validator->fails()) {
-            $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
+        $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
 
-            foreach ($rooms as $room) {
-                $fea_ids = explode(', ', $room->feature_ids);
-                $fac_ids = explode(', ', $room->fac_ids);
+        foreach ($rooms as $room) {
+            $fea_ids = explode(', ', $room->feature_ids);
+            $fac_ids = explode(', ', $room->fac_ids);
 
-                $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
-                $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
-                $gallery = $room->gallery;
+            $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
+            $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
+            $gallery = $room->gallery;
 
-                $room->features = $features;
-                $room->facs = $facs;
-                $room->gallery = $gallery;
-            }
-
-            return view('frontoffice.rooms', [
-                'rooms' => $rooms,
-            ]);
+            $room->features = $features;
+            $room->facs = $facs;
+            $room->gallery = $gallery;
         }
+
+        if (!$validator->fails()) {
+            // วันที่เริ่มต้นและวันที่สิ้นสุด
+            $startDate = new DateTime('2023-01-01');
+            $endDate = new DateTime('2023-12-31');
+
+            // คำนวณจำนวนวันที่ห่างกัน
+            $interval = $startDate->diff($endDate);
+
+            // ดึงค่าจำนวนวันออกมา
+            $daysDifference = $interval->days;
+
+            echo "จำนวนวันที่ห่างกัน: $daysDifference วัน";
+
+            $booking = DB::table('bookings')
+                ->whereBetween('date_checkout', [$request->checkin, $request->checkout])
+                // ->whereIn('status_id', [1, 2])
+                // ->whereIn('date_checkin', [$request->checkin, $request->checkout])
+                ->get();
+
+            dd($booking);
+        }
+
+        return view('frontoffice.rooms', [
+            'rooms' => $rooms,
+        ]);
     }
 
     public function roomDetailsPage(Request $request)
     {
-
         $room = Room::where(['id' => $request->id])->first();
 
         if (!$room) {

@@ -39,7 +39,6 @@
                     </button>
                 </div>
             </div>
-
             <div class="col-lg-5 col-md-12 px-4">
                 <div class="card mb-4 border-0 shadow-sm rounded-3">
                     <div class="card-body">
@@ -51,6 +50,15 @@
                                     {{ $fea->name }}
                                 </span>
                             @endforeach
+                        </div>
+                        <div class="features mb-2">
+                            <h5 class="mb-1">จำนวนผู้เข้าพัก</h5>
+                            <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">
+                                ผู้ใหญ่ : {{ $room->adult }}
+                            </span>
+                            <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">
+                                เด็ก : {{ $room->children }}
+                            </span>
                         </div>
                         <div class="facilities mb-4">
                             <h5 class="mb-1">สิ่งอำนวยความสะดวก</h5>

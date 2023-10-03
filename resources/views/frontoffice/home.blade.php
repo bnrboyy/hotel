@@ -83,7 +83,7 @@
                         <div class="card-body">
                             <h4>{{ $room->name }}</h4>
                             <h5 class="mb-4">฿ {{ $room->price }} / วัน</h5>
-                            <div class="features mb-4">
+                            <div class="features mb-2">
                                 <h5 class="mb-1">คุณสมบัติห้อง</h5>
                                 @foreach ($room->features as $fea)
                                     <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">

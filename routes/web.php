@@ -40,8 +40,7 @@ Route::middleware('auth:web')->group(function () {
 
 Route::prefix('admin')->group(function () {
     /* Views */
-    Route::get('/', [BackController::class, 'adminPage'])->name('admin-login');
-
+    Route::get('/login', [BackController::class, 'loginPage'])->name('admin-login');
     /* Controllers */
     Route::post('/signin', [AdminController::class, 'signIn']);
     Route::post('/register', [AdminController::class, 'register']);
@@ -49,50 +48,50 @@ Route::prefix('admin')->group(function () {
 
     /* Route middleware admin */
     Route::middleware('auth-admin:admin')->group(function () {
-        /* Views */
-        // Route::get('/dashboard', [BackController::class, 'dashboardPage'])->name('dashboard');
 
-        /* Controllers */
-        Route::get('/logout', [AdminController::class, 'onLogout']);
-        Route::post('/updatesite', [SettingController::class, 'onUpdateSite']);
-        Route::post('/updateshutdown', [SettingController::class, 'onUpdateShutdown']);
-        Route::post('/updatecontact', [SettingController::class, 'onUpdateContact']);
+        Route::middleware('admin-check')->group(function () {
+            /* Controllers */
+            Route::get('/', [BackController::class, 'adminPage'])->name('admin');
+            Route::get('/logout', [AdminController::class, 'onLogout'])->name('logout');
 
-        Route::get('/getcontact', [SettingController::class, 'getContact']);
+            Route::post('/updatesite', [SettingController::class, 'onUpdateSite']);
+            Route::post('/updateshutdown', [SettingController::class, 'onUpdateShutdown']);
+            Route::post('/updatecontact', [SettingController::class, 'onUpdateContact']);
 
-        Route::get('/carousel/{id}', [CarouselController::class, 'getById']);
-        Route::post('/carousel/create', [CarouselController::class, 'create']);
-        Route::post('/carousel/update', [CarouselController::class, 'update']);
-        Route::delete('/carousel/delete', [CarouselController::class, 'delete']);
+            Route::get('/getcontact', [SettingController::class, 'getContact']);
 
-        Route::post('/leavemessage', [LeaveMessageController::class, 'createMessage']);
-        Route::get('/messageone/{msg_id}', [LeaveMessageController::class, 'getMessageById']);
-        Route::delete('/message/delete/{msg_id}', [LeaveMessageController::class, 'deleteMessage']);
+            Route::get('/carousel/{id}', [CarouselController::class, 'getById']);
+            Route::post('/carousel/create', [CarouselController::class, 'create']);
+            Route::post('/carousel/update', [CarouselController::class, 'update']);
+            Route::delete('/carousel/delete', [CarouselController::class, 'delete']);
 
-        /* Feature & Facilities */
-        Route::post('/feature/create', [FeatureAndFacController::class, 'createFeature']);
-        Route::get('/featureone/{id}', [FeatureAndFacController::class, 'getFeatureById']);
-        Route::post('/feature/update', [FeatureAndFacController::class, 'updateFeature']);
+            Route::post('/leavemessage', [LeaveMessageController::class, 'createMessage']);
+            Route::get('/messageone/{msg_id}', [LeaveMessageController::class, 'getMessageById']);
+            Route::delete('/message/delete/{msg_id}', [LeaveMessageController::class, 'deleteMessage']);
 
-        Route::post('/fac/create', [FeatureAndFacController::class, 'createFac']);
-        Route::get('/facone/{id}', [FeatureAndFacController::class, 'getFacById']);
-        Route::post('/fac/update', [FeatureAndFacController::class, 'updateFac']);
+            /* Feature & Facilities */
+            Route::post('/feature/create', [FeatureAndFacController::class, 'createFeature']);
+            Route::get('/featureone/{id}', [FeatureAndFacController::class, 'getFeatureById']);
+            Route::post('/feature/update', [FeatureAndFacController::class, 'updateFeature']);
 
-        Route::patch('/updatefacdisplay/{id}', [FeatureAndFacController::class, 'updateFacDisplay']);
-        Route::patch('/updatefeaturedisplay/{id}', [FeatureAndFacController::class, 'updateFeatureDisplay']);
-        Route::delete('/deletefac/{id}', [FeatureAndFacController::class, 'deleteFac']);
-        Route::delete('/deletefeature/{id}', [FeatureAndFacController::class, 'deleteFeature']);
+            Route::post('/fac/create', [FeatureAndFacController::class, 'createFac']);
+            Route::get('/facone/{id}', [FeatureAndFacController::class, 'getFacById']);
+            Route::post('/fac/update', [FeatureAndFacController::class, 'updateFac']);
 
-        /* Rooms */
-        Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);
-        Route::get('/gallery/{id}', [RoomController::class, 'getGalleryById']);
-        Route::post('/room/create', [RoomController::class, 'createRoom']);
-        Route::post('/room/update', [RoomController::class, 'updateRoom']);
-        Route::post('/room/addimage', [RoomController::class, 'addImage']);
-        Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
-        Route::patch('/updategaldefault/{id}', [RoomController::class, 'updateGalleryDefault']);
-        Route::delete('/deletegal/{id}', [RoomController::class, 'deleteGallery']);
+            Route::patch('/updatefacdisplay/{id}', [FeatureAndFacController::class, 'updateFacDisplay']);
+            Route::patch('/updatefeaturedisplay/{id}', [FeatureAndFacController::class, 'updateFeatureDisplay']);
+            Route::delete('/deletefac/{id}', [FeatureAndFacController::class, 'deleteFac']);
+            Route::delete('/deletefeature/{id}', [FeatureAndFacController::class, 'deleteFeature']);
 
-
+            /* Rooms */
+            Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);
+            Route::get('/gallery/{id}', [RoomController::class, 'getGalleryById']);
+            Route::post('/room/create', [RoomController::class, 'createRoom']);
+            Route::post('/room/update', [RoomController::class, 'updateRoom']);
+            Route::post('/room/addimage', [RoomController::class, 'addImage']);
+            Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
+            Route::patch('/updategaldefault/{id}', [RoomController::class, 'updateGalleryDefault']);
+            Route::delete('/deletegal/{id}', [RoomController::class, 'deleteGallery']);
+        });
     });
 });

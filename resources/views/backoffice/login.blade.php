@@ -3,7 +3,7 @@
 
 <head>
     @include('backoffice.layouts.header')
-    <link rel="stylesheet" href="css/backoffice/login-admin.css">
+    <link rel="stylesheet" href="/css/backoffice/login-admin.css">
     <title>Admin Login</title>
 </head>
 
@@ -47,8 +47,13 @@
                     window.location.href = "/admin";
                 }
             }).catch(err => {
-                spinner.classList.add('hidden')
                 const message = document.querySelector('.invalid')
+                if (err.response.status === 403) {
+                    message.innerText = "บัญชีนี้ถูกปิดใช้งาน";
+                } else {
+                    message.innerText = "Username หรือ Password ไม่ถูกต้อง";
+                }
+                spinner.classList.add('hidden')
                 message.classList.remove('hidden')
             })
 

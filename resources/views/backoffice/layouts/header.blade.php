@@ -7,8 +7,8 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 {{-- Swiper --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-<link rel="stylesheet" href="css/backoffice/main-admin.css">
-<link rel="stylesheet" href="css/backoffice/layout-admin.css">
+<link rel="stylesheet" href="/css/backoffice/main-admin.css">
+<link rel="stylesheet" href="/css/backoffice/layout-admin.css">
 
 {{-- Datatable --}}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">

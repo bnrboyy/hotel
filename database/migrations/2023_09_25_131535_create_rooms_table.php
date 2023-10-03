@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('price');
-            $table->text('description')->nullable();
+            $table->text('description')->nullable()->default(null);
             $table->integer('adult');
             $table->integer('children');
             $table->string('area');

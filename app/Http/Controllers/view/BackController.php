@@ -46,7 +46,6 @@ class BackController extends Controller
         }
 
         if ($user) {
-
             switch ($page) {
                 case 'settings':
                     return view('backoffice.settings', [
@@ -90,9 +89,18 @@ class BackController extends Controller
                     return view('backoffice.dashboard');
                     break;
             }
-        } else {
-            return view('backoffice.login');
         }
+    }
+
+
+
+    public function loginPage(Request $request)
+    {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin');
+        }
+
+        return view('backoffice.login');
     }
 
     public function dashboardPage(Request $request)

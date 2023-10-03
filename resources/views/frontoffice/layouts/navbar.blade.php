@@ -22,12 +22,11 @@
                 <li class="nav-item">
                     <a class="nav-link me-2 fs-6" data-slug="/contactus" href="{{ route('contactus') }}">ติดต่อเรา</a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a class="nav-link me-2 fs-6" data-slug="/about" href="{{ route('about') }}">เกี่ยวกับเรา</a>
-                </li> --}}
+                <li class="nav-item">
+                    <a class="nav-link me-2 fs-6" data-slug="/about" href="{{ route('about') }}">ค้นหารายการจอง</a>
+                </li>
             </ul>
-            <div class="d-flex">
-                {{-- <button class="btn btn-outline-success shadow-none">Search</button> --}}
+            {{-- <div class="d-flex">
                 <button type="button" class="btn btn-outline-dark me-lg-2 me-3 shadow-none" data-bs-toggle="modal"
                     data-bs-target="#loginModal">
                     เข้าสู่ระบบ
@@ -36,7 +35,7 @@
                     data-bs-target="#registerModal">
                     สมัครสมาชิก
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
 </nav>
