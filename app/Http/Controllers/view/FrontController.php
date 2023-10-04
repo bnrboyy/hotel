@@ -76,6 +76,16 @@ class FrontController extends Controller
             'children' => 'numeric|required',
         ]);
 
+        $current_timestamp = strtotime(date('Y-m-d'));
+        $checkin_timestamp = strtotime($request->checkin);
+        $checkout_timestamp = strtotime($request->checkout);
+
+        if (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp)) {
+            return view('frontoffice.rooms', [
+                'rooms' => [],
+            ]);
+        }
+
         $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
 
         foreach ($rooms as $room) {
@@ -92,25 +102,45 @@ class FrontController extends Controller
         }
 
         if (!$validator->fails()) {
-            // วันที่เริ่มต้นและวันที่สิ้นสุด
-            $startDate = new DateTime('2023-01-01');
-            $endDate = new DateTime('2023-12-31');
 
-            // คำนวณจำนวนวันที่ห่างกัน
-            $interval = $startDate->diff($endDate);
+            // หา differrence date
+            $start_date = $request->checkin;
+            $end_date = $request->checkout;
+            $start_timeStamp = strtotime($start_date);
+            $end_timeStamp = strtotime($end_date);
+            $secondsDiff = $end_timeStamp - $start_timeStamp;
+            $diff_date = $secondsDiff / (60 * 60 * 24);
 
-            // ดึงค่าจำนวนวันออกมา
-            $daysDifference = $interval->days;
+            $current_date = $request->checkin;
+            $date_arr = $room_ids = $roomAvailable = [];
 
-            echo "จำนวนวันที่ห่างกัน: $daysDifference วัน";
-
-            $booking = DB::table('bookings')
-                ->whereBetween('date_checkout', [$request->checkin, $request->checkout])
-                // ->whereIn('status_id', [1, 2])
-                // ->whereIn('date_checkin', [$request->checkin, $request->checkout])
+            $bookings = DB::table('bookings')
+                ->select('bookings.*')
+                ->where(function ($query) use ($request, $diff_date) {
+                    $current_date = $request->checkin;
+                    for ($i = 0; $i < $diff_date; $i++) {
+                        $query->orWhere('booking_date', 'like', '%' . $current_date . '%');
+                        $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                    }
+                })
+                ->whereIn('status_id', [1, 2])
                 ->get();
+            // for ($i = 0; $i < $diff_date; $i++) {
+            //     $date_arr[] = $current_date;
+            //     $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
 
-            dd($booking);
+            // }
+            dd($bookings);
+
+            if (count($bookings) > 0) {
+                foreach ($bookings as $key => $value) {
+                    $room_ids[] = $value->room_id;
+                }
+            }
+
+            $uniqueIds = array_unique($room_ids);
+
+            print_r($uniqueIds);
         }
 
         return view('frontoffice.rooms', [
