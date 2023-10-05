@@ -44,7 +44,7 @@
                                 <option value="2" selected>2</option>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-3">
                             <label class="form-label" style="font-weight: 500;">เด็ก/คน</label>
                             <select class="form-select shadow-none pointer text-center" id="select-children" name="children" required>
                                 <option value="0">0</option>
@@ -52,7 +52,7 @@
                                 <option value="2">2</option>
                             </select>
                         </div>
-                        <div class="col-lg-1 mt-3">
+                        <div class="col-12 mt-3 text-center">
                             <button type="submit" class="btn text-white shadow-none custom-bg">ค้นหา</button>
                         </div>
                     </div>
@@ -63,7 +63,6 @@
 
     <!-- OUR ROOMS -->
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ห้องพัก</h2>
-
     <div class="container">
         <div class="row">
             @foreach ($rooms as $room)

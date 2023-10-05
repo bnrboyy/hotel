@@ -24,18 +24,22 @@ return new class extends Migration
         DB::table('booking_statuses')->insert([
             [
                 'id' => 1,
-                'name' => 'รอยืนยัน',
+                'name' => 'รอการตรวจสอบ',
             ],
             [
                 'id' => 2,
-                'name' => 'เข้าพัก',
+                'name' => 'ตรวจสอบสำเร็จ',
             ],
             [
                 'id' => 3,
-                'name' => 'เช็คเอาท์',
+                'name' => 'เข้าพัก',
             ],
             [
                 'id' => 4,
+                'name' => 'เช็คเอาท์',
+            ],
+            [
+                'id' => 5,
                 'name' => 'ยกเลิก',
             ],
         ]);
