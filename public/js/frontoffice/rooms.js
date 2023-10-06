@@ -32,13 +32,14 @@ if (someNullParam) {
     date_checkout.setAttribute("disabled", "");
     select_adult.value = "2";
     select_children.value = "1";
-    detailsURL = '/roomdetails?id='
+    detailsURL = "/roomdetails?id=";
 } else {
     date_checkin.value = urls.checkin;
     date_checkout.value = urls.checkout;
     select_adult.value = urls.adult;
     select_children.value = urls.children;
-    detailsURL = `/roomdetails?checkin=${urls.checkin}&checkout=${urls.checkout}&id=`
+    detailsURL = `/roomdetails?checkin=${urls.checkin}&checkout=${urls.checkout}&id=`;
+    bookingDetailsURL = `/bookingdetails?checkin=${urls.checkin}&checkout=${urls.checkout}&id=`;
 
     setDateSelected(urls.checkin);
 }
@@ -83,4 +84,19 @@ selects.forEach((select) => {
 
 function roomDetails(room_id) {
     window.location.href = `${detailsURL}${room_id}`;
+}
+
+function book(room_id) {
+    const isNullParams = someNullParam;
+    if (isNullParams) {
+        Swal.fire({
+            icon: "info",
+            text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",
+        }).then(() => {
+            return false;
+        })
+    } else {
+        console.log(`${bookingDetailsURL}${room_id}`)
+        window.location.href = `${bookingDetailsURL}${room_id}`;
+    }
 }

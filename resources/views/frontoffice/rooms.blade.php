@@ -121,7 +121,7 @@
             </div>
 
             <div class="col-lg-9 col-md-12 px-4">
-                {{-- Room items --}}
+                {{-- Rooms --}}
                 @foreach ($rooms as $room)
                     <div class="card mb-4 border-0 shadow">
                         <div class="row g-0 p-3 align-items-center">
@@ -182,7 +182,7 @@
                             </div>
                             <div class="col-md-2 mt-lg-0 mt-md-0 mt-4 text-center">
                                 <h6 class="mb-4">฿ {{ $room->price }} / วัน</h6>
-                                <button class="btn btn-sm w-100 text-white custom-bg shadow-none mb-2">จองห้อง</button>
+                                <button onclick="book({{ $room->id }})" class="btn btn-sm w-100 text-white custom-bg shadow-none mb-2">จองห้อง</button>
                                 <button onclick="roomDetails({{ $room->id }})"
                                     class="btn btn-sm w-100 btn-outline-dark shadow-none">ดูรายละเอียด</button>
                             </div>
@@ -195,8 +195,8 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/frontoffice/rooms.js"></script>
-
     <script>
         var swiper = new Swiper(".swiper-gallery", {
             spaceBetween: 30,

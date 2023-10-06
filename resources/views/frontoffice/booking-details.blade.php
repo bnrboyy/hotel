@@ -7,43 +7,65 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-12 my-3 px-4">
-                <h2 class="fw-bold">ห้อง : {{ $room->name }}</h2>
+            <div class="col-12 my-4 px-2">
+                <h2 class="fw-bold">รายละเอียดการจอง</h2>
                 <div style="font-size: 14px;">
                     <a href="{{ route('home') }}" class="text-secondary text-decoration-none">หน้าหลัก</a>
                     <span class="text-secondary"> > </span>
-                    <a href="{{ route('rooms') }}" class="text-secondary text-decoration-none">ห้องพัก</a>
+                    <a class="text-secondary text-decoration-none">การจอง</a>
                 </div>
             </div>
-            <div class="col-lg-7 col-md-12 px-4">
-                <div id="roomCarousel" class="carousel slide">
-                    <div class="carousel-indicators">
-                        @foreach ($room->gallery as $key => $slide)
-                            <button type="button" data-bs-target="#roomCarousel" data-bs-slide-to="{{ $key }}"
-                                class="{{ $slide->default === 1 ? 'active' : '' }} custom-bg"
-                                aria-current="{{ $slide->default === 1 ? 'true' : '' }}"></button>
-                        @endforeach
-                    </div>
-                    <div class="carousel-inner">
-                        @foreach ($room->gallery as $slide)
-                            <div class="carousel-item {{ $slide->default === 1 ? 'active' : '' }}">
-                                <img src="{{ $slide->image }}" class="d-block w-100 h-100 rounded">
+            <div class="col-12">
+                <div class="row shadow p-4 mb-4">
+                    <div class="col-lg-7 col-md-12 mb-5">
+                        <h6>ข้อมูลผู้จอง / รายละเอียด</h6>
+                        <div class="row">
+                            <div class="col-lg-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">ชื่อ <span class="text-secondary">(ภาษาไทย)</span></label>
+                                    <input name="fname" type="text"
+                                        class="form-control form-room shadow-none" required>
+                                </div>
                             </div>
-                        @endforeach
+                            <div class="col-lg-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">นามสกุล <span class="text-secondary">(ภาษาไทย)</span></label>
+                                    <input name="lname" type="text"
+                                        class="form-control form-room shadow-none" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">เบอร์โทรศัพท์</label>
+                                    <input name="phone" type="number"
+                                        class="form-control form-room shadow-none"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                        onKeyPress="if(this.value.length>=8) return false;" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">อีเมล</label>
+                                    <input name="email" type="email"
+                                        class="form-control form-room shadow-none" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">เลขบัตรประชาชน4ตัวท้าย <span class="text-secondary">(ใช้เป็นเลขอ้างอิงการจอง)</span></label>
+                                    <input name="email" type="email"
+                                        class="form-control form-room shadow-none" required>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#roomCarousel"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#roomCarousel"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    <div class="col-lg-5 col-md-12 mb-5">
+                        <h6>การชำระเงิน</h6>
+                        <img src="{{ $room->gallery[0]->image }}" class="d-block w-100 h-100 rounded">
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-5 col-md-12 px-4">
+            {{-- <div class="col-lg-5 col-md-12 px-4">
                 <div class="card mb-4 border-0 shadow-sm rounded-3">
                     <div class="card-body">
                         <h5 class="mb-4">฿ {{ $room->price }} / วัน</h5>
@@ -92,30 +114,6 @@
                                         <input type="date" class="form-control shadow-none pointer" name="checkout"
                                             id="date-checkout" required>
                                     </div>
-                                    {{-- <div class="border bg-light p-3 rounded mb-3">
-                                        <h5 class="mb-3" style="font-size: 18px;">จำนวนผู้เข้าพัก</h5>
-                                        <div class="d-flex">
-                                            <div class="row w-100">
-                                                <div class="col-12 col-md-6">
-                                                    <label class="form-label" style="font-weight: 500;">ผู้ใหญ่/คน</label>
-                                                    <select class="form-select select shadow-none pointer text-center"
-                                                        id="select-adult" name="adult" required>
-                                                        <option value="1">1</option>
-                                                        <option value="2" selected>2</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="form-label" style="font-weight: 500;">เด็ก/คน</label>
-                                                    <select class="form-select select shadow-none pointer text-center"
-                                                        id="select-children" name="children" required>
-                                                        <option value="0">0</option>
-                                                        <option value="1" selected>1</option>
-                                                        <option value="2">2</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="w-100 d-flex justify-content-center align-items-center">
                                         <div class="d-none">
                                             <button type="submit"
@@ -127,7 +125,6 @@
                         </div>
                         <h6 class="d-none text-danger cant-book">ไม่สามารถจองห้องนี้ในวันเวลาที่เลือกได้ หรือ ห้องอาจไม่ว่าง
                         </h6>
-                        {{-- <h6 class="text-success can-book">ห้องว่างอยู่ กดจองได้เลยจ้า</h6> --}}
                         <div class="d-flex justify-content-evenly">
                             <button onclick="booking({{ $room->id }})"
                                 class="btn btn-sm text-white btn-book custom-bg w-100 fs-4"
@@ -141,13 +138,13 @@
                     <h5>รายละเอียดห้อง</h5>
                     <p>{{ $room->description }}</p>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection
 
 @section('scripts')
-    <script src="js/frontoffice/room-details.js"></script>
+    {{-- <script src="js/frontoffice/room-details.js"></script>
     <script>
         const isAvailable = @json($isAvailable); // from laravel controller
         const details_only = @json($details_only); // from laravel controller
@@ -241,5 +238,5 @@
 
             window.location.href = `/booking?checkin=${data.checkin}&checkout=${data.checkout}&id=${data.room_id}`;
         }
-    </script>
+    </script> --}}
 @endsection

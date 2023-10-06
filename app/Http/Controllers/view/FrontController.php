@@ -213,7 +213,6 @@ class FrontController extends Controller
                 if ($book_value->room_id === $room->id) {
                     $isAvailable = false;
                 }
-
             }
         } else {
             $isAvailable = true;
@@ -223,6 +222,23 @@ class FrontController extends Controller
             'room' => $room,
             'isAvailable' => $isAvailable,
             'details_only' => false,
+        ]);
+    }
+
+    public function bookingDetailsPage(Request $request)
+    {
+
+        // dd($request->all());
+
+        $room = Room::where(['id' => $request->id])->first();
+
+        if (!$room) {
+            return redirect()->route('rooms');
+        }
+
+        return view('frontoffice.booking-details', [
+            'room' => $room,
+            'isAvailable' => true,
         ]);
     }
 }
