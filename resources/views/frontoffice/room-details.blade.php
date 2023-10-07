@@ -239,7 +239,7 @@
                 room_id: urls.room_id,
             }
 
-            window.location.href = `/booking?checkin=${data.checkin}&checkout=${data.checkout}&id=${data.room_id}`;
+            window.location.href = `/bookingdetails?checkin=${data.checkin}&checkout=${data.checkout}&id=${data.room_id}`;
         }
     </script>
 @endsection

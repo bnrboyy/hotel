@@ -111,9 +111,6 @@ class FrontController extends Controller
             $secondsDiff = $end_timeStamp - $start_timeStamp;
             $diff_date = $secondsDiff / (60 * 60 * 24);
 
-            $current_date = $request->checkin;
-            $date_arr = $room_ids = [];
-
             $bookings = DB::table('bookings')
                 ->select('bookings.*')
                 ->where(function ($query) use ($request, $diff_date) {
@@ -133,6 +130,12 @@ class FrontController extends Controller
                         if (($room_value->id === $book_value->room_id) || ($room_value->adult < $request->adult || $room_value->children < $request->children)) {
                             unset($roomAvailable[$room_key]);
                         }
+                    }
+                }
+            } else { // กรองจำนวนผู้เข้าพัก
+                foreach ($rooms as $room_key => $room_value) {
+                    if (($room_value->adult < $request->adult || $room_value->children < $request->children)) {
+                        unset($roomAvailable[$room_key]);
                     }
                 }
             }
@@ -228,17 +231,52 @@ class FrontController extends Controller
     public function bookingDetailsPage(Request $request)
     {
 
-        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'checkin' => 'string|required',
+            'checkout' => 'string|required',
+            'id' => 'numeric|required',
+        ]);
+
+        $current_timestamp = strtotime(date('Y-m-d'));
+        $checkin_timestamp = strtotime($request->checkin);
+        $checkout_timestamp = strtotime($request->checkout);
+
+        if ($validator->fails() || (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp))) {
+            return redirect()->route('rooms'); // กลับไปที่หน้า Rooms
+        }
 
         $room = Room::where(['id' => $request->id])->first();
 
         if (!$room) {
-            return redirect()->route('rooms');
+            return redirect()->route('rooms'); // กลับไปที่หน้า Rooms
         }
+
+        $fea_ids = explode(', ', $room->feature_ids);
+        $fac_ids = explode(', ', $room->fac_ids);
+        $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
+        $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
+
+        $room->features = $features;
+        $room->facs = $facs;
+
+
+        // หาจำนวนคืนที่เข้าพัก
+        $start_date = $request->checkin;
+        $end_date = $request->checkout;
+        $secondsDiff = strtotime($end_date) - strtotime($start_date);
+        $diff_date = $secondsDiff / (60 * 60 * 24);
+
+        $isAvailable = $this->checkAvailableRoom($request, $room);
 
         return view('frontoffice.booking-details', [
             'room' => $room,
-            'isAvailable' => true,
+            'checkin' => date('d-m-Y', strtotime($request->checkin)),
+            'checkout' => date('d-m-Y', strtotime($request->checkout)),
+            'diff_date' => $diff_date,
+            // 'isAvailable' => false,
+            'isAvailable' => $isAvailable,
         ]);
     }
+
+
 }

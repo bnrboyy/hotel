@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class Controller extends BaseController
@@ -46,5 +47,38 @@ class Controller extends BaseController
             }
         }
         return false;
+    }
+
+    public function checkAvailableRoom($request, $room)
+    {
+        // หาจำนวนคืนที่เข้าพัก
+        $start_date = $request->checkin;
+        $end_date = $request->checkout;
+        $start_timeStamp = strtotime($start_date);
+        $end_timeStamp = strtotime($end_date);
+        $secondsDiff = $end_timeStamp - $start_timeStamp;
+        $diff_date = $secondsDiff / (60 * 60 * 24);
+        $isAvailable = true;
+
+        $bookings = DB::table('bookings')
+            ->select('bookings.*')
+            ->where(function ($query) use ($request, $diff_date) {
+                $current_date = $request->checkin;
+                for ($i = 0; $i < $diff_date; $i++) {
+                    $query->orWhere('booking_date', 'like', '%' . $current_date . '%');
+                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                }
+            })
+            ->whereIn('status_id', [1, 2, 3])
+            ->get();
+        if (count($bookings) > 0) {
+            foreach ($bookings as $book_key => $book_value) {
+                if ($book_value->room_id === $room->id) {
+                    $isAvailable = false;
+                }
+            }
+        }
+
+        return $isAvailable;
     }
 }

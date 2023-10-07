@@ -35,6 +35,15 @@ hr.h-color {
     border-radius: 8px;
 }
 
+.caret-icon {
+    transition-duration: .3s;
+    transform: rotate(90deg);
+}
+
+.caret-icon.active {
+    transform: rotate(0deg);
+}
+
 .sidebar .nav-collapse li.active {
     background-color: #292525;
     border-radius: 0 8px 8px 0;

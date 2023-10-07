@@ -6,6 +6,7 @@ use App\Http\Controllers\backoffice\FeatureAndFacController;
 use App\Http\Controllers\backoffice\RoomController;
 use App\Http\Controllers\backoffice\SettingController;
 use App\Http\Controllers\frontoffice\LeaveMessageController;
+use App\Http\Controllers\frontoffice\UserBookingController;
 use App\Http\Controllers\view\BackController;
 use App\Http\Controllers\view\FrontController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,8 @@ Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('r
 Route::get('/bookingdetails', [FrontController::class, 'bookingDetailsPage'])->name('booking-details');
 
 /* Controllers */
+Route::post('/confirmbooking', [UserBookingController::class, 'createBookOrder']);
+
 
 
 /* Route middleware users */

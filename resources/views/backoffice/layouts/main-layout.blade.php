@@ -22,20 +22,24 @@
                 <li class=""><a href="javascript:getPage('')" class="text-decoration-none px-3 py-2 d-block"><i
                             class="bi bi-house-door" style="font-size: 20px;"></i> แผงควบคุม</a></li>
                 <li class="nav-collapse">
-                    <a class="text-decoration-none px-3 py-2 d-flex gap-1 align-items-center" data-bs-toggle="collapse" href="#bookingLinks" role="button" aria-expanded="false" aria-controls="bookingLinks">
+                    <a onclick="rotateIcon()"
+                        class="toggle-collapse text-decoration-none px-3 py-2 d-flex gap-1 align-items-center"
+                        data-bs-toggle="collapse" href="#bookingLinks" role="button" aria-expanded="false"
+                        aria-controls="bookingLinks">
                         <i class="bi bi-kanban-fill" style="font-size: 20px;"></i>
                         <div class="d-flex w-100 align-items-center justify-content-between">
                             <span>จัดการการจอง</span>
-                            <span class="text-end"><i class="bi bi-caret-down-fill"></i></span>
+                            <span class="caret-icon text-end"><i class="bi bi-caret-down-fill"></i></span>
                         </div>
                     </a>
                     <div class="collapse" id="bookingLinks" style="padding-left: 1.5rem;">
                         <ul class="nav flex-column">
                             <li class="managebook">
-                              <a class="nav-link text-decoration-none" href="javascript:getPage('managebook')">รายการจอง</a>
+                                <a class="nav-link text-decoration-none"
+                                    href="javascript:getPage('managebook')">รายการจอง</a>
                             </li>
                             <li class="booking">
-                              <a class="nav-link text-decoration-none" href="javascript:getPage('booking')">Link</a>
+                                <a class="nav-link text-decoration-none" href="javascript:getPage('booking')">Link</a>
                             </li>
                         </ul>
                     </div>
@@ -43,7 +47,6 @@
                 <li class="rooms"><a href="javascript:getPage('rooms')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-hospital"
                             style="font-size: 20px;"></i> จัดการห้องพัก</a></li>
-
                 <li class="messages"><a href="javascript:getPage('messages')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-chat-right-text"
                             style="font-size: 20px;"></i> ข้อความ</a></li>
@@ -86,7 +89,8 @@
                                     </div>
                                 </div>
                                 <button onclick="onLogout()"
-                                    class="action w-100 h-25 bg-dark text-light d-flex gap-2 align-items-center justify-content-center" style="border: none;">
+                                    class="action w-100 h-25 bg-dark text-light d-flex gap-2 align-items-center justify-content-center"
+                                    style="border: none;">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span class="">ออกจากระบบ</span>
                                 </button>
@@ -113,10 +117,44 @@
     @include('backoffice.layouts.scripts')
 
     <script>
-
         const queryString = window.location.search;
         const params = new URLSearchParams(queryString);
         const paramValue = params.get('page');
+        const toggle_collapse = document.querySelector('.toggle-collapse');
+        const collapse_show = toggle_collapse.getAttribute('aria-expanded');
+        const caret_icon = document.querySelector('.caret-icon');
+
+        function rotateIcon() {
+            const collapse_show = toggle_collapse.getAttribute('aria-expanded');
+
+            if(collapse_show === 'true') {
+                caret_icon.classList.add('active')
+            } else if (collapse_show === 'false') {
+                caret_icon.classList.remove('active')
+            }
+        }
+
+        function collapseShow() {
+            const bookingLinks = document.querySelector('#bookingLinks');
+            const collapse_links = document.querySelectorAll('.nav-collapse li');
+            let isShow = false;
+
+            collapse_links.forEach(link => {
+                if(link.classList.contains('active')) {
+                    isShow = true;
+                }
+            })
+
+            if (isShow) {
+                bookingLinks.classList.add('show')
+                caret_icon.classList.add('active')
+
+            } else {
+                bookingLinks.classList.remove('show')
+                caret_icon.classList.remove('active')
+
+            }
+        }
 
         function activeMenu() {
             $(".sidebar ul li").on('click', function() {
@@ -126,7 +164,6 @@
         }
 
         document.querySelectorAll('.sidebar ul li').forEach(function(el, ind) {
-            console.log(el)
             if ((el.className === paramValue) || (!paramValue && el.className === "")) {
                 el.classList.add('active')
             } else {
@@ -145,6 +182,9 @@
                 window.location.href = `/admin`
             }
         }
+
+        collapseShow();
+
     </script>
 
     @yield('script')

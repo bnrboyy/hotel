@@ -31,10 +31,10 @@ figure.image-upload:hover::after {
     pointer-events: none;
 }
 
-figure.image-upload:hover img {
+/* figure.image-upload:hover img {
     border-radius: 3px;
     transform: scale(0.97) !important;
-}
+} */
 
 figure.image-upload input.img-input {
     cursor: pointer;
