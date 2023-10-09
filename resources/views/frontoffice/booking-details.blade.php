@@ -42,7 +42,7 @@
                                         <label class="form-label" style="font-weight: 500;">*เบอร์โทรศัพท์</label>
                                         <input name="phone" type="number" class="form-control form-room shadow-none"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                            onKeyPress="if(this.value.length>=8) return false;" required>
+                                            onKeyPress="if(this.value.length>=10) return false;" minlength="10" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12">
@@ -58,7 +58,7 @@
                                                 class="text-secondary">(ใช้เป็นเลขอ้างอิงการจอง)</span></label>
                                         <input name="card_id" type="number" class="form-control form-room shadow-none"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                            onKeyPress="if(this.value.length>=4) return false;" required>
+                                            onKeyPress="if(this.value.length>=4) return false;" minlength="4" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12 mb-4">
@@ -170,6 +170,8 @@
                         <input type="hidden" name="checkin" value="{{ $checkin }}">
                         <input type="hidden" name="checkout" value="{{ $checkout }}">
                         <input type="hidden" name="room_id" value="{{ $room->id }}">
+                        <input type="hidden" name="price" value="{{ $room->price * $diff_date }}">
+                        <input type="hidden" name="days" value="{{ $diff_date }}">
                     </form>
                 </div>
             </div>
@@ -178,6 +180,7 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/preview-img.js"></script>
 
     {{-- <script>
@@ -300,14 +303,22 @@
             text_confirm.classList.add('d-none')
 
             axios.post('/confirmbooking', formData).then(({ data }) => {
-                console.log(data)
                 setTimeout(() => {
-                    loading.classList.add('d-none')
+                    if (data.status) {
+                        loading.classList.add('d-none')
+                        localStorage.setItem('card_id', formData.get('card_id'))
+                        localStorage.setItem('phone', formData.get('phone'))
+                        Swal.fire({
+                            title: 'จองห้องสำเร็จ!',
+                            icon: 'success'
+                        }).then(() => {
+                            window.location.href = `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
+                        })
+                    }
                 }, 1500);
             }).catch(({response}) => {
                 setTimeout(() => {
                     loading.classList.add('d-none')
-
                     if(response.status === 403) {
                         btn_confirm.classList.add('d-none');
                         not_available.classList.remove('d-none')

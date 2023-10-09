@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 Route::get('/facilities', [FrontController::class, 'facilitiesPage'])->name('facilities');
 Route::get('/about', [FrontController::class, 'aboutPage'])->name('about');
+Route::get('/bookingsearch', [FrontController::class, 'bookingSearchPage'])->name('bookingsearch');
 Route::get('/contactus', [FrontController::class, 'contactPage'])->name('contactus');
 Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
 Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('room-details');

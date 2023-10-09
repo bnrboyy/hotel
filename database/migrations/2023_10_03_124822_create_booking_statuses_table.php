@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('booking_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('bg_color')->nullable()->default(null);
 
             $table->timestamps();
         });
@@ -25,22 +26,27 @@ return new class extends Migration
             [
                 'id' => 1,
                 'name' => 'รอการตรวจสอบ',
+                'bg_color' => 'warning',
             ],
             [
                 'id' => 2,
-                'name' => 'ตรวจสอบสำเร็จ',
+                'name' => 'ตรวจสอบแล้ว',
+                'bg_color' => 'primary',
             ],
             [
                 'id' => 3,
-                'name' => 'เข้าพัก',
+                'name' => 'กำลังเข้าพัก',
+                'bg_color' => 'info',
             ],
             [
                 'id' => 4,
-                'name' => 'เช็คเอาท์',
+                'name' => 'เช็คเอาท์แล้ว',
+                'bg_color' => 'success',
             ],
             [
                 'id' => 5,
                 'name' => 'ยกเลิก',
+                'bg_color' => 'danger',
             ],
         ]);
     }

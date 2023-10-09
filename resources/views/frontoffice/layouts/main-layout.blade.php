@@ -24,6 +24,15 @@
     @include('frontoffice.layouts.scripts')
 
     @yield('scripts')
+
+    <script>
+        function bookingSearch() {
+            const phone = localStorage.getItem('phone')
+            const card_id = localStorage.getItem('card_id')
+
+            window.location.href = `/bookingsearch?phone=${phone}&card_id=${card_id}`;
+        }
+    </script>
 </body>
 
 </html>

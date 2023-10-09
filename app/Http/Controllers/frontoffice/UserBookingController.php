@@ -8,6 +8,7 @@ use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Image;
 
 class UserBookingController extends Controller
 {
@@ -49,9 +50,41 @@ class UserBookingController extends Controller
 
         try {
 
+            $current_date = $request->checkin;
+            $booking_date = "";
+            for ($i = 0; $i < $request->days; $i++) {
+                $booking_date .= "," . date('Y-m-d', strtotime($current_date));
+                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+            }
+
+            $files = $request->allFiles();
+            $slip_image = "";
+            if (isset($files['image'])) {
+                /* Upload Image */
+                $newFolder = "upload/fontoffice/slip/";
+                $slip_image = $this->uploadImage($newFolder, $files['image'], "newslip", "", "");
+            }
+
+
+            // dd($request->all());
+
             $order = new Booking();
-            $order->booking_id = 'BK-' . $request->card_id;
             $order->room_id = $request->room_id;
+            $order->price = $request->price;
+            $order->date_checkin = date('Y-m-d', strtotime($request->checkin));
+            $order->date_checkout = date('Y-m-d', strtotime($request->checkout));
+            $order->booking_date = $booking_date;
+            $order->days = $request->days;
+            $order->status_id = 2;
+            $order->booking_type = "online";
+            $order->cus_fname = $request->fname;
+            $order->cus_lname = $request->lname;
+            $order->cus_phone = $request->phone;
+            $order->email = $request->email;
+            $order->card_id = $request->card_id;
+            $order->line_id = $request->line_id;
+            $order->payment_type = "transfer";
+            $order->slip = $slip_image;
 
             $order->save();
 

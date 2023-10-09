@@ -273,10 +273,35 @@ class FrontController extends Controller
             'checkin' => date('d-m-Y', strtotime($request->checkin)),
             'checkout' => date('d-m-Y', strtotime($request->checkout)),
             'diff_date' => $diff_date,
-            // 'isAvailable' => false,
             'isAvailable' => $isAvailable,
         ]);
     }
 
+    public function bookingSearchPage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone' => 'numeric|required',
+            'card_id' => 'numeric|required',
+        ]);
 
+        if ($validator->fails()) {
+            return view('frontoffice.booking-search', [
+                'bookings' => [],
+            ]);
+        }
+
+        $bookings = Booking::join('booking_statuses', 'booking_statuses.id', '=', 'bookings.status_id')
+            ->join('rooms', 'rooms.id', '=', 'bookings.room_id')
+            ->where(['cus_phone' => $request->phone, 'card_id' => $request->card_id])
+            ->select('bookings.*', 'booking_statuses.name AS status_name', 'booking_statuses.bg_color AS bg_color', 'rooms.name AS room_title')
+            ->orderBy('bookings.status_id', 'ASC')
+            ->orderBy('bookings.booking_number', 'DESC')
+            ->get();
+
+        // dd($bookings);
+
+        return view('frontoffice.booking-search', [
+            'bookings' => $bookings
+        ]);
+    }
 }
