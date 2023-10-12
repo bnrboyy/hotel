@@ -135,7 +135,10 @@
                                 <div class="row g-0 p-3 align-items-center justify-content-center">
                                     <h2 class="text-center">ที่ต้องชำระ {{ $room->price * $diff_date }} ฿</h2>
                                     <div class="col-md-10 mb-4">
-                                        <img src="/images/bank/k-bankqr.png" class="d-block w-100 h-100 rounded">
+                                        <img src="{{ $bank_details->bank_image }}" class="d-block w-100 h-100 mb-2 rounded">
+                                        <h6>{{ $bank_details->bank_name }}</h6>
+                                        <h6>ชื่อบัญชี : {{ $bank_details->account_name }}</h6>
+                                        <h6>เลขที่บัญชี : {{ $bank_details->account_number }}</h6>
                                     </div>
                                     <div class="col-8 col-md-8 mb-4 border-secondary p-3 rounded"
                                         style="border-style: dashed;">

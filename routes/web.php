@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backoffice\AdminController;
+use App\Http\Controllers\backoffice\BankController;
 use App\Http\Controllers\backoffice\CarouselController;
 use App\Http\Controllers\backoffice\FeatureAndFacController;
 use App\Http\Controllers\backoffice\RoomController;
@@ -87,6 +88,13 @@ Route::prefix('admin')->group(function () {
             Route::patch('/updatefeaturedisplay/{id}', [FeatureAndFacController::class, 'updateFeatureDisplay']);
             Route::delete('/deletefac/{id}', [FeatureAndFacController::class, 'deleteFac']);
             Route::delete('/deletefeature/{id}', [FeatureAndFacController::class, 'deleteFeature']);
+
+            /* Bank */
+            Route::get('/bankone/{id}', [BankController::class, 'getBankById']);
+            Route::post('/bank/create', [BankController::class, 'createBank']);
+            Route::post('/bank/update', [BankController::class, 'updateBank']);
+            Route::patch('/updatebankdisplay/{id}', [BankController::class, 'updateBankDisplay']);
+            Route::delete('/deletebank/{id}', [BankController::class, 'deleteBank']);
 
             /* Rooms */
             Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);

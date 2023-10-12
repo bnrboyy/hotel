@@ -56,9 +56,12 @@
                 <li class="carousel"><a href="javascript:getPage('carousel')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-images"
                             style="font-size: 20px;"></i> ภาพโฆษณา</a></li>
-                <li class="users"><a href="javascript:getPage('users')"
-                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-people"
-                            style="font-size: 20px;"></i> จัดการผู้ใช้งาน</a></li>
+                <li class="bank"><a href="javascript:getPage('bank')"
+                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-bank"
+                            style="font-size: 20px;"></i> จัดการบัญชีธนาคาร</a></li>
+                <li class="admins"><a href="javascript:getPage('admins')"
+                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-person-fill-lock"
+                            style="font-size: 20px;"></i> ผู้ดูแลระบบ</a></li>
                 <li class="settings"><a href="javascript:getPage('settings')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-sliders"
                             style="font-size: 20px;"></i> ตั้งค่าระบบ</a></li>

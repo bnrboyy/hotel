@@ -20,7 +20,7 @@ class CheckAdminStatus
 
         $admin = Auth::guard('admin')->user();
 
-        if ($admin->status === 'inactive') {
+        if ($admin->status === 'ปิดใช้งาน') {
             Auth::guard('admin')->logout();
             return redirect()->route('admin-login');
         }

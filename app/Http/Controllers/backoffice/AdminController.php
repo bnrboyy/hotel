@@ -30,7 +30,7 @@ class AdminController extends Controller
 
         $adminUser = Admin::where(['username' => $request->username])->first();
 
-        if ($adminUser->status === "inactive") {
+        if ($adminUser->status === "ปิดใช้งาน") {
             return response([
                 'message' => 'error',
                 'status' => false,

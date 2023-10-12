@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\view;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\Bank;
 use App\Models\Carousel;
 use App\Models\Contact;
 use App\Models\Facilitie;
@@ -39,6 +41,12 @@ class BackController extends Controller
         $features_room = Feature::where(['display' => 1])->orderBy('priority', 'ASC')->get();
         $facilities_room = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->get();
 
+        /* Bank page */
+        $banks = Bank::orderBy('priority', 'ASC')->get();
+
+        /* Admins page */
+        $admins = Admin::all();
+
         foreach ($messages as $message) {
             $msg = $message->message;
             $submsg = substr($msg, 0, 40);
@@ -64,8 +72,9 @@ class BackController extends Controller
 
                     break;
 
-                case 'users':
-                    return view('backoffice.users');
+                case 'admins':
+                    // dd($admins);
+                    return view('backoffice.admins', ['banks' => $banks, 'admins' => $admins]);
                     break;
 
                 case 'messages':
@@ -82,6 +91,12 @@ class BackController extends Controller
                 case 'carousel':
                     return view('backoffice.carousel', [
                         'slide_img' => $carousel,
+                    ]);
+                    break;
+
+                case 'bank':
+                    return view('backoffice.bank', [
+                        'banks' => $banks,
                     ]);
                     break;
 
@@ -103,13 +118,13 @@ class BackController extends Controller
         return view('backoffice.login');
     }
 
-    public function dashboardPage(Request $request)
-    {
-        return view('backoffice.dashboard');
-    }
+    // public function dashboardPage(Request $request)
+    // {
+    //     return view('backoffice.dashboard');
+    // }
 
-    public function managerooms(Request $request)
-    {
-        return view('backoffice.managerooms');
-    }
+    // public function managerooms(Request $request)
+    // {
+    //     return view('backoffice.managerooms');
+    // }
 }

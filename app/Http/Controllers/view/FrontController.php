@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\view;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Booking;
 use App\Models\Carousel;
 use App\Models\Contact;
@@ -268,12 +269,19 @@ class FrontController extends Controller
 
         $isAvailable = $this->checkAvailableRoom($request, $room);
 
+        $bank_details = Bank::where(['display' => 1])->orderBy('priority', 'ASC')->first();
+
+        if (!$bank_details) {
+            $bank_details = Bank::orderBy('priority', 'ASC')->first();
+        }
+
         return view('frontoffice.booking-details', [
             'room' => $room,
             'checkin' => date('d-m-Y', strtotime($request->checkin)),
             'checkout' => date('d-m-Y', strtotime($request->checkout)),
             'diff_date' => $diff_date,
             'isAvailable' => $isAvailable,
+            'bank_details' => $bank_details,
         ]);
     }
 
