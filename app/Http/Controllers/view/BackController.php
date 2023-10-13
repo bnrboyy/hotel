@@ -5,6 +5,7 @@ namespace App\Http\Controllers\view;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Bank;
+use App\Models\Booking;
 use App\Models\Carousel;
 use App\Models\Contact;
 use App\Models\Facilitie;
@@ -46,6 +47,15 @@ class BackController extends Controller
 
         /* Admins page */
         $admins = Admin::all();
+
+        /* Managebook page */
+        $bookings = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+                    ->join('rooms', 'rooms.id', 'bookings.room_id')
+                    ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+                    ->whereIn('bookings.status_id', [1, 2, 3])
+                    ->orderBy('bookings.created_at', 'DESC')
+                    ->get();
+
 
         foreach ($messages as $message) {
             $msg = $message->message;
@@ -97,6 +107,13 @@ class BackController extends Controller
                 case 'bank':
                     return view('backoffice.bank', [
                         'banks' => $banks,
+                    ]);
+                    break;
+
+                case 'managebook':
+                    // dd($bookings);
+                    return view('backoffice.managebook', [
+                        'bookings' => $bookings,
                     ]);
                     break;
 

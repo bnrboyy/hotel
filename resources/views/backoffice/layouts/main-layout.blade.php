@@ -32,14 +32,17 @@
                             <span class="caret-icon text-end"><i class="bi bi-caret-down-fill"></i></span>
                         </div>
                     </a>
-                    <div class="collapse" id="bookingLinks" style="padding-left: 1.5rem;">
+                    <div class="collapse show" id="bookingLinks" style="padding-left: 1.5rem;">
                         <ul class="nav flex-column">
                             <li class="managebook">
-                                <a class="nav-link text-decoration-none"
-                                    href="javascript:getPage('managebook')">รายการจอง</a>
+                                <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between"
+                                    href="javascript:getPage('managebook')">รายการจอง <span class="badge text-bg-danger rounded-pill" style="min-width: 40px;">{{ $shareBookingNew }}</span></a>
+                            </li>
+                            <li class="bookinghistory">
+                                <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between" href="javascript:getPage('bookinghistory')">ประวัติการจอง <span class="badge text-bg-success rounded-pill" style="min-width: 40px;">{{ $shareBookingHistory }}</span></a>
                             </li>
                             <li class="booking">
-                                <a class="nav-link text-decoration-none" href="javascript:getPage('booking')">Link</a>
+                                <a class="nav-link text-decoration-none" href="javascript:getPage('booking')">จองแบบ Walk-in</a>
                             </li>
                         </ul>
                     </div>
@@ -47,21 +50,33 @@
                 <li class="rooms"><a href="javascript:getPage('rooms')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-hospital"
                             style="font-size: 20px;"></i> จัดการห้องพัก</a></li>
-                <li class="messages"><a href="javascript:getPage('messages')"
-                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-chat-right-text"
-                            style="font-size: 20px;"></i> ข้อความ</a></li>
+                <li class="messages">
+                    <a href="javascript:getPage('messages')"class="text-decoration-none px-3 py-2 d-flex align-items-center justify-content-between">
+                        <div>
+                            <i class="bi bi-chat-right-text" style="font-size: 20px;"> </i>
+                            ข้อความ
+                        </div>
+                        @if ($share_messages > 0)
+                            <span class="badge text-bg-danger rounded-pill">
+                                <i class="bi bi-exclamation-lg" style="font-size: 14px;"></i>
+                            </span>
+                        @endif
+                    </a>
+                </li>
                 <li class="features_fac"><a href="javascript:getPage('features_fac')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-ui-checks-grid"
                             style="font-size: 20px;"></i> คุณสมบัติ & ความสะดวก</a></li>
                 <li class="carousel"><a href="javascript:getPage('carousel')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-images"
                             style="font-size: 20px;"></i> ภาพโฆษณา</a></li>
-                <li class="bank"><a href="javascript:getPage('bank')"
-                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-bank"
-                            style="font-size: 20px;"></i> จัดการบัญชีธนาคาร</a></li>
-                <li class="admins"><a href="javascript:getPage('admins')"
-                        class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-person-fill-lock"
-                            style="font-size: 20px;"></i> ผู้ดูแลระบบ</a></li>
+                @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                    <li class="bank"><a href="javascript:getPage('bank')"
+                            class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-bank"
+                                style="font-size: 20px;"></i> จัดการบัญชีธนาคาร</a></li>
+                    <li class="admins"><a href="javascript:getPage('admins')"
+                            class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-person-fill-lock"
+                                style="font-size: 20px;"></i> ผู้ดูแลระบบ</a></li>
+                @endif
                 <li class="settings"><a href="javascript:getPage('settings')"
                         class="text-decoration-none px-3 py-2 d-block"><i class="bi bi-sliders"
                             style="font-size: 20px;"></i> ตั้งค่าระบบ</a></li>
@@ -81,14 +96,15 @@
 
                     <div class="profile bg-light">
                         <div>
-                            <img src="/images/backoffice/user.png">
+                            <img src="{{ $shareUser->profile_image }}">
 
                             <div class="frofile-card shadow rounded bg-white">
                                 <div class="details d-flex gap-2 align-items-center p-3 w-100 h-75">
-                                    <img class="img" src="/images/backoffice/user.png">
+                                    <img class="img" src="{{ $shareUser->profile_image }}">
                                     <div class="text-center d-flex flex-column justify-content-center">
-                                        <p class="display">{{ $shareUser->display_name }}</p>
-                                        <span class="email">{{ $shareUser->username }}</span>
+                                        <p class="mb-2">- {{ $shareUser->admin_role }} -</p>
+                                        <p class="display">{{ $shareUser->username }}</p>
+                                        <span class="email">{{ $shareUser->email }}</span>
                                     </div>
                                 </div>
                                 <button onclick="onLogout()"
@@ -126,6 +142,8 @@
         const toggle_collapse = document.querySelector('.toggle-collapse');
         const collapse_show = toggle_collapse.getAttribute('aria-expanded');
         const caret_icon = document.querySelector('.caret-icon');
+
+        caret_icon.classList.add('active')
 
         function rotateIcon() {
             const collapse_show = toggle_collapse.getAttribute('aria-expanded');
@@ -186,7 +204,7 @@
             }
         }
 
-        collapseShow();
+        // collapseShow();
 
     </script>
 

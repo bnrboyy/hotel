@@ -75,8 +75,8 @@ class UserBookingController extends Controller
             $order->date_checkout = date('Y-m-d', strtotime($request->checkout));
             $order->booking_date = $booking_date;
             $order->days = $request->days;
-            $order->status_id = 2;
-            $order->booking_type = "online";
+            $order->status_id = 1;
+            $order->booking_type = "Online";
             $order->cus_fname = $request->fname;
             $order->cus_lname = $request->lname;
             $order->cus_phone = $request->phone;

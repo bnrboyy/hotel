@@ -15,8 +15,8 @@
             <div class="p-4">
                 <div class="mb-3">
                     <p class="invalid text-danger hidden">Username หรือ Password ไม่ถูกต้อง</p>
-                    <input name="username" type="email" class="form-control shadow-none text-center"
-                        placeholder="Username" required>
+                    <input name="email" type="email" class="form-control shadow-none text-center"
+                        placeholder="Email" required>
                 </div>
                 <div class="mb-4">
                     <input name="password" type="password" class="form-control shadow-none text-center"

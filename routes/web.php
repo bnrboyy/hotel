@@ -105,6 +105,13 @@ Route::prefix('admin')->group(function () {
             Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
             Route::patch('/updategaldefault/{id}', [RoomController::class, 'updateGalleryDefault']);
             Route::delete('/deletegal/{id}', [RoomController::class, 'deleteGallery']);
+
+
+            /* Admins */
+            Route::get('/adminone/{id}', [AdminController::class, 'getAdminById']);
+            Route::post('/admincreate', [AdminController::class, 'register']);
+            Route::post('/adminupdate', [AdminController::class, 'updateAdmin']);
+            Route::delete('/deleteadmin/{id}', [AdminController::class, 'deleteAdmin']);
         });
     });
 });

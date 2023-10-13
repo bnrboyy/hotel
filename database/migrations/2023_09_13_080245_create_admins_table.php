@@ -16,9 +16,9 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('display_name');
             $table->string('username');
             $table->string('email')->unique();
+            $table->string('profile_image');
             $table->string('password');
             $table->string('admin_role');
             $table->string('status');
@@ -30,8 +30,8 @@ return new class extends Migration
         DB::table('admins')->insert([
             [
              'id' => 1,
-             'display_name' => 'Tester',
-             'username' => 'admin@example.com',
+             'username' => 'Tester',
+             'profile_image' => '/images/backoffice/superadmin.png',
              'password' => '$2y$10$NWqZXU3U7OgUO7XTl9UC0eqDeSRZMof2/xOQ2N.SUlIE6pD2uMd2y', /* ASDqwe123 */
              'admin_role' => 'แอดมินสูงสุด',
              'status' => 'เปิดใช้งาน',
@@ -39,12 +39,21 @@ return new class extends Migration
             ],
             [
              'id' => 2,
-             'display_name' => 'Admin1',
-             'username' => 'admin1@gmail.com',
+             'username' => 'Admin1',
+             'profile_image' => '/images/backoffice/admin.png',
+             'email ' => "admin1@gmail.com",
+             'password' => '$2y$10$xi9r9XV0lsLPQpFtYK5A7udQDxhumgZPhQihmsLqd/Ry0lj2tZOc.', /* asdqwe123 */
+             'admin_role' => 'แอดมิน',
+             'status' => 'เปิดใช้งาน',
+            ],
+            [
+             'id' => 3,
+             'username' => 'Admin2',
+             'profile_image' => '/images/backoffice/admin.png',
+             'email ' => "admin2@gmail.com",
              'password' => '$2y$10$xi9r9XV0lsLPQpFtYK5A7udQDxhumgZPhQihmsLqd/Ry0lj2tZOc.', /* asdqwe123 */
              'admin_role' => 'แอดมิน',
              'status' => 'ปิดใช้งาน',
-             'email' => "admin1@gmail.com",
             ],
         ]);
     }

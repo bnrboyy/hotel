@@ -116,9 +116,6 @@
                 if (data.status) {
                     btn_reset.click();
                     toastr.success('ส่งข้อความสำเร็จ');
-                    toastr.options.onHidden = function () {
-                        // Do some thing after toastr done.
-                    }
                 }
             }).catch(err => {
                 toastr.error('error');

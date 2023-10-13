@@ -34,7 +34,7 @@
                             @foreach ($admins as $key => $admin)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $admin->display_name }}</td>
+                                    <td>{{ $admin->username }}</td>
                                     <td>{{ $admin->email }}</td>
                                     <td>{{ $admin->admin_role }}</td>
                                     <td><span
@@ -42,10 +42,10 @@
                                     </td>
                                     <td>
                                         <button class="btn-modal btn btn-warning shadow-none" data-bs-toggle="modal"
-                                            onclick="getBank({{ $admin->id }})" data-bs-target="#adminedit-s"><i
+                                            onclick="getAdmin({{ $admin->id }})" data-bs-target="#adminedit-s"><i
                                                 class="bi bi-pen-fill"></i></button>
                                         <button class="btn btn-danger shadow-none"
-                                            onclick="deleteBank(this, {{ $admin->id }})"><i
+                                            onclick="deleteAdmin(this, {{ $admin->id }})"><i
                                                 class="bi bi-trash-fill"></i></button>
                                     </td>
                                 </tr>
@@ -71,7 +71,7 @@
 
                             <div class="col-12 mb-3">
                                 <label class="form-label">ชื่อ</label>
-                                <input type="text" name="name" id="name"
+                                <input type="text" name="username" id="username"
                                     class="form-title form-control shadow-none" required>
                             </div>
                             <div class="col-12 mb-3">
@@ -120,95 +120,52 @@
     <div class="modal fade" id="adminedit-s" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form onsubmit="return updateBank(event)">
+            <form onsubmit="return updateAdmin(event)">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">แก้ไขบัญชีธนาคาร</h5>
+                        <h5 class="modal-title">แก้ไขผู้ดูแลระบบ</h5>
                     </div>
                     <div class="modal-body">
-                        <div class="row justify-content-center">
-                            <label class="form-label mb-2 text-center">ภาพพร้อมเพย์ธนาคาร <br> ( QR code )</label>
-                            <div class="col-6">
-                                <div class="group-image mb-3">
-                                    <figure class="image-upload shadow bg-white">
-                                        <input onchange="previewImg(1)" class="img-input" id="file1" type="file"
-                                            name="image" id="image" accept="image/jpeg, image/png, image/jpg">
-                                        <img class="" src="/images/istockphoto.jpg" id="preview-img"
-                                            alt="" style="width: 100%;">
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
-                            <div class="col-12">
-                                <div class="mb-3">
-                                    <select class="form-select shadow-none pointer text-center" id="select-bankname"
-                                        name="bankname" required>
-                                        <option value="">-- เลือกธนาคาร --</option>
-                                        <option value="ธนาคารกรุงเทพ">ธนาคารกรุงเทพ</option>
-                                        <option value="ธนาคารกสิกรไทย">ธนาคารกสิกรไทย</option>
-                                        <option value="ธนาคารกรุงไทย">ธนาคารกรุงไทย</option>
-                                        <option value="ธนาคารทหารไทย">ธนาคารทหารไทย</option>
-                                        <option value="ธนาคารไทยพาณิชย์">ธนาคารไทยพาณิชย์</option>
-                                        <option value="ธนาคารกรุงศรีอยุธยา">ธนาคารกรุงศรีอยุธยา</option>
-                                        <option value="ธนาคารเกียรตินาคิน">ธนาคารเกียรตินาคิน</option>
-                                        <option value="ธนาคารออมสิน">ธนาคารออมสิน</option>
-                                        <option value="ธนาคารซีไอเอ็มบีไทย">ธนาคารซีไอเอ็มบีไทย</option>
-                                        <option value="ธนาคารธนชาต">ธนาคารธนชาต</option>
-                                        <option value="ธนาคารอาคารสงเคราะห์">ธนาคารอาคารสงเคราะห์</option>
-                                        <option value="ธนาคารยูโอบี">ธนาคารยูโอบี</option>
-                                        <option value="ธนาคารทิสโก้">ธนาคารทิสโก้</option>
-                                        <option value="ธนาคารสแตนดาร์ดชาร์เตอร์ด(ไทย)">ธนาคารสแตนดาร์ดชาร์เตอร์ด(ไทย)
-                                        </option>
-                                        <option value="ธนาคารไทยเครดิตเพื่อรายย่อย">ธนาคารไทยเครดิตเพื่อรายย่อย</option>
-                                        <option value="ธนาคารแลนด์แอนด์เฮาส์">ธนาคารแลนด์ แอนด์ เฮาส์</option>
-                                        <option value="ธนาคารไอซีบีซี(ไทย)">ธนาคารไอซีบีซี (ไทย)</option>
-                                        <option value="ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย">
-                                            ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย</option>
-                                        <option value="ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร">
-                                            ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</option>
-                                        <option value="ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย">
-                                            ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย</option>
-                                        <option value="ธนาคารอิสลามแห่งประเทศไทย">ธนาคารอิสลามแห่งประเทศไทย</option>
-                                        <option value="ธนาคารแห่งประเทศจีน">ธนาคารแห่งประเทศจีน</option>
-                                        <option value="ธนาคารซูมิโตโมมิตซุยทรัสต์(ไทย)">ธนาคารซูมิโตโม มิตซุย ทรัสต์ (ไทย)
-                                        </option>
-                                        <option value="ธนาคารฮ่องกงและเซี้ยงไฮ้แบงกิ้งคอร์ปอเรชั่นจำกัด">
-                                            ธนาคารฮ่องกงและเซี้ยงไฮ้แบงกิ้งคอร์ปอเรชั่น จำกัด</option>
-                                    </select>
-                                </div>
+
+                            <div class="col-12 mb-3">
+                                <label class="form-label">ชื่อ</label>
+                                <input type="text" name="username" id="username"
+                                    class="form-title form-control shadow-none" required>
                             </div>
                             <div class="col-12 mb-3">
-                                <label class="form-label">ชื่อบัญชีธนาคาร</label>
-                                <input type="text" name="account_name" id="account-name"
-                                    class="form-title form-control shadow-none text-center" required>
+                                <label class="form-label">อีเมล</label>
+                                <input type="email" name="email" id="email"
+                                    class="form-title form-control shadow-none" required readonly>
                             </div>
-                            <div class="col-7 mb-3">
-                                <label class="form-label">เลขที่บัญชี</label>
-                                <input type="text" name="account_number" id="account-number"
-                                    placeholder="123-4-56789-0" class="form-title form-control shadow-none text-center"
+                            <div class="col-6 mb-3">
+                                <select class="form-select shadow-none pointer" id="admin-role" name="admin_role" required>
+                                    <option value="">-- เลือกสิทธิ์แอดมิน --</option>
+                                    <option value="แอดมินสูงสุด">แอดมินสูงสุด</option>
+                                    <option value="แอดมิน">แอดมิน</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <select class="form-select shadow-none pointer" id="admin-status" name="admin_status"
                                     required>
-                            </div>
-                            <div class="col-5 mb-3">
-                                <label class="form-label">ลำดับความสำคัญ</label>
-                                <input type="number" name="priority" id="priority"
-                                    class="form-title form-control shadow-none text-center"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                    onKeyPress="if(this.value.length>=10) return false;" required>
+                                    <option value="">-- เลือกสถานะแอดมิน --</option>
+                                    <option value="เปิดใช้งาน">เปิดใช้งาน</option>
+                                    <option value="ปิดใช้งาน">ปิดใช้งาน</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" onclick="closeModal()"
-                            class="btn-close-modal btn btn-secondary shadow-none" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" onclick="closeModal()" class="btn-close-modal btn btn-secondary shadow-none"
+                            data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn custom-bg text-white shadow-none">บันทึก</button>
                     </div>
                 </div>
-                <input type="hidden" name="bank_id" id="bank-id">
-                <input type="hidden" name="image_path" id="image-path">
+                <input type="hidden" name="admin_id" id="admin-id">
             </form>
         </div>
     </div>
+
 @endsection
 
 @section('script')
@@ -218,7 +175,8 @@
         new DataTable("#admin");
 
         const modals = document.querySelectorAll(".modal");
-        const name = document.querySelectorAll("#name");
+        const admin_id = document.querySelector("#admin-id");
+        const username = document.querySelectorAll("#username");
         const email = document.querySelectorAll("#email");
         const admin_role = document.querySelectorAll("#admin-role");
         const admin_status = document.querySelectorAll("#admin-status");
@@ -227,16 +185,15 @@
         const cpassword_valid = document.querySelectorAll(".cpassword-valid");
         const password_valid = document.querySelectorAll(".password-valid");
 
-        const admin_id = document.querySelector("#admin-id");
         const close_modal = document.querySelectorAll(".btn-close-modal");
 
         function closeModal() {
             for (let i = 0; i < modals.length; i++) {
                 admin_role[i].value = "";
                 admin_status[i].value = "";
-                password[i].value = "";
-                c_password[i].value = "";
-                name[i].value = "";
+                password[0].value = "";
+                c_password[0].value = "";
+                username[i].value = "";
                 email[i].value = "";
             }
         }
@@ -263,14 +220,11 @@
                 cpassword_valid[0].classList.add('d-none');
             }
 
-
-            return false;
-
             const form = event.target;
             const formData = new FormData(form);
 
             axios
-                .post("/admin/admin/create", formData)
+                .post("/admincreate/create", formData)
                 .then(({
                     data
                 }) => {
@@ -282,9 +236,13 @@
                         }, 2000);
                     }
                 })
-                .catch((err) => {
+                .catch(({ response }) => {
                     close_modal.forEach((btn) => btn.click());
-                    toastr.error("Error");
+                    if (response.status === 422) {
+                        toastr.error("Email นี้มีผู้ใช้งานอยู่แล้ว");
+                    } else {
+                        toastr.error("error");
+                    }
                 });
         }
 
@@ -295,14 +253,13 @@
                     data
                 }) => {
                     if (data.status) {
-                        const bank = data.data;
-                        bank_id.value = bank.id;
-                        img[1].src = bank.bank_image;
-                        select_bank_name[1].value = bank.bank_name;
-                        account_name[1].value = bank.account_name;
-                        account_number[1].value = bank.account_number;
-                        priority[1].value = bank.priority;
-                        image_path.value = bank.bank_image;
+                        const admin = data.data;
+                        admin_id.value = admin.id;
+                        username[1].value = admin.username;
+                        email[1].value = admin.email;
+                        admin_role[1].value = admin.admin_role;
+                        admin_status[1].value = admin.status;
+
                     }
                 })
                 .catch((err) => {
@@ -317,7 +274,7 @@
             const formData = new FormData(form);
 
             axios
-                .post(`/admin/admin/update`, formData)
+                .post(`/admin/adminupdate`, formData)
                 .then(({
                     data
                 }) => {
@@ -331,11 +288,16 @@
                 })
                 .catch((err) => {
                     close_modal.forEach((btn) => btn.click());
-                    toastr.error("Error");
+                    if (err.response.status === 403) {
+                        toastr.error(err.response.data.description);
+                    } else {
+                        toastr.error("Error");
+                    }
+
                 });
         }
 
-        function deleteBank(_el, _id) {
+        function deleteAdmin(_el, _id) {
             const url = `/admin/deleteadmin/`;
             onDelete(_el, _id, url);
         }
@@ -368,8 +330,11 @@
                             }
                         })
                         .catch((err) => {
-                            console.log(err.response);
-                            toastr.error(err.response.data.description);
+                            if (err.response.status === 403) {
+                                toastr.error(err.response.data.description);
+                            } else {
+                                toastr.error('Error');
+                            }
                         });
                 }
             });
