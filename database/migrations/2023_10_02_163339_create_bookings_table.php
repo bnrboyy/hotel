@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('booking_number')->unique();
             $table->integer('room_id');
+            $table->integer('price_per_date')->nullable()->default(null);
             $table->integer('price');
             $table->date('date_checkin');
             $table->date('date_checkout');
@@ -45,6 +46,7 @@ return new class extends Migration
                 'booking_number' => 'BK-0001',
                 'room_id' => 1,
                 'price' => 2400,
+                'price_per_date' => 400,
                 'date_checkin' => '2023-10-3',
                 'date_checkout' => '2023-10-9',
                 'booking_date' => '2023-10-03,2023-10-04,2023-10-05,2023-10-06,2023-10-07,2023-10-08',
@@ -64,6 +66,7 @@ return new class extends Migration
                 'booking_number' => 'BK-0002',
                 'room_id' => 2,
                 'price' => 450,
+                'price_per_date' => 450,
                 'date_checkin' => '2023-10-5',
                 'date_checkout' => '2023-10-6',
                 'booking_date' => '2023-10-05',
@@ -83,6 +86,7 @@ return new class extends Migration
                 'booking_number' => 'BK-0003',
                 'room_id' => 2,
                 'price' => 900,
+                'price_per_date' => 450,
                 'date_checkin' => '2023-10-6',
                 'date_checkout' => '2023-10-8',
                 'booking_date' => '2023-10-06,2023-10-07',
@@ -102,10 +106,11 @@ return new class extends Migration
                 'booking_number' => 'BK-0004',
                 'room_id' => 1,
                 'price' => 400,
+                'price_per_date' => 400,
                 'date_checkin' => '2023-10-10',
                 'date_checkout' => '2023-10-15',
                 'booking_date' => '2023-10-10,2023-10-11,2023-10-12,2023-10-13,2023-10-14',
-                'days' => 1,
+                'days' => 5,
                 'status_id' => 1,
                 'booking_type' => 'Online',
                 'cus_fname' => "Nantachai",
@@ -121,6 +126,7 @@ return new class extends Migration
                 'booking_number' => 'BK-0005',
                 'room_id' => 3,
                 'price' => 500,
+                'price_per_date' => 500,
                 'date_checkin' => '2023-10-10',
                 'date_checkout' => '2023-10-11',
                 'booking_date' => '2023-10-10',

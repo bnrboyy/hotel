@@ -174,6 +174,7 @@
                         <input type="hidden" name="checkout" value="{{ $checkout }}">
                         <input type="hidden" name="room_id" value="{{ $room->id }}">
                         <input type="hidden" name="price" value="{{ $room->price * $diff_date }}">
+                        <input type="hidden" name="price_per_date" value="{{ $room->price }}">
                         <input type="hidden" name="days" value="{{ $diff_date }}">
                     </form>
                 </div>

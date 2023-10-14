@@ -70,6 +70,7 @@ class UserBookingController extends Controller
 
             $order = new Booking();
             $order->room_id = $request->room_id;
+            $order->price_per_date = $request->price_per_date;
             $order->price = $request->price;
             $order->date_checkin = date('Y-m-d', strtotime($request->checkin));
             $order->date_checkout = date('Y-m-d', strtotime($request->checkout));
@@ -85,7 +86,6 @@ class UserBookingController extends Controller
             $order->line_id = $request->line_id;
             $order->payment_type = "transfer";
             $order->slip = $slip_image;
-
             $order->save();
 
             return response([

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\backoffice\AdminController;
 use App\Http\Controllers\backoffice\BankController;
+use App\Http\Controllers\backoffice\BookingController;
 use App\Http\Controllers\backoffice\CarouselController;
 use App\Http\Controllers\backoffice\FeatureAndFacController;
 use App\Http\Controllers\backoffice\RoomController;
@@ -112,6 +113,11 @@ Route::prefix('admin')->group(function () {
             Route::post('/admincreate', [AdminController::class, 'register']);
             Route::post('/adminupdate', [AdminController::class, 'updateAdmin']);
             Route::delete('/deleteadmin/{id}', [AdminController::class, 'deleteAdmin']);
+
+            /* Admins */
+            Route::post('/updatebookstatus', [BookingController::class, 'updatebookingStatus']);
+            Route::get('/bookingone/{id}', [BookingController::class, 'getBookingById']);
+
         });
     });
 });

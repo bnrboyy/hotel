@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Bank;
 use App\Models\Booking;
+use App\Models\BookingStatus;
 use App\Models\Carousel;
 use App\Models\Contact;
 use App\Models\Facilitie;
@@ -55,6 +56,7 @@ class BackController extends Controller
                     ->whereIn('bookings.status_id', [1, 2, 3])
                     ->orderBy('bookings.created_at', 'DESC')
                     ->get();
+        $statuses = BookingStatus::orderBy('id', 'ASC')->get();
 
 
         foreach ($messages as $message) {
@@ -83,7 +85,6 @@ class BackController extends Controller
                     break;
 
                 case 'admins':
-                    // dd($admins);
                     return view('backoffice.admins', ['banks' => $banks, 'admins' => $admins]);
                     break;
 
@@ -111,9 +112,9 @@ class BackController extends Controller
                     break;
 
                 case 'managebook':
-                    // dd($bookings);
                     return view('backoffice.managebook', [
                         'bookings' => $bookings,
+                        'statuses' => $statuses,
                     ]);
                     break;
 

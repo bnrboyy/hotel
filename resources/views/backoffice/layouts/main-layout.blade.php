@@ -84,7 +84,7 @@
             <hr class="h-color mx-2">
         </div>
 
-        <div class="content">
+        <div class="content" style="overflow: auto;">
             <nav class="navbar navbar-expand-md navbar-light nav-bg">
                 <div class="container-fluid justify-content-md-end justify-content-between">
                     <div class="d-flex justify-content-between d-md-none d-block align-items-center">

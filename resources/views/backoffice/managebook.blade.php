@@ -1,14 +1,13 @@
 @extends('backoffice.layouts.main-layout')
 
 @section('style')
-    <link rel="stylesheet" href="css/backoffice/carousel.css">
+    <link rel="stylesheet" href="css/backoffice/managebook.css">
 @endsection
 
 @section('content')
     <h3><i class="bi bi-images"></i> รายการจอง</h3>
-
     <div class="d-flex flex-column gap-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm" style="width: 1578px;">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <h5 class="card-title m-0 mb-4">
@@ -24,7 +23,6 @@
                             <th>ห้อง</th>
                             <th>เช็คอิน - เช็คเอาท์</th>
                             <th>วันเวลาที่จอง</th>
-                            <th>จำนวนวัน</th>
                             <th>สถานะการจอง</th>
                             <th>เบอร์โทรศัพท์</th>
                             <th>slip</th>
@@ -37,21 +35,41 @@
                                 <td style="width: 100px;">{{ $booking->booking_number }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
-                                <td style="width: 100px;">{{ $booking->room_name }}</td>
-                                <td>
+                                <td style="width: 200px;">
+                                    <p>ห้อง : {{ $booking->room_name }}</p>
+                                    <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
+                                    <p>ราคารวม : {{ $booking->price }} บาท</p>
+                                </td>
+                                <td style="width: 200px;">
                                     <p>เช็คอิน : {{ $booking->date_checkin }}</p>
                                     <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
                                 </td>
-                                <td style="width: 200px;">{{ $booking->created_at }}</td>
-                                <td>{{ $booking->days }}</td>
-                                <td><span style="cursor: pointer;"
-                                        class="badge rounded-pill text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }} <span><i class="bi bi-caret-down-fill"></i></span></span>
+                                <td style="width: 120px;">{{ $booking->created_at }}</td>
+                                <td class="td-status">
+                                    <span style="width: 112px;"
+                                        class="badge rounded-pill d-flex align-items-center justify-content-between text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
+                                        <span><i class="bi bi-caret-down-fill"></i></span>
+                                    </span>
+                                    <select onchange="updateBookStatus(this, {{ $booking->id }})"
+                                        class="form-select status-select shadow-none pointer" id="select-children"
+                                        name="children" style="cursor: pointer; width: 112px; height: 22px;">
+                                        @foreach ($statuses as $status)
+                                            @if ($status->id === $booking->status_id)
+                                                <option value="{{ $status->id }}" selected style="font-size: 14px;">
+                                                    {{ $status->name }}</option>
+                                            @else
+                                                <option value="{{ $status->id }}" style="font-size: 14px;">
+                                                    {{ $status->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </td>
                                 <td>{{ $booking->cus_phone }}</td>
                                 <td><img onclick="previewSlip('{{ $booking->slip }}')" src="{{ $booking->slip }}"
-                                        width="100%" style="width: 146px; cursor: pointer;"></td>
+                                        width="100%" style="width: 126px; cursor: pointer;"></td>
                                 <td class="">
-                                    <div class="w-100 h-100 d-flex flex-column align-items-center gap-2" style="height: 163px;">
+                                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2"
+                                        style="height: 163px !important;">
                                         <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
                                             onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
                                                 class="bi bi-eye-fill"></i></button>
@@ -77,41 +95,124 @@
             <form>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">รายละเอียดข้อความ</h5>
+                        <h5 class="modal-title">รายละเอียดการจอง</h5>
                     </div>
                     <div class="modal-body">
-                        <div class="mt-3">
-                            <label class="form-label" style="font-weight: 500;">ชื่อ</label>
-                            <input name="name" type="text" class="form-control form-msg shadow-none" readonly>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">รหัสการจอง</label>
+                                    <input name="booking_number" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">เลขอ้างอิง</label>
+                                    <input name="card_id" type="number"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">ห้อง</label>
+                                    <input name="room" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 col-12">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">เช็คอิน</label>
+                                    <input name="checkin" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">เช็คเอาท์</label>
+                                    <input name="checkout" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">จำนวนวันที่เข้าพัก (วัน)</label>
+                                    <input name="days" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">ราคารวม (บาท)</label>
+                                    <input name="price" type="number"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">วันเวลาที่จอง</label>
+                                    <input name="booking_date" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">สถานะการจอง</label>
+                                    <input name="status" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">ชื่อผู้จอง</label>
+                                    <input name="cus_name" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="mt-3">
                                     <label class="form-label" style="font-weight: 500;">อีเมล</label>
-                                    <input name="email" type="email" class="form-control form-msg shadow-none" readonly>
+                                    <input name="email" type="email"
+                                        class="form-control form-booking shadow-none text-center" readonly>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
                                 <div class="mt-3">
-                                    <label class="form-label" style="font-weight: 500;">เบอร์โทร</label>
-                                    <input name="phone" type="number" class="form-control form-msg shadow-none"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                        onKeyPress="if(this.value.length>=10) return false;" readonly>
+                                    <label class="form-label" style="font-weight: 500;">Line ID</label>
+                                    <input name="line_id" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">การชำระเงิน</label>
+                                    <input name="payment_type" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                                <div class="mt-3">
+                                    <label class="form-label" style="font-weight: 500;">ประเภทการจอง</label>
+                                    <input name="payment_type" type="text"
+                                        class="form-control form-booking shadow-none text-center" readonly>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-3">
-                            <label class="form-label" style="font-weight: 500;">หัวข้อเรื่อง</label>
-                            <input name="subject" type="text" class="form-control form-msg shadow-none" readonly>
-                        </div>
-                        <div class="mt-3">
-                            <label class="form-label" style="font-weight: 500;">ข้อความ</label>
-                            <textarea name="message" class="form-control form-msg shadow-none" rows="5" style="resize: none;" readonly></textarea>
-                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn-close-modal btn btn-secondary shadow-none"
-                            data-bs-dismiss="modal">ยกเลิก</button>
+                            data-bs-dismiss="modal">ปิด</button>
                     </div>
                 </div>
             </form>
@@ -130,8 +231,42 @@
             });
         });
 
-        const formMsg = document.querySelectorAll(".form-msg");
+        const formBooking = document.querySelectorAll(".form-booking");
         const btn_modal = document.querySelector(".btn-modal");
+
+        function updateBookStatus(_el, _id) {
+            const badge = _el.closest("td").querySelector(".badge");
+            const badge_bg = ['bg-warning', 'bg-primary', 'bg-info', 'bg-success', 'bg-danger'];
+
+            axios
+                .post(`/admin/updatebookstatus`, {
+                    booking_id: parseInt(_id),
+                    status_id: parseInt(_el.value)
+                })
+                .then(({
+                    data
+                }) => {
+                    if (data.status) {
+                        toastr.success("อัพเดทสถานะสำเร็จ");
+                        badge_bg.forEach(bg => {
+                            badge.classList.remove(bg)
+                        })
+                        badge.classList.add(`bg-${data.booking_status.bg_color}`);
+                        badge.innerHTML =
+                            `${data.booking_status.name} <span><i class="bi bi-caret-down-fill"></i></span>`;
+
+                        setTimeout(() => {
+                            window.location.reload();
+                            // ถ้าสถานะเช็คเอาท์ หรือ ยกเลิก
+                            // if ([4, 5].includes(parseInt(data.booking_status.id))) {
+                            //     window.location.reload();
+                            // }
+                        }, 2000);
+                    }
+                })
+                .catch((err) => console.log(err));
+
+        }
 
         function previewSlip(_src) {
             Swal.fire({
@@ -144,27 +279,26 @@
             });
         }
 
-        function getMessage(_el, _id) {
-            const badge = _el.closest("tr").querySelector(".badge");
+        function getBooking(_el, _id) {
+
             axios
-                .get(`/admin/messageone/${_id}`)
+                .get(`/admin/bookingone/${_id}`)
                 .then(({
                     data
                 }) => {
                     const formData = data.data["formData"];
-                    formMsg.forEach((form, ind) => {
+                    console.log(formBooking)
+                    formBooking.forEach((form, ind) => {
                         form.value = formData[ind];
                     });
-                    badge.classList.remove("bg-warning", "text-dark");
-                    badge.classList.add("bg-secondary");
-                    badge.innerText = "อ่านแล้ว";
                 })
                 .catch((err) => console.log(err));
         }
 
-        function deleteMessage(_el, _id) {
+        function deleteBook(_el, _id) {
+            return;
             axios
-                .delete(`/admin/message/delete/${_id}`)
+                .delete(`/admin/booking/delete/${_id}`)
                 .then(({
                     data
                 }) => {

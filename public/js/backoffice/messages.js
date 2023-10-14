@@ -1,4 +1,9 @@
-new DataTable("#messages");
+// new DataTable("#messages");
+$(document).ready(function() {
+    $('#messages').DataTable({
+        "order": [] // กำหนด order เป็นรายการว่าง
+    });
+});
 
 const formMsg = document.querySelectorAll(".form-msg");
 const btn_modal = document.querySelector(".btn-modal");
