@@ -39,7 +39,7 @@ return new class extends Migration
              'email' => 'hotel@gmail.com',
              'fb' => 'facebook.com/hotelbooking',
              'line' => 'line.me',
-             'iframe' => 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d244903.97722605334!2d102.820093!3d16.443879!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3122602b91988e2f%3A0x93f0805cf799cc6!2z4LmA4LiX4Lio4Lia4Liy4Lil4LiZ4LiE4Lij4LiC4Lit4LiZ4LmB4LiB4LmI4LiZIOC4reC4s-C5gOC4oOC4reC5gOC4oeC4t-C4reC4h-C4guC4reC4meC5geC4geC5iOC4mSDguILguK3guJnguYHguIHguYjguJkgNDAwMDA!5e0!3m2!1sth!2sth!4v1695004235712!5m2!1sth!2sth',
+             'iframe' => 'https://www.google.com/maps/embed?pb=!1m17!1m11!1m3!1d411771.6170829172!2d102.22084010865298!3d16.49382902120054!2m2!1f0!2f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31221164d20c42d9%3A0x828ce61718feeae6!2z4Liq4Lin4LiZ4Liq4Lia4Liy4Lii4Lib4Lil4Liy4Lii4LiZ4Liy4Lij4Li14Liq4Lit4Lij4LmM4LiXIChTdWFuIFNhYmFpIFBsYWkgTmEgUmVzb3J0KQ!5e0!3m2!1sth!2sth!4v1697286176328!5m2!1sth!2sth',
             ],
         ]);
     }
