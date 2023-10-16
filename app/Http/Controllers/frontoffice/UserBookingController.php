@@ -61,7 +61,7 @@ class UserBookingController extends Controller
             $slip_image = "";
             if (isset($files['image'])) {
                 /* Upload Image */
-                $newFolder = "upload/fontoffice/slip/";
+                $newFolder = "upload/frontoffice/slip/";
                 $slip_image = $this->uploadImage($newFolder, $files['image'], "newslip", "", "");
             }
 

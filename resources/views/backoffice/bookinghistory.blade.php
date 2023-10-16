@@ -5,13 +5,13 @@
 @endsection
 
 @section('content')
-    <h3><i class="bi bi-list-task"></i> รายการจอง</h3>
+    <h3><i class="bi bi-list-check"></i> ประวัติการจอง</h3>
     <div class="d-flex flex-column gap-3">
         <div class="card border-0 shadow-sm" style="width: 1578px;">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <h5 class="card-title m-0 mb-4">
-                        #รายการจองทั้งหมด
+                        #ประวัติการจองทั้งหมด
                     </h5>
                 </div>
                 <table id="bookings" class="table table-striped" style="width:100%">

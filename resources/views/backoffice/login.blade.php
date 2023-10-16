@@ -22,7 +22,7 @@
                     <input name="password" type="password" class="form-control shadow-none text-center"
                         placeholder="Password" required>
                 </div>
-                <button name="btn_login" type="submit" class="btn text-white custom-bg shadow-none">
+                <button name="btn_login" type="submit" class="btn text-white custom-bg btn_login shadow-none">
                     <span class="spinner spinner-border spinner-border-sm hidden" aria-hidden="true"></span>   เข้าสู่ระบบ
                 </button>
             </div>
@@ -35,16 +35,24 @@
     @include('backoffice.layouts.scripts')
     <script>
         const spinner = document.querySelector('.spinner')
+        const btn_login = document.querySelector('.btn_login')
+
+
         document.getElementById("login-form").addEventListener("submit", function(event) {
             event.preventDefault();
 
             spinner.classList.remove('hidden')
+            btn_login.setAttribute('disabled', '')
+
             const form = event.target;
             const formData = new FormData(form);
 
             axios.post('/admin/signin', formData).then(res => {
                 if (res.status) {
                     window.location.href = "/admin";
+                } else {
+                    btn_login.removeAttribute('disabled')
+                    spinner.classList.add('hidden')
                 }
             }).catch(err => {
                 const message = document.querySelector('.invalid')
@@ -53,6 +61,7 @@
                 } else {
                     message.innerText = "Username หรือ Password ไม่ถูกต้อง";
                 }
+                btn_login.removeAttribute('disabled')
                 spinner.classList.add('hidden')
                 message.classList.remove('hidden')
             })

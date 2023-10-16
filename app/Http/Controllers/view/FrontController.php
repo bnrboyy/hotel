@@ -28,6 +28,7 @@ class FrontController extends Controller
             $fea_ids = explode(', ', $room->feature_ids);
             $fac_ids = explode(', ', $room->fac_ids);
 
+            $contactUs = Contact::get()->first();
             $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
             $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
             $gallery = $room->gallery;
@@ -36,12 +37,14 @@ class FrontController extends Controller
             $room->features = $features;
             $room->facs = $facs;
             $room->gallery = $gallery;
+
         }
 
         return view('frontoffice.home', [
             'slide_img' => $carousel,
             'facilities' => $facilities,
             'rooms' => $rooms,
+            'contactUs' => $contactUs,
         ]);
     }
 
