@@ -36,10 +36,10 @@
                         <ul class="nav flex-column">
                             <li class="managebook">
                                 <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between"
-                                    href="javascript:getPage('managebook')">รายการจอง <span class="badge text-bg-danger rounded-pill" style="min-width: 40px;">{{ $shareBookingNew }}</span></a>
+                                    href="javascript:getPage('managebook')">รายการจอง <div><span class="badge text-bg-warning rounded-pill" style="min-width: 20px;">{{ $shareBookingNew }}</span> <span class="badge text-bg-primary rounded-pill" style="min-width: 20px;">{{ $shareBookingVerified }}</span> <span class="badge text-bg-info rounded-pill" style="min-width: 20px;">{{ $shareBookingInprogress }}</span></div></a>
                             </li>
                             <li class="bookinghistory">
-                                <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between" href="javascript:getPage('bookinghistory')">ประวัติการจอง <span class="badge text-bg-success rounded-pill" style="min-width: 40px;">{{ $shareBookingHistory }}</span></a>
+                                <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between" href="javascript:getPage('bookinghistory')">ประวัติการจอง <div><span class="badge text-bg-success rounded-pill" style="min-width: 20px;">{{ $shareBookingHistory }}</span> <span class="badge text-bg-danger rounded-pill" style="min-width: 20px;">{{ $shareBookingCancel }}</span></div></a>
                             </li>
                             <li class="booking">
                                 <a class="nav-link text-decoration-none" href="javascript:getPage('booking')">จองแบบ Walk-in</a>
@@ -84,7 +84,7 @@
             <hr class="h-color mx-2">
         </div>
 
-        <div class="content" style="overflow: auto;">
+        <div class="content" style="">
             <nav class="navbar navbar-expand-md navbar-light nav-bg">
                 <div class="container-fluid justify-content-md-end justify-content-between">
                     <div class="d-flex justify-content-between d-md-none d-block align-items-center">

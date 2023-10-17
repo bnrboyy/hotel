@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\backoffice;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Booking;
 use App\Models\BookingStatus;
+use App\Models\Facilitie;
+use App\Models\Feature;
+use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -108,5 +112,64 @@ class BookingController extends Controller
                 'errorMessage' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function preBooking(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'checkin' => 'string|required',
+            'checkout' => 'string|required',
+            'id' => 'numeric|required',
+        ]);
+
+        $current_timestamp = strtotime(date('Y-m-d'));
+        $checkin_timestamp = strtotime($request->checkin);
+        $checkout_timestamp = strtotime($request->checkout);
+
+        if ($validator->fails() || (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp))) {
+            return response([
+                'message' => 'Invalid params'
+            ], 401);
+        }
+
+        $room = Room::where(['id' => $request->id])->first();
+
+        if (!$room) {
+            return response([
+                'message' => 'room not found'
+            ], 200);
+        }
+
+        $fea_ids = explode(', ', $room->feature_ids);
+        $fac_ids = explode(', ', $room->fac_ids);
+        $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
+        $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
+
+        $room->features = $features;
+        $room->facs = $facs;
+
+        // หาจำนวนคืนที่เข้าพัก
+        $start_date = $request->checkin;
+        $end_date = $request->checkout;
+        $secondsDiff = strtotime($end_date) - strtotime($start_date);
+        $diff_date = $secondsDiff / (60 * 60 * 24);
+
+        $isAvailable = $this->checkAvailableRoom($request, $room);
+
+        $preText = [
+            'Check-in :' . date('d-m-Y', strtotime($request->checkin)),
+            'Check-out :' . date('d-m-Y', strtotime($request->checkout)),
+            'Day :' . $diff_date . 'วัน',
+            'Price :' . $room->price * $diff_date . '฿',
+        ];
+
+        return response([
+            'room' => $room,
+            'checkin' => date('d-m-Y', strtotime($request->checkin)),
+            'checkout' => date('d-m-Y', strtotime($request->checkout)),
+            'diff_date' => $diff_date,
+            'isAvailable' => $isAvailable,
+        ], 200);
     }
 }

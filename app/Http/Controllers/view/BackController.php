@@ -16,6 +16,8 @@ use App\Models\Room;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class BackController extends Controller
 {
@@ -34,6 +36,12 @@ class BackController extends Controller
         /* Message page */
         $messages = LeaveMessage::orderBy('send_date', 'DESC')->get();
 
+        foreach ($messages as $message) {
+            $msg = $message->message;
+            $submsg = substr($msg, 0, 40);
+            $message->submsg = $submsg;
+        }
+
         /* Feature&Fac page */
         $features = Feature::orderBy('priority', 'ASC')->get();
         $facilities = Facilitie::orderBy('priority', 'ASC')->get();
@@ -51,27 +59,26 @@ class BackController extends Controller
 
         /* Managebook page */
         $bookings = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
-                    ->join('rooms', 'rooms.id', 'bookings.room_id')
-                    ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
-                    ->whereIn('bookings.status_id', [1, 2, 3])
-                    ->orderBy('bookings.created_at', 'DESC')
-                    ->get();
+            ->join('rooms', 'rooms.id', 'bookings.room_id')
+            ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+            ->whereIn('bookings.status_id', [1, 2, 3])
+            ->orderBy('bookings.created_at', 'DESC')
+            ->get();
+
+        $booking_online = $this->getBookingByType('Online');
+        $booking_walkin = $this->getBookingByType('Walk-in');
         $statuses = BookingStatus::orderBy('id', 'ASC')->get();
 
-        /* Managebook page */
+        /* bookinghistory page */
         $bookinghistory = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
-                    ->join('rooms', 'rooms.id', 'bookings.room_id')
-                    ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
-                    ->whereIn('bookings.status_id', [4, 5])
-                    ->orderBy('bookings.created_at', 'DESC')
-                    ->get();
+            ->join('rooms', 'rooms.id', 'bookings.room_id')
+            ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+            ->whereIn('bookings.status_id', [4, 5])
+            ->orderBy('bookings.created_at', 'DESC')
+            ->get();
 
-
-        foreach ($messages as $message) {
-            $msg = $message->message;
-            $submsg = substr($msg, 0, 40);
-            $message->submsg = $submsg;
-        }
+        $bookinghistory_online = $this->getBookingHistoryByType('Online');
+        $bookinghistory_walkin = $this->getBookingHistoryByType('Walk-in');
 
         if ($user) {
             switch ($page) {
@@ -122,6 +129,8 @@ class BackController extends Controller
                 case 'managebook':
                     return view('backoffice.managebook', [
                         'bookings' => $bookings,
+                        'booking_online' => $booking_online,
+                        'booking_walkin' => $booking_walkin,
                         'statuses' => $statuses,
                     ]);
                     break;
@@ -129,14 +138,86 @@ class BackController extends Controller
                 case 'bookinghistory':
                     return view('backoffice.bookinghistory', [
                         'bookings' => $bookinghistory,
+                        'booking_online' => $bookinghistory_online,
+                        'booking_walkin' => $bookinghistory_walkin,
                         'statuses' => $statuses,
                     ]);
                     break;
 
                 case 'booking':
-                    return view('backoffice.bookinghistory', [
-                        'bookings' => $bookinghistory,
-                        'statuses' => $statuses,
+                    $validator = Validator::make($request->all(), [
+                        'checkin' => 'string|required',
+                        'checkout' => 'string|required',
+                        'adult' => 'numeric|required',
+                        'children' => 'numeric|required',
+                    ]);
+
+                    $current_timestamp = strtotime(date('Y-m-d'));
+                    $checkin_timestamp = strtotime($request->checkin);
+                    $checkout_timestamp = strtotime($request->checkout);
+
+                    if (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp)) {
+                        return view('backoffice.booking', [
+                            'rooms' => [],
+                        ]);
+                    }
+
+                    $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
+                    $roomAvailable = $rooms;
+
+                    foreach ($rooms as $room) {
+                        $fea_ids = explode(', ', $room->feature_ids);
+                        $fac_ids = explode(', ', $room->fac_ids);
+
+                        $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
+                        $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
+                        $gallery = $room->gallery;
+
+                        $room->features = $features;
+                        $room->facs = $facs;
+                        $room->gallery = $gallery;
+                    }
+
+                    if (!$validator->fails()) {
+                        // หาจำนวนคืนที่เข้าพัก
+                        $start_date = $request->checkin;
+                        $end_date = $request->checkout;
+                        $start_timeStamp = strtotime($start_date);
+                        $end_timeStamp = strtotime($end_date);
+                        $secondsDiff = $end_timeStamp - $start_timeStamp;
+                        $diff_date = $secondsDiff / (60 * 60 * 24);
+
+                        $bookings = DB::table('bookings')
+                            ->select('bookings.*')
+                            ->where(function ($query) use ($request, $diff_date) {
+                                $current_date = $request->checkin;
+                                for ($i = 0; $i < $diff_date; $i++) {
+                                    $query->orWhere('booking_date', 'like', '%' . $current_date . '%');
+                                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                                }
+                            })
+                            ->whereIn('status_id', [1, 2, 3])
+                            ->get();
+
+                        if (count($bookings) > 0) {
+                            foreach ($bookings as $book_key => $book_value) {
+                                foreach ($rooms as $room_key => $room_value) {
+                                    if (($room_value->id === $book_value->room_id) || ($room_value->adult < $request->adult || $room_value->children < $request->children)) {
+                                        unset($roomAvailable[$room_key]);
+                                    }
+                                }
+                            }
+                        } else { // กรองจำนวนผู้เข้าพัก
+                            foreach ($rooms as $room_key => $room_value) {
+                                if (($room_value->adult < $request->adult || $room_value->children < $request->children)) {
+                                    unset($roomAvailable[$room_key]);
+                                }
+                            }
+                        }
+                    }
+
+                    return view('backoffice.booking', [
+                        'rooms' => $roomAvailable,
                     ]);
                     break;
 
@@ -158,13 +239,49 @@ class BackController extends Controller
         return view('backoffice.login');
     }
 
-    // public function dashboardPage(Request $request)
-    // {
-    //     return view('backoffice.dashboard');
-    // }
+    private function getBookingByType($type)
+    {
+        $result = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+            ->join('rooms', 'rooms.id', 'bookings.room_id')
+            ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+            ->whereIn('bookings.status_id', [1, 2, 3])
+            ->where('bookings.booking_type', $type)
+            ->orderBy('bookings.created_at', 'DESC')
+            ->get();
 
-    // public function managerooms(Request $request)
-    // {
-    //     return view('backoffice.managerooms');
-    // }
+        return $result;
+    }
+
+    private function getBookingHistoryByType($type)
+    {
+        $result = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+            ->join('rooms', 'rooms.id', 'bookings.room_id')
+            ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+            ->whereIn('bookings.status_id', [4, 5])
+            ->where('bookings.booking_type', $type)
+            ->orderBy('bookings.created_at', 'DESC')
+            ->get();
+
+        return $result;
+    }
+
+    private function checkedRoomAvailable($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'checkin' => 'string|required',
+            'checkout' => 'string|required',
+            'adult' => 'numeric|required',
+            'children' => 'numeric|required',
+        ]);
+
+        $current_timestamp = strtotime(date('Y-m-d'));
+        $checkin_timestamp = strtotime($request->checkin);
+        $checkout_timestamp = strtotime($request->checkout);
+
+        if (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp)) {
+            return view('frontoffice.booking', [
+                'rooms' => [],
+            ]);
+        }
+    }
 }

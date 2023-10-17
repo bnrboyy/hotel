@@ -26,7 +26,10 @@ class ShareAdminData
         $site_settings = Settings::where(['id' => 1])->get()->first();
         $contact_settings = Contact::where(['id' => 1])->get()->first();
         $booking_new = Booking::where(['status_id' => 1])->count();
-        $booking_history = Booking::whereIn('status_id', [4, 5])->count();
+        $booking_verified = Booking::whereIn('status_id', [2])->count();
+        $booking_inprogress = Booking::whereIn('status_id', [3])->count();
+        $booking_history = Booking::whereIn('status_id', [4])->count();
+        $booking_cancel = Booking::whereIn('status_id', [5])->count();
         $unseen_messages = LeaveMessage::where('seen', 0)->count();
 
         View::share([
@@ -34,7 +37,11 @@ class ShareAdminData
                 'shareSite' => $site_settings,
                 'shareContact' => $contact_settings,
                 'shareBookingNew' => $booking_new,
+                'shareBookingPending' => $booking_history,
+                'shareBookingVerified' => $booking_verified,
+                'shareBookingInprogress' => $booking_inprogress,
                 'shareBookingHistory' => $booking_history,
+                'shareBookingCancel' => $booking_cancel,
                 'share_messages' => $unseen_messages,
 
             ]);

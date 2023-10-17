@@ -9,12 +9,21 @@
     <div class="d-flex flex-column gap-3">
         <div class="card border-0 shadow-sm" style="width: 1578px;">
             <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
                     <h5 class="card-title m-0 mb-4">
                         #รายการจองทั้งหมด
                     </h5>
+                    <div class="col-2 mb-3">
+                        <select class="form-select select-booking-type shadow-none" id="admin-role" name="admin_role" style="cursor: pointer;">
+                            <option value="all">รายการจองทั้งหมด</option>
+                            <option value="online">จองแบบออนไลน์</option>
+                            <option value="walk-in">จองแบบ Walk-in</option>
+                        </select>
+                    </div>
                 </div>
-                <table id="bookings" class="table table-striped" style="width:100%">
+
+                {{-- Booking All --}}
+                <table id="booking-all" class="table table-striped table-booking" type="all" style="width:100%">
                     <thead>
                         <tr>
                             <th>รหัสการจอง</th>
@@ -31,6 +40,150 @@
                     </thead>
                     <tbody>
                         @foreach ($bookings as $booking)
+                            <tr>
+                                <td style="width: 100px;">{{ $booking->booking_number }}</td>
+                                <td style="width: 100px;">{{ $booking->card_id }}</td>
+                                <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
+                                <td style="width: 200px;">
+                                    <p>ห้อง : {{ $booking->room_name }}</p>
+                                    <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
+                                    <p>ราคารวม : {{ $booking->price }} บาท</p>
+                                </td>
+                                <td style="width: 200px;">
+                                    <p>เช็คอิน : {{ $booking->date_checkin }}</p>
+                                    <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
+                                </td>
+                                <td style="width: 120px;">{{ $booking->created_at }}</td>
+                                <td class="td-status">
+                                    <span style="width: 112px;"
+                                        class="badge rounded-pill d-flex align-items-center justify-content-between text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
+                                        <span><i class="bi bi-caret-down-fill"></i></span>
+                                    </span>
+                                    <select onchange="updateBookStatus(this, {{ $booking->id }})"
+                                        class="form-select status-select shadow-none pointer" id="select-children"
+                                        name="children" style="cursor: pointer; width: 112px; height: 22px;">
+                                        @foreach ($statuses as $status)
+                                            @if ($status->id === $booking->status_id)
+                                                <option value="{{ $status->id }}" selected style="font-size: 14px;">
+                                                    {{ $status->name }}</option>
+                                            @else
+                                                <option value="{{ $status->id }}" style="font-size: 14px;">
+                                                    {{ $status->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>{{ $booking->cus_phone }}</td>
+                                <td><img onclick="previewSlip('{{ $booking->slip }}')" src="{{ $booking->slip }}"
+                                        width="100%" style="width: 126px; cursor: pointer;"></td>
+                                <td class="">
+                                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2"
+                                        style="height: 163px !important;">
+                                        <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
+                                            onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
+                                                class="bi bi-eye-fill"></i></button>
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                                            <button class="btn btn-danger shadow-none"
+                                                onclick="deleteBook(this, {{ $booking->id }})"><i
+                                                    class="bi bi-trash-fill"></i></button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                {{-- Booking Online --}}
+                <table id="booking-online" class="table table-striped table-booking" type="online" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>รหัสการจอง</th>
+                            <th>เลขอ้างอิง</th>
+                            <th>ชื่อผู้จอง</th>
+                            <th>ห้อง</th>
+                            <th>เช็คอิน - เช็คเอาท์</th>
+                            <th>วันเวลาที่จอง</th>
+                            <th>สถานะการจอง</th>
+                            <th>เบอร์โทรศัพท์</th>
+                            <th>slip</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($booking_online as $booking)
+                            <tr>
+                                <td style="width: 100px;">{{ $booking->booking_number }}</td>
+                                <td style="width: 100px;">{{ $booking->card_id }}</td>
+                                <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
+                                <td style="width: 200px;">
+                                    <p>ห้อง : {{ $booking->room_name }}</p>
+                                    <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
+                                    <p>ราคารวม : {{ $booking->price }} บาท</p>
+                                </td>
+                                <td style="width: 200px;">
+                                    <p>เช็คอิน : {{ $booking->date_checkin }}</p>
+                                    <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
+                                </td>
+                                <td style="width: 120px;">{{ $booking->created_at }}</td>
+                                <td class="td-status">
+                                    <span style="width: 112px;"
+                                        class="badge rounded-pill d-flex align-items-center justify-content-between text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
+                                        <span><i class="bi bi-caret-down-fill"></i></span>
+                                    </span>
+                                    <select onchange="updateBookStatus(this, {{ $booking->id }})"
+                                        class="form-select status-select shadow-none pointer" id="select-children"
+                                        name="children" style="cursor: pointer; width: 112px; height: 22px;">
+                                        @foreach ($statuses as $status)
+                                            @if ($status->id === $booking->status_id)
+                                                <option value="{{ $status->id }}" selected style="font-size: 14px;">
+                                                    {{ $status->name }}</option>
+                                            @else
+                                                <option value="{{ $status->id }}" style="font-size: 14px;">
+                                                    {{ $status->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>{{ $booking->cus_phone }}</td>
+                                <td><img onclick="previewSlip('{{ $booking->slip }}')" src="{{ $booking->slip }}"
+                                        width="100%" style="width: 126px; cursor: pointer;"></td>
+                                <td class="">
+                                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2"
+                                        style="height: 163px !important;">
+                                        <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
+                                            onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
+                                                class="bi bi-eye-fill"></i></button>
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                                            <button class="btn btn-danger shadow-none"
+                                                onclick="deleteBook(this, {{ $booking->id }})"><i
+                                                    class="bi bi-trash-fill"></i></button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                {{-- Booking Online --}}
+                <table id="booking-walkin" class="table table-striped table-booking" type="walkin" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>รหัสการจอง</th>
+                            <th>เลขอ้างอิง</th>
+                            <th>ชื่อผู้จอง</th>
+                            <th>ห้อง</th>
+                            <th>เช็คอิน - เช็คเอาท์</th>
+                            <th>วันเวลาที่จอง</th>
+                            <th>สถานะการจอง</th>
+                            <th>เบอร์โทรศัพท์</th>
+                            <th>slip</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($booking_walkin as $booking)
                             <tr>
                                 <td style="width: 100px;">{{ $booking->booking_number }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
@@ -221,100 +374,5 @@
 @endsection
 
 @section('script')
-    {{-- <script src="/js/backoffice/messages.js"></script> --}}
-
-    <script>
-        // new DataTable("#bookings");
-        $(document).ready(function() {
-            $('#bookings').DataTable({
-                "order": [] // กำหนด order เป็นรายการว่าง
-            });
-        });
-
-        const formBooking = document.querySelectorAll(".form-booking");
-        const btn_modal = document.querySelector(".btn-modal");
-
-        function updateBookStatus(_el, _id) {
-            const badge = _el.closest("td").querySelector(".badge");
-            const badge_bg = ['bg-warning', 'bg-primary', 'bg-info', 'bg-success', 'bg-danger'];
-
-            axios
-                .post(`/admin/updatebookstatus`, {
-                    booking_id: parseInt(_id),
-                    status_id: parseInt(_el.value)
-                })
-                .then(({
-                    data
-                }) => {
-                    if (data.status) {
-                        toastr.success("อัพเดทสถานะสำเร็จ");
-                        badge_bg.forEach(bg => {
-                            badge.classList.remove(bg)
-                        })
-                        badge.classList.add(`bg-${data.booking_status.bg_color}`);
-                        badge.innerHTML =
-                            `${data.booking_status.name} <span><i class="bi bi-caret-down-fill"></i></span>`;
-
-                        setTimeout(() => {
-                            window.location.reload();
-                            // ถ้าสถานะเช็คเอาท์ หรือ ยกเลิก
-                            // if ([4, 5].includes(parseInt(data.booking_status.id))) {
-                            //     window.location.reload();
-                            // }
-                        }, 2000);
-                    }
-                })
-                .catch((err) => console.log(err));
-
-        }
-
-        function previewSlip(_src) {
-            Swal.fire({
-                imageUrl: `${_src}`,
-                imageWidth: 350,
-                imageHeight: 400,
-                imageClass: "slide-img",
-                showConfirmButton: false,
-                animation: false,
-            });
-        }
-
-        function getBooking(_el, _id) {
-
-            axios
-                .get(`/admin/bookingone/${_id}`)
-                .then(({
-                    data
-                }) => {
-                    const formData = data.data["formData"];
-                    console.log(formBooking)
-                    formBooking.forEach((form, ind) => {
-                        form.value = formData[ind];
-                    });
-                })
-                .catch((err) => console.log(err));
-        }
-
-        function deleteBook(_el, _id) {
-            return;
-            axios
-                .delete(`/admin/booking/delete/${_id}`)
-                .then(({
-                    data
-                }) => {
-                    if (data.status) {
-                        const row = _el.closest("tr");
-                        toastr.success("ลบข้อความสำเร็จ");
-
-                        if (row) {
-                            // Get the table to which the row belongs
-                            const table = row.closest("table");
-                            // Delete the row from the table
-                            table.deleteRow(row.rowIndex);
-                        }
-                    }
-                })
-                .catch((err) => console.log(err));
-        }
-    </script>
+    <script src="/js/backoffice/managebook.js"></script>
 @endsection

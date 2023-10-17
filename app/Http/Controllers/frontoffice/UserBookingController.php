@@ -66,8 +66,6 @@ class UserBookingController extends Controller
             }
 
 
-            // dd($request->all());
-
             $order = new Booking();
             $order->room_id = $request->room_id;
             $order->price_per_date = $request->price_per_date;

@@ -114,9 +114,10 @@ Route::prefix('admin')->group(function () {
             Route::post('/adminupdate', [AdminController::class, 'updateAdmin']);
             Route::delete('/deleteadmin/{id}', [AdminController::class, 'deleteAdmin']);
 
-            /* Admins */
+            /* booking */
             Route::post('/updatebookstatus', [BookingController::class, 'updatebookingStatus']);
             Route::get('/bookingone/{id}', [BookingController::class, 'getBookingById']);
+            Route::post('/prebooking', [BookingController::class, 'preBooking']);
 
         });
     });

@@ -5,6 +5,7 @@ const select_adult = document.getElementById("select-adult");
 const select_children = document.getElementById("select-children");
 const form_search = document.getElementById("form-search");
 const btn_search = document.querySelector(".btn-search");
+const btn_form_modal = document.querySelector(".btn-form-modal");
 const selects = document.querySelectorAll(".select");
 
 let detailsURL = "";
@@ -65,7 +66,7 @@ function searchrooms(event) {
         children: formData.get("children"),
     };
 
-    window.location.href = `/rooms?checkin=${data.checkin}&checkout=${data.checkout}&adult=${data.adult}&children=${data.children}`;
+    window.location.href = `/admin?page=booking&checkin=${data.checkin}&checkout=${data.checkout}&adult=${data.adult}&children=${data.children}`;
 }
 
 date_checkout.addEventListener("input", function (event) {
@@ -86,6 +87,36 @@ function roomDetails(room_id) {
     window.location.href = `${detailsURL}${room_id}`;
 }
 
+function openBookForm(_id) {
+    const isNullParams = someNullParam;
+    if (isNullParams || !date_checkout.value || !date_checkin.value) {
+        Swal.fire({
+            icon: "info",
+            text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",
+        }).then(() => {
+            return false;
+        });
+    } else {
+        const text_prebooks = document.querySelectorAll(".text-prebook")
+        const formData = {
+            checkin: date_checkin.value,
+            checkout: date_checkout.value,
+            id: _id,
+        }
+
+        axios
+        .post(`/admin/prebooking`, formData)
+        .then(({ data }) => {
+            console.log(data)
+        }).then(() => {
+            btn_form_modal.click();
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+}
+
 function book(room_id) {
     const isNullParams = someNullParam;
     if (isNullParams || !date_checkout.value || !date_checkin.value) {
@@ -94,9 +125,9 @@ function book(room_id) {
             text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",
         }).then(() => {
             return false;
-        })
+        });
     } else {
-        console.log(`${bookingDetailsURL}${room_id}`)
+        console.log(`${bookingDetailsURL}${room_id}`);
         window.location.href = `${bookingDetailsURL}${room_id}`;
     }
 }
