@@ -7,8 +7,31 @@ const form_search = document.getElementById("form-search");
 const btn_search = document.querySelector(".btn-search");
 const btn_form_modal = document.querySelector(".btn-form-modal");
 const selects = document.querySelectorAll(".select");
-
 let detailsURL = "";
+
+const form_room = document.querySelectorAll(".form-room");
+const pre_value = document.querySelectorAll(".pre-value")
+const radios = document.querySelectorAll('input[type="radio"]')
+
+const btn_confirm = document.querySelector(".btn-confirm");
+const btn_close_modal = document.querySelector(".btn-close-modal");
+const loading = document.querySelector(".loading");
+const not_available = document.querySelector(".not-available");
+const text_confirm = document.querySelector(".text-btn-confirm");
+
+
+function closeModal() {
+    form_room.forEach((el) => {
+        el.value = "";
+    })
+
+    pre_value.forEach((el) => {
+        el.value = "";
+    })
+
+    radios[0].checked = true;
+    radios[1].checked = false;
+}
 
 function setDateSelected(date_checkin) {
     const checkin = dayjs(date_checkin);
@@ -98,6 +121,7 @@ function openBookForm(_id) {
         });
     } else {
         const text_prebooks = document.querySelectorAll(".text-prebook")
+        const pre_value = document.querySelectorAll(".pre-value")
         const formData = {
             checkin: date_checkin.value,
             checkout: date_checkout.value,
@@ -107,7 +131,12 @@ function openBookForm(_id) {
         axios
         .post(`/admin/prebooking`, formData)
         .then(({ data }) => {
-            console.log(data)
+            text_prebooks.forEach((el, ind) => {
+                el.innerHTML = data.preBook[ind]
+            })
+            pre_value.forEach((el, ind) => {
+                el.value = data.preValue[ind]
+            })
         }).then(() => {
             btn_form_modal.click();
         })
@@ -130,4 +159,59 @@ function book(room_id) {
         console.log(`${bookingDetailsURL}${room_id}`);
         window.location.href = `${bookingDetailsURL}${room_id}`;
     }
+}
+
+function confirmBook(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    loading.classList.remove('d-none')
+    text_confirm.classList.add('d-none')
+    btn_confirm.setAttribute('disabled', '')
+
+    axios
+        .post(`/admin/confirmbooking`, formData)
+        .then(({ data }) => {
+            console.log(data)
+            setTimeout(() => {
+                loading.classList.add('d-none')
+                text_confirm.classList.remove('d-none')
+                Swal.fire({
+                    title: 'จองห้องสำเร็จ!',
+                    icon: 'success'
+                }).then(() => {
+                    btn_close_modal.click()
+                    window.location.href = `/admin?page=managebook`;
+                })
+            }, 1000);
+        }).then(() => {
+            // btn_form_modal.click();
+        })
+        .catch(({response}) => {
+            setTimeout(() => {
+                text_confirm.classList.remove('d-none')
+                loading.classList.add('d-none')
+                if(response.status === 403) {
+                    Swal.fire({
+                        title: 'ห้องไม่ว่าง!',
+                        icon: 'error'
+                    }).then(() => {
+                        btn_close_modal.click()
+                        window.location.href = `/admin?page=booking`;
+
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        icon: 'error'
+                    }).then(() => {
+                        btn_close_modal.click()
+                        window.location.href = `/admin?page=booking`;
+
+                    })
+                }
+            }, 1000);
+        })
+
 }

@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Image;
 
@@ -49,6 +50,7 @@ class UserBookingController extends Controller
         }
 
         try {
+            DB::beginTransaction();
 
             $current_date = $request->checkin;
             $booking_date = "";
@@ -86,12 +88,16 @@ class UserBookingController extends Controller
             $order->slip = $slip_image;
             $order->save();
 
+            $this->sendLineNotify($order, $room);
+
+            DB::commit();
             return response([
                 'message' => 'ok',
                 'status' => true,
                 'description' => 'Order has been created successfully.'
             ], 201);
         } catch (Exception $e) {
+            DB::rollBack();
             return response([
                 'message' => 'error',
                 'status' => false,

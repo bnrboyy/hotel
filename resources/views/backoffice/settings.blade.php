@@ -28,7 +28,7 @@
         </div>
 
         <!-- shutdown -->
-        <div class="card border-0 shadow-sm">
+        {{-- <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <h5 class="card-title m-0 mb-4">
@@ -40,7 +40,7 @@
                 </div>
                 <p class="card-text">เมื่อปิดการใช้งานเว็บไซต์ จะไม่สามารถใช้งานเว็บไซต์ได้</p>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Contact details section -->
         <div class="card border-0 shadow-sm">

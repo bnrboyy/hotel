@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
+use App\Models\Room;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -80,5 +82,40 @@ class Controller extends BaseController
         }
 
         return $isAvailable;
+    }
+
+    public function sendLineNotify(Booking $booking, Room $room)
+    {
+        // dd($booking);
+        $message = "👇👇 มีรายการจองห้องพักใหม่ 👇👇 \n\n"
+            . "No. ►► " . $booking->booking_number . "\n"
+            . "เลขอ้างอิงการจอง ►► " . $booking->card_id . "\n"
+            . "ประเภทการจอง ►► " . "【 Online 】" . "\n"
+            // . "สถานะ ►► " . "รอการตรวจสอบ" . "\n"
+            . "ชื่อ-นามสกุล ผู้จอง ►► " . $booking->cus_fname . " " . $booking->cus_lname . "\n"
+            . "เบอร์โทร ►► " . $booking->cus_phone . "\n"
+            . "ห้องพัก ►► " . $room->name . "\n"
+            . "เช็คอิน ►► " . $booking->date_checkin . "\n"
+            . "เช็คเอาท์ ►► " . $booking->date_checkout . "\n"
+            . "ระยะเวลาเข้าพัก ►► " . $booking->days . ' วัน' . "\n"
+            . "ราคารวม ►► " . $booking->price . ' บาท' . "\n";
+
+        $LINE_API = "https://notify-api.line.me/api/notify";
+        $LINE_TOKEN = "dVyvQN5pvqOLLOna8JDTck2rvI43Dr4vfP4rcddMETr";
+        $queryData = array('message' => $message);
+        $queryData = http_build_query($queryData, '', '&');
+        $headerOptions = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+                    . "Authorization: Bearer " . $LINE_TOKEN . "\r\n"
+                    . "Content-Length: " . strlen($queryData) . "\r\n",
+                'content' => $queryData
+            )
+        );
+        $context = stream_context_create($headerOptions);
+        $result = file_get_contents($LINE_API, FALSE, $context);
+        $res = json_decode($result);
+        return $res;
     }
 }

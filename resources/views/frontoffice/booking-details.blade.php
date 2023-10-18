@@ -303,6 +303,7 @@
             const form = event.target;
             const formData = new FormData(form);
 
+            btn_confirm.setAttribute('disabled', '')
             loading.classList.remove('d-none')
             text_confirm.classList.add('d-none')
 
@@ -319,7 +320,7 @@
                             window.location.href = `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
                         })
                     }
-                }, 1500);
+                }, 500);
             }).catch(({response}) => {
                 setTimeout(() => {
                     loading.classList.add('d-none')
@@ -332,10 +333,10 @@
                         not_available.classList.add('d-none')
                         return false;
                     }
-                }, 1500);
+                }, 500);
             })
 
-            return;
+            // return;
         }
     </script>
 @endsection

@@ -157,11 +157,20 @@ class BookingController extends Controller
 
         $isAvailable = $this->checkAvailableRoom($request, $room);
 
-        $preText = [
-            'Check-in :' . date('d-m-Y', strtotime($request->checkin)),
-            'Check-out :' . date('d-m-Y', strtotime($request->checkout)),
-            'Day :' . $diff_date . 'วัน',
-            'Price :' . $room->price * $diff_date . '฿',
+        $preBook = [
+            'Room : ' . $room->name,
+            'Check-in : ' . date('d-m-Y', strtotime($request->checkin)),
+            'Check-out :' . ' ' . date('d-m-Y', strtotime($request->checkout)),
+            'Day : ' . $diff_date,
+            'Price : ' . $room->price * $diff_date . ' ฿',
+        ];
+
+        $preValue = [
+            $room->id,
+            date('Y-m-d', strtotime($request->checkin)),
+            date('Y-m-d', strtotime($request->checkout)),
+            (int)$diff_date,
+            (int)$room->price,
         ];
 
         return response([
@@ -170,6 +179,84 @@ class BookingController extends Controller
             'checkout' => date('d-m-Y', strtotime($request->checkout)),
             'diff_date' => $diff_date,
             'isAvailable' => $isAvailable,
+            'preBook' => $preBook,
+            'preValue' => $preValue,
         ], 200);
+    }
+
+    public function createBookOrderAdmin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "room_id" => "numeric|required",
+            "price_per_date" => "numeric|required",
+            "days" => "numeric|required",
+            "payment_type" => "string|required",
+            "fname" => "string|required",
+            "lname" => "string|required",
+            "phone" => "string|required",
+            "email" => "email|required",
+            "card_id" => "numeric|required",
+            "checkin" => "string|required",
+            "checkout" => "string|required",
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendErrorValidators('Invalid params', $validator->errors());
+        }
+
+        $room = Room::where(['id' => $request->room_id])->first();
+        $isAvailable = $this->checkAvailableRoom($request, $room);
+
+        if (!$isAvailable) {
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => 'This room is not available!',
+                'isAvailable' => $isAvailable,
+            ], 403);
+        }
+
+        try {
+
+            $current_date = $request->checkin;
+            $booking_date = "";
+            for ($i = 0; $i < $request->days; $i++) {
+                $booking_date .= "," . date('Y-m-d', strtotime($current_date));
+                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+            }
+
+            $price = (int)$request->price_per_date * (int)$request->days;
+
+            $order = new Booking();
+            $order->room_id = $request->room_id;
+            $order->price_per_date = $request->price_per_date;
+            $order->price = $price;
+            $order->date_checkin = date('Y-m-d', strtotime($request->checkin));
+            $order->date_checkout = date('Y-m-d', strtotime($request->checkout));
+            $order->booking_date = $booking_date;
+            $order->days = $request->days;
+            $order->status_id = 2;
+            $order->booking_type = "Walk-in";
+            $order->cus_fname = $request->fname;
+            $order->cus_lname = $request->lname;
+            $order->cus_phone = $request->phone;
+            $order->email = $request->email;
+            $order->card_id = $request->card_id;
+            $order->payment_type = $request->payment_type;
+            // $order->slip = $slip_image;
+            $order->save();
+
+            return response([
+                'message' => 'ok',
+                'status' => true,
+                'description' => 'Order walk-in has been created successfully.'
+            ], 201);
+        } catch (Exception $e) {
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => $e->getMessage()
+            ], 500);
+        }
     }
 }

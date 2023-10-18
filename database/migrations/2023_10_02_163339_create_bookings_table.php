@@ -105,7 +105,7 @@ return new class extends Migration
                 'id' => 4,
                 'booking_number' => 'BK-0004',
                 'room_id' => 1,
-                'price' => 400,
+                'price' => 2000,
                 'price_per_date' => 400,
                 'date_checkin' => '2023-10-10',
                 'date_checkout' => '2023-10-15',

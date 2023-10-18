@@ -30,11 +30,11 @@
                             <th>รหัสการจอง</th>
                             <th>เลขอ้างอิง</th>
                             <th>ชื่อผู้จอง</th>
+                            <th>เบอร์โทรศัพท์</th>
                             <th>ห้อง</th>
                             <th>เช็คอิน - เช็คเอาท์</th>
                             <th>วันเวลาที่จอง</th>
                             <th>สถานะการจอง</th>
-                            <th>เบอร์โทรศัพท์</th>
                             <th>slip</th>
                             <th>Actions</th>
                         </tr>
@@ -45,6 +45,7 @@
                                 <td style="width: 100px;">{{ $booking->booking_number }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
+                                <td>{{ $booking->cus_phone }}</td>
                                 <td style="width: 200px;">
                                     <p>ห้อง : {{ $booking->room_name }}</p>
                                     <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
@@ -74,7 +75,6 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <td>{{ $booking->cus_phone }}</td>
                                 <td><img onclick="previewSlip('{{ $booking->slip }}')" src="{{ $booking->slip }}"
                                         width="100%" style="width: 126px; cursor: pointer;"></td>
                                 <td class="">
@@ -103,11 +103,11 @@
                             <th>รหัสการจอง</th>
                             <th>เลขอ้างอิง</th>
                             <th>ชื่อผู้จอง</th>
+                            <th>เบอร์โทรศัพท์</th>
                             <th>ห้อง</th>
                             <th>เช็คอิน - เช็คเอาท์</th>
                             <th>วันเวลาที่จอง</th>
                             <th>สถานะการจอง</th>
-                            <th>เบอร์โทรศัพท์</th>
                             <th>slip</th>
                             <th>Actions</th>
                         </tr>
@@ -118,6 +118,7 @@
                                 <td style="width: 100px;">{{ $booking->booking_number }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
+                                <td>{{ $booking->cus_phone }}</td>
                                 <td style="width: 200px;">
                                     <p>ห้อง : {{ $booking->room_name }}</p>
                                     <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
@@ -147,7 +148,6 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <td>{{ $booking->cus_phone }}</td>
                                 <td><img onclick="previewSlip('{{ $booking->slip }}')" src="{{ $booking->slip }}"
                                         width="100%" style="width: 126px; cursor: pointer;"></td>
                                 <td class="">
@@ -176,11 +176,11 @@
                             <th>รหัสการจอง</th>
                             <th>เลขอ้างอิง</th>
                             <th>ชื่อผู้จอง</th>
+                            <th>เบอร์โทรศัพท์</th>
                             <th>ห้อง</th>
                             <th>เช็คอิน - เช็คเอาท์</th>
                             <th>วันเวลาที่จอง</th>
                             <th>สถานะการจอง</th>
-                            <th>เบอร์โทรศัพท์</th>
                             <th>slip</th>
                             <th>Actions</th>
                         </tr>
@@ -191,6 +191,7 @@
                                 <td style="width: 100px;">{{ $booking->booking_number }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
+                                <td>{{ $booking->cus_phone }}</td>
                                 <td style="width: 200px;">
                                     <p>ห้อง : {{ $booking->room_name }}</p>
                                     <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
@@ -220,7 +221,6 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <td>{{ $booking->cus_phone }}</td>
                                 <td><img onclick="previewSlip('{{ $booking->slip }}')" src="{{ $booking->slip }}"
                                         width="100%" style="width: 126px; cursor: pointer;"></td>
                                 <td class="">

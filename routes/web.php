@@ -119,6 +119,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/bookingone/{id}', [BookingController::class, 'getBookingById']);
             Route::post('/prebooking', [BookingController::class, 'preBooking']);
 
+            Route::post('/confirmbooking', [BookingController::class, 'createBookOrderAdmin']);
         });
     });
 });

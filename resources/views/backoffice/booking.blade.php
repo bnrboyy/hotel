@@ -134,7 +134,7 @@
     <div class="modal fade" id="bookingform-s" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form>
+            <form onsubmit="return confirmBook(event)">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">ข้อมูลผู้จอง / รายละเอียด</h5>
@@ -200,14 +200,11 @@
                                     <div class="row g-0 align-items-center">
                                         <div class="col-12 p-3 pb-0">
                                             <h6 class="text-secondary" style="font-size: 14px;">รายละเอียดการจอง</h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;">Check-in :
-                                               222-222-2-2</h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;">Check-out :
-                                                222-222-2-2</h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;">Day : 3
-                                            </h6>
-                                            <h6 class="text-prebook" style="font-size: 16px; font-weight: 500;">Price :
-                                                400 ฿</h6>
+                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
+                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
+                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
+                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
+                                            <h5 class="text-prebook" style="font-weight: 500;"></h5>
                                         </div>
                                     </div>
                                 </div>
@@ -216,12 +213,19 @@
 
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn-close-modal btn bg-secondary text-white shadow-none"
+                        <button onclick="closeModal()" type="button" class="btn-close-modal btn bg-secondary text-white shadow-none"
                             data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="button" class="btn custom-bg text-white shadow-none"
-                            data-bs-dismiss="modal">ยืนยันการจอง</button>
+                        <button type="submit" class="btn btn-confirm custom-bg d-flex align-items-center justify-content-center text-white shadow-none" style="width: 117px;">
+                            <div class="spinner-border loading d-none" role="status" style="width: 20px; height: 20px;"></div>
+                            <div class="text-btn-confirm">ยืนยันการจอง</div>
+                        </button>
                     </div>
                 </div>
+                <input class="pre-value" type="hidden" name="room_id">
+                <input class="pre-value" type="hidden" name="checkin">
+                <input class="pre-value" type="hidden" name="checkout">
+                <input class="pre-value" type="hidden" name="days">
+                <input class="pre-value" type="hidden" name="price_per_date">
             </form>
         </div>
     </div>
