@@ -5,7 +5,8 @@ Chart.defaults.global.defaultFontColor = '#858796';
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
-  type: 'doughnut',
+//   type: 'doughnut',
+  type: 'pie',
   data: {
     labels: ["Online", "Walk-in"],
     datasets: [{
@@ -16,12 +17,12 @@ var myPieChart = new Chart(ctx, {
     }],
   },
   options: {
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     tooltips: {
       backgroundColor: "rgb(255,255,255)",
       bodyFontColor: "#858796",
       borderColor: '#dddfeb',
-      borderWidth: 1,
+      borderWidth: 10,
       xPadding: 15,
       yPadding: 15,
       displayColors: false,
@@ -30,6 +31,6 @@ var myPieChart = new Chart(ctx, {
     legend: {
       display: false
     },
-    cutoutPercentage: 80,
+    cutoutPercentage: 0,
   },
 });

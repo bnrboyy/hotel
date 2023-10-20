@@ -4107,7 +4107,7 @@ input[type="button"].btn-block {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  /* padding: 0.5rem 1rem; */
 }
 
 .navbar .container,
@@ -9812,8 +9812,8 @@ a:focus {
 .container-md,
 .container-lg,
 .container-xl {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  /* padding-left: 1.5rem;
+  padding-right: 1.5rem; */
 }
 
 .scroll-to-top {
