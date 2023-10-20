@@ -80,6 +80,16 @@ class BackController extends Controller
         $bookinghistory_online = $this->getBookingHistoryByType('Online');
         $bookinghistory_walkin = $this->getBookingHistoryByType('Walk-in');
 
+         /* Dashboard page */
+         $allRoom = Room::count();
+         $allCustomer = Booking::get()->groupBy('card_id');
+         $bookingAll = Booking::get();
+         $incomes = Booking::where('status_id', 4)
+                   ->select(DB::raw('SUM(bookings.price) AS income'))
+                   ->get()
+                   ->groupBY('id');
+
+
         if ($user) {
             switch ($page) {
                 case 'settings':
@@ -222,7 +232,15 @@ class BackController extends Controller
                     break;
 
                 default:
-                    return view('backoffice.dashboard');
+                    dd($incomes);
+                    return view('backoffice.dashboard', [
+                        'allRoom' => $allRoom,
+                        'allCustomer' => $allCustomer,
+                        'bookingAll' => $bookingAll,
+                        'income' => number_format($incomes, 0),
+                        'bookingOnline' => Booking::where('booking_type', 'Online')->count(),
+                        'bookingWalkin' => Booking::where('booking_type', 'Walk-in')->count(),
+                    ]);
                     break;
             }
         }

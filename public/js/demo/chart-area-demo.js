@@ -32,8 +32,9 @@ const backgroundColors = [
 
 ];
 
-// Area Chart Example
-var ctx = document.getElementById("myAreaChart");
+var ctx1 = document.getElementById("barChartDate");
+var ctx2 = document.getElementById("barChartMonth");
+var ctx3 = document.getElementById("barChartYear");
 // var myLineChart = new Chart(ctx, {
 //   type: 'line',
 //   data: {
@@ -122,98 +123,102 @@ var ctx = document.getElementById("myAreaChart");
 //   }
 // });
 
-var myBarChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [
-            {
-                label: "# of Votes",
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: "#4e73df",
-                borderWidth: 1,
-                borderRadius: 10,
-            },
-            {
-                label: "# of Votes",
-                data: [1, 14, 30, 5, 12, 3],
-                backgroundColor: "#1cc88a",
-                borderWidth: 1,
-                borderRadius: 10,
-            },
-        ],
-    },
-    options: {
-        maintainAspectRatio: false,
-        layout: {
-            padding: {
-                left: 10,
-                right: 25,
-                top: 25,
-                bottom: 0,
-            },
-        },
-        scales: {
-            xAxes: [
+function barChartShow(_ctx) {
+    var myBarChart = new Chart(_ctx, {
+        type: "bar",
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [
                 {
-                    time: {
-                        unit: "date",
-                    },
-                    gridLines: {
-                        display: false,
-                        drawBorder: false,
-                    },
-                    ticks: {
-                        maxTicksLimit: 7,
-                    },
+                    label: "# of Votes",
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: "#4e73df",
+                    borderWidth: 1,
+                    borderRadius: 10,
+                },
+                {
+                    label: "# of Votes",
+                    data: [1, 14, 30, 5, 12, 3],
+                    backgroundColor: "#1cc88a",
+                    borderWidth: 1,
+                    borderRadius: 10,
                 },
             ],
-            yAxes: [
-                {
-                    ticks: {
-                        maxTicksLimit: 5,
-                        padding: 10,
-                        // Include a dollar sign in the ticks
-                        callback: function (value, index, values) {
-                            return number_format(value) + " บาท";
+        },
+        options: {
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0,
+                },
+            },
+            scales: {
+                xAxes: [
+                    {
+                        time: {
+                            unit: "date",
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false,
+                        },
+                        ticks: {
+                            maxTicksLimit: 7,
                         },
                     },
-                    gridLines: {
-                        color: "rgb(234, 236, 244)",
-                        zeroLineColor: "rgb(234, 236, 244)",
-                        drawBorder: false,
-                        borderDash: [2],
-                        zeroLineBorderDash: [2],
+                ],
+                yAxes: [
+                    {
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                return number_format(value) + " บาท";
+                            },
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2],
+                        },
                     },
-                },
-            ],
-        },
-        legend: {
-            display: false,
-        },
-        tooltips: {
-            backgroundColor: "rgb(255,255,255)",
-            bodyFontColor: "#858796",
-            titleMarginBottom: 10,
-            titleFontColor: "#6e707e",
-            titleFontSize: 14,
-            borderColor: "#dddfeb",
-            borderWidth: 1,
-            xPadding: 15,
-            yPadding: 15,
-            displayColors: false,
-            intersect: false,
-            mode: "index",
-            caretPadding: 10,
-            callbacks: {
-                label: function (tooltipItem, chart) {
-                    var datasetLabel =
-                        chart.datasets[tooltipItem.datasetIndex].label || "";
-                    return (
-                        datasetLabel + " " + number_format(tooltipItem.yLabel) + " บาท"
-                    );
+                ],
+            },
+            legend: {
+                display: false,
+            },
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                titleMarginBottom: 10,
+                titleFontColor: "#6e707e",
+                titleFontSize: 14,
+                borderColor: "#dddfeb",
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                intersect: false,
+                mode: "index",
+                caretPadding: 10,
+                callbacks: {
+                    label: function (tooltipItem, chart) {
+                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || "";
+                        return (datasetLabel + " " + number_format(tooltipItem.yLabel) + " บาท");
+                    },
                 },
             },
         },
-    },
-});
+    });
+}
+
+barChartShow(ctx1)
+barChartShow(ctx2)
+barChartShow(ctx3)
+

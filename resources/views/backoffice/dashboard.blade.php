@@ -14,10 +14,8 @@
 @section('content')
     <div class="container-fluid">
         <h2 class="fs-5">แผงควบคุม</h2>
-
         <!-- Content Row 1 -->
         <div class="row">
-
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
@@ -26,7 +24,7 @@
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     <h4>รายการจองทั้งหมด</h4></div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">98 รายการ <span style="color: #4e73df; font-size: 14px;">Online : 5, Walk-in : 15</span></div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($bookingAll) }} รายการ <span style="color: #4e73df; font-size: 14px;">Online : {{ $bookingOnline }}, Walk-in : {{ $bookingWalkin }}</span></div>
                             </div>
                             <div class="col-auto">
                                 <i class="bi bi-calendar-check fa-2x text-gray-300"></i>
@@ -44,7 +42,7 @@
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     <h4>รายได้ทั้งหมด</h4></div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">215,000 บาท</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $income }} บาท</div>
                             </div>
                             <div class="col-auto">
                                 <i class="bi bi-currency-bitcoin fa-2x text-gray-300"></i>
@@ -62,7 +60,7 @@
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                     <h4>จำนวนลูกค้า</h4></div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($allCustomer) }}</div>
                             </div>
                             <div class="col-auto">
                                 <i class="bi bi-people-fill fa-2x text-gray-300"></i>
@@ -81,7 +79,7 @@
                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                     <h4>จำนวนห้องทั้งหมด</h4>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">9</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $allRoom }}</div>
 
                                 {{-- <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
@@ -106,15 +104,14 @@
 
         <!-- Content Row 2 -->
         <div class="row">
-
             <!-- Area Chart -->
             <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้</h6>
-                        <div class="dropdown no-arrow">
+                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / วัน</h6>
+                        {{-- <div class="dropdown no-arrow">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
@@ -125,25 +122,24 @@
                                 <a class="dropdown-item" href="#">Another action</a>
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
                         <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
+                            <canvas id="barChartDate"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนรายได้</h6>
-                        <div class="dropdown no-arrow">
+                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพัก / วัน</h6>
+                        {{-- <div class="dropdown no-arrow">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
@@ -154,12 +150,122 @@
                                 <a class="dropdown-item" href="#">Another action</a>
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
                         <div class="chart-pie pt-4 pb-2">
-                            <canvas id="myPieChart"></canvas>
+                            <canvas id="pieChartDate"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="bi bi-circle-fill text-primary"></i> Online
+                            </span>
+                            <span class="mr-2">
+                                <i class="bi bi-circle-fill text-success"></i> Walk-in
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Row 3 -->
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / เดือน</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="barChartMonth"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพัก / เดือน</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <canvas id="pieChartMonth"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="bi bi-circle-fill text-primary"></i> Online
+                            </span>
+                            <span class="mr-2">
+                                <i class="bi bi-circle-fill text-success"></i> Walk-in
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Row 4 -->
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / ปี</h6>
+                        {{-- <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div> --}}
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="barChartYear"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพัก / ปี</h6>
+                        {{-- <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div> --}}
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <canvas id="pieChartYear"></canvas>
                         </div>
                         <div class="mt-4 text-center small">
                             <span class="mr-2">
