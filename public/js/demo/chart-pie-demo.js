@@ -5,7 +5,7 @@ Chart.defaults.global.defaultFontColor = '#858796';
 // Pie Chart Example
 var ctx1 = document.getElementById("pieChartDate");
 var ctx2 = document.getElementById("pieChartMonth");
-var ctx3 = document.getElementById("pieChartYear");
+// var ctx3 = document.getElementById("pieChartYear");
 
 function pieChartShow(_ctx) {
     var myPieChart = new Chart(_ctx, {
@@ -42,4 +42,4 @@ function pieChartShow(_ctx) {
 
 pieChartShow(ctx1)
 pieChartShow(ctx2)
-pieChartShow(ctx3)
+// pieChartShow(ctx3)

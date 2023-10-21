@@ -33,6 +33,7 @@ class RoomController extends Controller
 
         $feature_ids = implode(', ', $request->feature_ids);
         $fac_ids = implode(', ', $request->fac_ids);
+        $color_code = '#' . str_pad(dechex(mt_rand(0, 16777215)), 6, '0', STR_PAD_LEFT); // random color code.
 
         try {
             $newData = Room::create([
@@ -45,6 +46,7 @@ class RoomController extends Controller
                 'feature_ids' => $feature_ids,
                 'fac_ids' => $fac_ids,
                 'display' => true,
+                'color_code' => $color_code,
             ]);
 
             return response([

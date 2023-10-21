@@ -28,13 +28,13 @@
             <div class="col-12 pb-5">
                 <form onsubmit="return search(event)">
                     <div class="row align-items-end justify-content-center">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 mb-3 mb-lg-0">
                             <label class="form-label" style="font-weight: 500;">เบอร์โทรศัพท์ที่ใช้ในการจอง</label>
                             <input type="number" name="phone" id="phone" class="form-control shadow-none text-center pointer"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                 onKeyPress="if(this.value.length>=10) return false;" minlength="10" required>
                         </div>
-                        <div class="col-lg-3 ">
+                        <div class="col-lg-3 mb-3 mb-lg-0">
                             <label class="form-label" style="font-weight: 500;">เลขประชาชน 4 ตัวท้าย</label>
                             <input type="number" name="card_id" id="card-id" class="form-control shadow-none text-center pointer"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '');"

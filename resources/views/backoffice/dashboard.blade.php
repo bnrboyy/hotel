@@ -110,7 +110,16 @@
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / วัน</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบจำนวนครั้งที่เข้าพัก</h6>
+
+                        {{-- <div class="">
+                            @foreach ($rooms as $room)
+                                <span class="mr-3">
+                                    <i class="bi bi-circle-fill" style="color: {{ $room->color_code }}; font-size: 12px;"></i> {{ $room->name }}
+                                </span>
+                            @endforeach
+                        </div> --}}
+
                         {{-- <div class="dropdown no-arrow">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -221,18 +230,6 @@
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / ปี</h6>
-                        {{-- <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div> --}}
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -242,56 +239,18 @@
                     </div>
                 </div>
             </div>
-            <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพัก / ปี</h6>
-                        {{-- <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div> --}}
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <canvas id="pieChartYear"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="bi bi-circle-fill text-primary"></i> Online
-                            </span>
-                            <span class="mr-2">
-                                <i class="bi bi-circle-fill text-success"></i> Walk-in
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
+        <div id="rooms-data" roomsData="{{ json_encode($rooms) }}"></div>
     </div>
 @endsection
 
 @section('script')
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
     <script src="js/sb-admin-2.min.js"></script>
-
     <script src="vendor/chart.js/Chart.min.js"></script>
-
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 

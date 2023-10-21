@@ -11,7 +11,7 @@
 <body class="bg-light">
     <div class="main-container d-flex">
         <div class="sidebar" id="side_nav">
-            <div class="header-box px-2 pt-3 pb-2 d-flex justify-content-center align-items-center">
+            <div class="header-box px-2 pt-3 pb-2 d-flex justify-content-between align-items-center">
                 <h1 class="fs-5"><span class="bg-white text-dark rounded shadow px-2 me-2"><i class="bi bi-hospital-fill" style="color: #000 !important;"></i></span><span
                         class="text-white fs-6">{{ $shareSite->site_title }}</span></h1>
                 <button class="btn d-md-none d-block close-btn px-1 py-0 text-white"><i class="bi bi-list"
@@ -36,10 +36,32 @@
                         <ul class="nav flex-column">
                             <li class="managebook">
                                 <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between"
-                                    href="javascript:getPage('managebook')"><span style="font-size: 15px;">รายการจอง</span> <div><span class="badge text-bg-warning rounded-pill" style="min-width: 20px;">{{ $shareBookingNew }}</span> <span class="badge text-bg-primary rounded-pill" style="min-width: 20px;">{{ $shareBookingVerified }}</span> <span class="badge text-bg-info rounded-pill" style="min-width: 20px;">{{ $shareBookingInprogress }}</span></div></a>
+                                    href="javascript:getPage('managebook')">
+                                    <span style="font-size: 15px;">รายการจอง</span>
+                                    <div>
+                                        @if ($shareBookingNew > 0)
+                                            <span class="badge text-bg-warning rounded-pill" style="min-width: 20px;">{{ $shareBookingNew }}</span>
+                                        @endif
+                                        @if ($shareBookingVerified > 0)
+                                            <span class="badge text-bg-primary rounded-pill" style="min-width: 20px;">{{ $shareBookingVerified }}</span>
+                                        @endif
+                                        @if ($shareBookingInprogress > 0)
+                                            <span class="badge text-bg-info rounded-pill" style="min-width: 20px;">{{ $shareBookingInprogress }}</span>
+                                        @endif
+                                    </div>
+                                </a>
                             </li>
                             <li class="bookinghistory">
-                                <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between" href="javascript:getPage('bookinghistory')"><span style="font-size: 15px;">ประวัติการจอง</span> <div><span class="badge text-bg-success rounded-pill" style="min-width: 20px;">{{ $shareBookingHistory }}</span> <span class="badge text-bg-danger rounded-pill" style="min-width: 20px;">{{ $shareBookingCancel }}</span></div></a>
+                                <a class="nav-link text-decoration-none d-flex align-items-center justify-content-between" href="javascript:getPage('bookinghistory')"><span style="font-size: 15px;">ประวัติการจอง</span>
+                                    <div>
+                                        @if ($shareBookingHistory > 0)
+                                            <span class="badge text-bg-success rounded-pill" style="min-width: 20px;">{{ $shareBookingHistory }}</span>
+                                        @endif
+                                        @if ($shareBookingCancel > 0)
+                                            <span class="badge text-bg-danger rounded-pill" style="min-width: 20px;">{{ $shareBookingCancel }}</span>
+                                        @endif
+                                    </div>
+                                </a>
                             </li>
                             <li class="booking">
                                 <a class="nav-link text-decoration-none" href="javascript:getPage('booking')"><span style="font-size: 15px;">จองแบบ Walk-in</span></a>
@@ -82,6 +104,10 @@
                             style="font-size: 18px;"></i> <span style="font-size: 15px;">ตั้งค่าระบบ</span></a></li>
             </ul>
             {{-- <hr class="h-color mx-2"> --}}
+
+            <div class="nav-bottom d-flex justify-content-center align-items-center mt-auto px-4 py-2 shadow-sm">
+                <a class="visit-site w-100 h-100 rounded shadow d-flex justify-content-center align-items-center" href="/" target="_blank">เข้าสู่เว็บไซต์</a>
+            </div>
         </div>
 
         <div class="content" style="">

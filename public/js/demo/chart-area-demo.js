@@ -1,6 +1,5 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
-(Chart.defaults.global.defaultFontFamily = "Nunito"),
-    '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+(Chart.defaults.global.defaultFontFamily = "Kanit");
 Chart.defaults.global.defaultFontColor = "#858796";
 
 function number_format(number, decimals, dec_point, thousands_sep) {
@@ -28,122 +27,34 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
-const backgroundColors = [
+const backgroundColors = [];
+const roomsData = JSON.parse(document.getElementById("rooms-data").getAttribute("roomsData"));
+const mouthNumbers = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
-];
+let datasets = roomsData.map((room) => {
+    return {
+        label: `${room.name}`,
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: `${room.color_code}`,
+        borderWidth: 1,
+        borderRadius: 10,
+    };
+});
+
+let labelMonths = mouthNumbers.map(item => {
+    return dayjs(`${item}`, { locale: "th" }).format("MMMM");
+});
 
 var ctx1 = document.getElementById("barChartDate");
 var ctx2 = document.getElementById("barChartMonth");
 var ctx3 = document.getElementById("barChartYear");
-// var myLineChart = new Chart(ctx, {
-//   type: 'line',
-//   data: {
-//     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-//     datasets: [{
-//       label: "Earnings",
-//       lineTension: 0.3,
-//       backgroundColor: "rgba(78, 115, 223, 0.05)",
-//       borderColor: "rgba(78, 115, 223, 1)",
-//       pointRadius: 3,
-//       pointBackgroundColor: "rgba(78, 115, 223, 1)",
-//       pointBorderColor: "rgba(78, 115, 223, 1)",
-//       pointHoverRadius: 3,
-//       pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-//       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-//       pointHitRadius: 10,
-//       pointBorderWidth: 2,
-//       data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
-//     }],
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     layout: {
-//       padding: {
-//         left: 10,
-//         right: 25,
-//         top: 25,
-//         bottom: 0
-//       }
-//     },
-//     scales: {
-//       xAxes: [{
-//         time: {
-//           unit: 'date'
-//         },
-//         gridLines: {
-//           display: false,
-//           drawBorder: false
-//         },
-//         ticks: {
-//           maxTicksLimit: 7
-//         }
-//       }],
-//       yAxes: [{
-//         ticks: {
-//           maxTicksLimit: 5,
-//           padding: 10,
-//           // Include a dollar sign in the ticks
-//           callback: function(value, index, values) {
-//             return '$' + number_format(value);
-//           }
-//         },
-//         gridLines: {
-//           color: "rgb(234, 236, 244)",
-//           zeroLineColor: "rgb(234, 236, 244)",
-//           drawBorder: false,
-//           borderDash: [2],
-//           zeroLineBorderDash: [2]
-//         }
-//       }],
-//     },
-//     legend: {
-//       display: false
-//     },
-//     tooltips: {
-//       backgroundColor: "rgb(255,255,255)",
-//       bodyFontColor: "#858796",
-//       titleMarginBottom: 10,
-//       titleFontColor: '#6e707e',
-//       titleFontSize: 14,
-//       borderColor: '#dddfeb',
-//       borderWidth: 1,
-//       xPadding: 15,
-//       yPadding: 15,
-//       displayColors: false,
-//       intersect: false,
-//       mode: 'index',
-//       caretPadding: 10,
-//       callbacks: {
-//         label: function(tooltipItem, chart) {
-//           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-//           return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-//         }
-//       }
-//     }
-//   }
-// });
 
-function barChartShow(_ctx) {
+function barChartShow(_ctx, roomsData) {
     var myBarChart = new Chart(_ctx, {
         type: "bar",
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [
-                {
-                    label: "# of Votes",
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: "#4e73df",
-                    borderWidth: 1,
-                    borderRadius: 10,
-                },
-                {
-                    label: "# of Votes",
-                    data: [1, 14, 30, 5, 12, 3],
-                    backgroundColor: "#1cc88a",
-                    borderWidth: 1,
-                    borderRadius: 10,
-                },
-            ],
+            labels: labelMonths,
+            datasets: datasets,
         },
         options: {
             maintainAspectRatio: false,
@@ -166,7 +77,7 @@ function barChartShow(_ctx) {
                             drawBorder: false,
                         },
                         ticks: {
-                            maxTicksLimit: 7,
+                            // maxTicksLimit: 12, //max labels
                         },
                     },
                 ],
@@ -177,7 +88,7 @@ function barChartShow(_ctx) {
                             padding: 10,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
-                                return number_format(value) + " บาท";
+                                return number_format(value) + " ครั้ง";
                             },
                         },
                         gridLines: {
@@ -191,7 +102,7 @@ function barChartShow(_ctx) {
                 ],
             },
             legend: {
-                display: false,
+                display: true,
             },
             tooltips: {
                 backgroundColor: "rgb(255,255,255)",
@@ -209,8 +120,15 @@ function barChartShow(_ctx) {
                 caretPadding: 10,
                 callbacks: {
                     label: function (tooltipItem, chart) {
-                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || "";
-                        return (datasetLabel + " " + number_format(tooltipItem.yLabel) + " บาท");
+                        var datasetLabel =
+                            chart.datasets[tooltipItem.datasetIndex].label ||
+                            "";
+                        return (
+                            datasetLabel +
+                            " " +
+                            number_format(tooltipItem.yLabel) +
+                            " ครั้ง"
+                        );
                     },
                 },
             },
@@ -218,7 +136,6 @@ function barChartShow(_ctx) {
     });
 }
 
-barChartShow(ctx1)
-barChartShow(ctx2)
-barChartShow(ctx3)
-
+barChartShow(ctx1, roomsData);
+barChartShow(ctx2, roomsData);
+barChartShow(ctx3, roomsData);

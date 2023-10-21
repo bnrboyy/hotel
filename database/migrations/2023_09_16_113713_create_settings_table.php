@@ -25,8 +25,8 @@ return new class extends Migration
         DB::table('settings')->insert([
             [
              'id' => 1,
-             'site_title' => 'Hotel Booking',
-             'site_about' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt aspernatur enim magnam tenetur optio adipisci consequuntur non odio, explicabo laboriosam.',
+             'site_title' => 'สวนสบายปลายนารีสอร์ท',
+             'site_about' => 'บริการห้องพักรายวัน 24 ชั่วโมง',
              'shutdown' => 0,
             ],
         ]);
