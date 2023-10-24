@@ -28,56 +28,113 @@ return new class extends Migration
 
         DB::table('galleries')->insert([
             [
-                'id' => 1,
                 'room_id' => 1,
-                'image' => '/images/rooms/1.jpg',
+                'image' => '/images/rooms/1.png',
                 'default' => 1,
             ],
             [
-                'id' => 2,
                 'room_id' => 1,
                 'image' => '/images/rooms/2.png',
                 'default' => 0,
 
             ],
             [
-                'id' => 3,
                 'room_id' => 2,
                 'image' => '/images/rooms/2.png',
                 'default' => 1,
 
             ],
             [
-                'id' => 4,
                 'room_id' => 2,
                 'image' => '/images/rooms/3.png',
                 'default' => 0,
 
             ],
             [
-                'id' => 5,
                 'room_id' => 3,
                 'image' => '/images/rooms/5.png',
                 'default' => 1,
 
             ],
             [
-                'id' => 6,
                 'room_id' => 3,
                 'image' => '/images/rooms/6.png',
                 'default' => 0,
 
             ],
             [
-                'id' => 7,
                 'room_id' => 3,
                 'image' => '/images/rooms/7.png',
                 'default' => 0,
 
             ],
             [
-                'id' => 8,
                 'room_id' => 3,
+                'image' => '/images/rooms/4.png',
+                'default' => 0,
+
+            ],
+            [
+                'room_id' => 4,
+                'image' => '/images/rooms/2.png',
+                'default' => 1,
+            ],
+            [
+                'room_id' => 4,
+                'image' => '/images/rooms/3.png',
+                'default' => 0,
+
+            ],
+            [
+                'room_id' => 4,
+                'image' => '/images/rooms/5.png',
+                'default' => 0,
+
+            ],
+            [
+                'room_id' => 5,
+                'image' => '/images/rooms/3.png',
+                'default' => 1,
+
+            ],
+            [
+                'room_id' => 5,
+                'image' => '/images/rooms/5.png',
+                'default' => 0,
+
+            ],
+            [
+                'room_id' => 6,
+                'image' => '/images/rooms/6.png',
+                'default' => 1,
+
+            ],
+            [
+                'room_id' => 7,
+                'image' => '/images/rooms/7.png',
+                'default' => 1,
+
+            ],
+            [
+                'room_id' => 8,
+                'image' => '/images/rooms/4.png',
+                'default' => 1,
+
+            ],
+            [
+                'room_id' => 8,
+                'image' => '/images/rooms/1.png',
+                'default' => 0,
+
+            ],
+            [
+                'room_id' => 9,
+                'image' => '/images/rooms/2.png',
+                'default' => 1,
+
+            ],
+            [
+                'room_id' => 9,
                 'image' => '/images/rooms/4.png',
                 'default' => 0,
 
