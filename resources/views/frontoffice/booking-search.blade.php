@@ -58,7 +58,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h5>ห้องพัก : {{ $book->room_title }}</h5>
-                                <span class="badge rounded-pill text-dark bg-{{ $book->bg_color }}">{{ $book->status_name }}</span>
+                                <span class="badge rounded-pill bg-{{ $book->bg_color }}">{{ $book->status_name }}</span>
                             </div>
                             <h6 class="">รหัสการจอง : {{ $book->booking_number }}</h6>
                             <h6 class="">ชื่อผู้จอง : {{ $book->cus_fname . " " . $book->cus_lname }}</h6>

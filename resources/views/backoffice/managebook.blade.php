@@ -7,7 +7,7 @@
 @section('content')
     <h3><i class="bi bi-list-task"></i> รายการจอง</h3>
     <div class="d-flex flex-column gap-3">
-        <div class="card border-0 shadow-sm" style="width: 1578px;">
+        <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-2">
                     <h5 class="card-title m-0 mb-4">
@@ -57,7 +57,7 @@
                                 <td style="width: 120px;">{{ $booking->created_at }}</td>
                                 <td class="td-status">
                                     <span style="width: 112px;"
-                                        class="badge rounded-pill d-flex align-items-center justify-content-between text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
+                                        class="badge rounded-pill d-flex align-items-center justify-content-between bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
                                         <span><i class="bi bi-caret-down-fill"></i></span>
                                     </span>
                                     <select onchange="updateBookStatus(this, {{ $booking->id }})"
@@ -129,7 +129,7 @@
                                 <td style="width: 120px;">{{ $booking->created_at }}</td>
                                 <td class="td-status">
                                     <span style="width: 112px;"
-                                        class="badge rounded-pill d-flex align-items-center justify-content-between text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
+                                        class="badge rounded-pill d-flex align-items-center justify-content-between bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
                                         <span><i class="bi bi-caret-down-fill"></i></span>
                                     </span>
                                     <select onchange="updateBookStatus(this, {{ $booking->id }})"
@@ -201,7 +201,7 @@
                                 <td style="width: 120px;">{{ $booking->created_at }}</td>
                                 <td class="td-status">
                                     <span style="width: 112px;"
-                                        class="badge rounded-pill d-flex align-items-center justify-content-between text-dark bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
+                                        class="badge rounded-pill d-flex align-items-center justify-content-between bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
                                         <span><i class="bi bi-caret-down-fill"></i></span>
                                     </span>
                                     <select onchange="updateBookStatus(this, {{ $booking->id }})"
