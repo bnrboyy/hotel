@@ -110,7 +110,8 @@
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบจำนวนครั้งที่เข้าพัก</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">จำนวนครั้งที่เข้าพัก</h6>
+                        <h6 class="year m-0 font-weight-bold text-primary"></h6>
 
                         {{-- <div class="">
                             @foreach ($rooms as $room)
@@ -143,36 +144,16 @@
             </div>
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
+                <div class="card shadow mb-4" style="height: 414.19px;">
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพัก / วัน</h6>
-                        {{-- <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots-vertical fa-sm fa-fw text-gray-600"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div> --}}
+                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพักทั้งหมด</h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
                         <div class="chart-pie pt-4 pb-2">
                             <canvas id="pieChartDate"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="bi bi-circle-fill text-primary"></i> Online
-                            </span>
-                            <span class="mr-2">
-                                <i class="bi bi-circle-fill text-success"></i> Walk-in
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -186,7 +167,8 @@
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / เดือน</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้</h6>
+                        <h6 class="year m-0 font-weight-bold text-primary"></h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -198,50 +180,23 @@
             </div>
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
+                <div class="card shadow mb-4" style="height: 414.19px;">
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพัก / เดือน</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วยรายได้ทั้งหมด</h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
                         <div class="chart-pie pt-4 pb-2">
                             <canvas id="pieChartMonth"></canvas>
                         </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="bi bi-circle-fill text-primary"></i> Online
-                            </span>
-                            <span class="mr-2">
-                                <i class="bi bi-circle-fill text-success"></i> Walk-in
-                            </span>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Content Row 4 -->
-        <div class="row">
-            <!-- Area Chart -->
-            <div class="col-xl-8 col-lg-7">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้ / ปี</h6>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="barChartYear"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-        </div>
-        <div id="rooms-data" roomsData="{{ json_encode($rooms) }}"></div>
+        <div id="data" roomsData="{{ json_encode($rooms) }}" bookingsData="{{ json_encode($bookingComplete) }}"></div>
     </div>
 @endsection
 
@@ -251,8 +206,16 @@
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
     <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-area.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
-    <script></script>
+    <script>
+        const year = document.querySelectorAll('.year');
+        const currentYear = dayjs().year();
+        const buddhistYear = dayjs().year(currentYear).add(543, 'year').year();
+
+        year.forEach(y => {
+            y.innerText = `พ.ศ. ${buddhistYear}`;
+        });
+    </script>
 @endsection

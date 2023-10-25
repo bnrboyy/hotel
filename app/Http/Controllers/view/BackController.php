@@ -80,18 +80,24 @@ class BackController extends Controller
         $bookinghistory_online = $this->getBookingHistoryByType('Online');
         $bookinghistory_walkin = $this->getBookingHistoryByType('Walk-in');
 
+
         /* Dashboard page */
         $allRoom = Room::count();
         $allCustomer = Booking::get()->groupBy('card_id');
         $bookingAll = Booking::get();
         $incomes = Booking::where('status_id', 4)->sum('price');
 
-        $bookingHis = Booking::join('rooms', 'rooms.id', '=', 'bookings.room_id')
-            ->select('bookings.room_id AS room_id', DB::raw('GROUP_CONCAT(MONTH(bookings.date_checkin)) as month'), DB::raw('count(*) as count'))
-            ->whereYear('date_checkin', date('Y'))
-            ->where('bookings.status_id', 4)
-            ->groupBy('room_id')
-            ->get();
+        $bookingComplete = Booking::join('rooms', 'rooms.id', 'bookings.room_id')
+                            ->whereYear('date_checkin', date('Y'))
+                            ->select('bookings.*', 'rooms.name AS room_name')
+                            ->where('bookings.status_id', 4)
+                            ->get();
+
+        foreach ($bookingComplete as $book) {
+            $book->month = substr($book->date_checkin, 5, -3);
+        }
+
+
             // ->select('rooms.name', 'rooms.id', 'bookings.date_checkin', 'bookings.date_checkout' , DB::raw('count(bookings.id) as booking_count'))
             // ->whereYear('date_checkin', date('Y'))
             // ->where('bookings.status_id', 4)
@@ -241,12 +247,13 @@ class BackController extends Controller
                     break;
 
                 default:
-                    // dd($bookingHis);
+                    // dd($bookingComplete);
                     return view('backoffice.dashboard', [
                         'allRoom' => $allRoom,
                         'allCustomer' => $allCustomer,
                         'bookingAll' => $bookingAll,
                         'rooms' => $rooms,
+                        'bookingComplete' => $bookingComplete,
                         'income' => number_format($incomes, 0),
                         'bookingOnline' => Booking::where('booking_type', 'Online')->count(),
                         'bookingWalkin' => Booking::where('booking_type', 'Walk-in')->count(),

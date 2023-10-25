@@ -5,6 +5,7 @@ const select_adult = document.getElementById("select-adult");
 const select_children = document.getElementById("select-children");
 const form_search = document.getElementById("form-search");
 const btn_search = document.querySelector(".btn-search");
+const btn_scrolltop = document.querySelector(".btn-scrolltop");
 const selects = document.querySelectorAll(".select");
 
 let detailsURL = "";
@@ -87,16 +88,20 @@ function roomDetails(room_id) {
 }
 
 function book(room_id) {
+    const originalScrollPosition = window.scrollY;
     const isNullParams = someNullParam;
     if (isNullParams || !date_checkout.value || !date_checkin.value) {
         Swal.fire({
             icon: "info",
             text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",
-        }).then(() => {
-            return false;
         })
+        // scrollToTop(originalScrollPosition)
+        return false;
     } else {
-        console.log(`${bookingDetailsURL}${room_id}`)
         window.location.href = `${bookingDetailsURL}${room_id}`;
     }
+}
+
+function scrollToTop(_position) {
+    window.scrollTo(0, 0)
 }

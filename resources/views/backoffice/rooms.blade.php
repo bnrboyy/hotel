@@ -9,7 +9,7 @@
     <h3><i class="bi bi-hospital-fill"></i> ห้องพัก</h3>
 
     <div class="d-flex flex-column gap-3">
-        <!-- Message section -->
+        <!-- Rooms section -->
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
@@ -59,7 +59,7 @@
                                                 class="bi bi-pencil-square"></i></button>
                                         <button onclick="getGallery('{{ $room->id }}')" class="btn-modal btn btn-info shadow-none" data-bs-toggle="modal"
                                             data-bs-target="#images-s"><i class="bi bi-images"></i></button>
-                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด' && false)
                                             <button class="btn btn-danger shadow-none" onclick="deleteRoom({{ $room->id }})"><i
                                                     class="bi bi-trash-fill"></i></button>
                                         @endif

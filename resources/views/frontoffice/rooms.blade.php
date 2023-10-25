@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="my-5 px-4">
+    <div class="my-5 px-4 scroll-top">
         <h1 class="fw-bold text-center">ห้องพักทั้งหมด</h1>
         <div class="h-line bg-dark"></div>
     </div>

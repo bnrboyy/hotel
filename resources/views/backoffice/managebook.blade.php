@@ -82,7 +82,7 @@
                                         <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
                                             onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
                                                 class="bi bi-eye-fill"></i></button>
-                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด' && false)
                                             <button class="btn btn-danger shadow-none"
                                                 onclick="deleteBook(this, {{ $booking->id }})"><i
                                                     class="bi bi-trash-fill"></i></button>
@@ -154,7 +154,7 @@
                                         <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
                                             onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
                                                 class="bi bi-eye-fill"></i></button>
-                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด' && false)
                                             <button class="btn btn-danger shadow-none"
                                                 onclick="deleteBook(this, {{ $booking->id }})"><i
                                                     class="bi bi-trash-fill"></i></button>
@@ -226,7 +226,7 @@
                                         <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
                                             onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
                                                 class="bi bi-eye-fill"></i></button>
-                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด' && false)
                                             <button class="btn btn-danger shadow-none"
                                                 onclick="deleteBook(this, {{ $booking->id }})"><i
                                                     class="bi bi-trash-fill"></i></button>
