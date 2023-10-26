@@ -1,5 +1,5 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
-(Chart.defaults.global.defaultFontFamily = "Kanit");
+Chart.defaults.global.defaultFontFamily = "Kanit";
 Chart.defaults.global.defaultFontColor = "#858796";
 
 function number_format(number, decimals, dec_point, thousands_sep) {
@@ -27,14 +27,57 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
-const roomsData = JSON.parse(document.getElementById("data").getAttribute("roomsData"));
-const bookingsData = JSON.parse(document.getElementById("data").getAttribute("bookingsData"));
-const mouthNumbers = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+const roomsData = JSON.parse(
+    document.getElementById("data").getAttribute("roomsData")
+);
+const bookingsData = JSON.parse(
+    document.getElementById("data").getAttribute("bookingsData")
+);
+const bookingCompleteAll = JSON.parse(
+    document.getElementById("data").getAttribute("bookingCompleteAll")
+);
+const mouthNumbers = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+];
 
 let bar1 = document.getElementById("barChartDate");
 let bar2 = document.getElementById("barChartMonth");
 let pie1 = document.getElementById("pieChartDate");
 let pie2 = document.getElementById("pieChartMonth");
+
+let roomSet1 = new Array(),
+    roomSet2 = new Array();
+roomsData.forEach((room, ind) => {
+    roomSet1[room.id] = 0;
+    roomSet2[room.id] = 0;
+});
+
+roomSet1.forEach((room, room_ind) => {
+    bookingCompleteAll.forEach((book, book_ind) => {
+        if (book.room_id === room_ind) {
+            roomSet1[room_ind] += 1;
+        }
+    });
+});
+
+roomSet2.forEach((room, room_ind) => {
+    bookingCompleteAll.forEach((book, book_ind) => {
+        if (book.room_id === room_ind) {
+            roomSet2[room_ind] += book.price;
+        }
+    });
+});
 
 let barDatasets1 = roomsData.map((room) => {
     return {
@@ -42,11 +85,14 @@ let barDatasets1 = roomsData.map((room) => {
         data: mouthNumbers.map((month, ind) => {
             let tt = 0;
             for (let book of bookingsData) {
-                if (room.id === book.room_id && month === book.month.toString()) {
+                if (
+                    room.id === book.room_id &&
+                    month === book.month.toString()
+                ) {
                     tt += 1;
                 }
             }
-            return tt
+            return tt;
         }),
         backgroundColor: `${room.color_code}`,
         borderWidth: 1,
@@ -60,11 +106,14 @@ let barDatasets2 = roomsData.map((room) => {
         data: mouthNumbers.map((month, ind) => {
             let tt = 0;
             for (let book of bookingsData) {
-                if (room.id === book.room_id && month === book.month.toString()) {
+                if (
+                    room.id === book.room_id &&
+                    month === book.month.toString()
+                ) {
                     tt += book.price;
                 }
             }
-            return tt
+            return tt;
         }),
         backgroundColor: `${room.color_code}`,
         borderWidth: 1,
@@ -72,41 +121,22 @@ let barDatasets2 = roomsData.map((room) => {
     };
 });
 
-let pieDatasets1 = roomsData.map((room) => {
-
-});
-
-let pieDatasets2 = roomsData.map((room) => {
-    return {
-        label: `${room.name}`,
-        data: mouthNumbers.map((month, ind) => {
-            let tt = 0;
-            for (let book of bookingsData) {
-                if (room.id === book.room_id && month === book.month.toString()) {
-                    tt += 1;
-                }
-            }
-            return tt
-        }),
-        backgroundColor: `${room.color_code}`,
-        borderWidth: 1,
-        borderRadius: 10,
-    };
-});
-
-let labelMonths = mouthNumbers.map(item => {
+let labelMonths = mouthNumbers.map((item) => {
     return dayjs(`${item}`, { locale: "th" }).format("MMMM");
 });
 
-let labelRooms = roomsData.map(item => {
+let labelRooms = roomsData.map((item) => {
     return item.name;
 });
 
-let pieBgColor = roomsData.map(item => {
+let pieBgColor = roomsData.map((item) => {
     return item.color_code;
 });
-console.log(pieBgColor)
 
+const pieDatasets1 = Object.values(roomSet1); // แปลง array object เป็น array
+const pieDatasets2 = Object.values(roomSet2); // แปลง array object เป็น array
+
+/* Chart Area */
 let barChart1 = new Chart(bar1, {
     type: "bar",
     data: {
@@ -160,6 +190,7 @@ let barChart1 = new Chart(bar1, {
         },
         legend: {
             display: true,
+            position: "bottom",
         },
         tooltips: {
             backgroundColor: "rgb(255,255,255)",
@@ -178,11 +209,10 @@ let barChart1 = new Chart(bar1, {
             callbacks: {
                 label: function (tooltipItem, chart) {
                     let datasetLabel =
-                        chart.datasets[tooltipItem.datasetIndex].label ||
-                        "";
+                        chart.datasets[tooltipItem.datasetIndex].label || "";
                     return (
                         datasetLabel +
-                        " " +
+                        " : " +
                         number_format(tooltipItem.yLabel) +
                         " ครั้ง"
                     );
@@ -245,6 +275,7 @@ let barChart2 = new Chart(bar2, {
         },
         legend: {
             display: true,
+            position: "bottom",
         },
         tooltips: {
             backgroundColor: "rgb(255,255,255)",
@@ -263,11 +294,10 @@ let barChart2 = new Chart(bar2, {
             callbacks: {
                 label: function (tooltipItem, chart) {
                     var datasetLabel =
-                        chart.datasets[tooltipItem.datasetIndex].label ||
-                        "";
+                        chart.datasets[tooltipItem.datasetIndex].label || "";
                     return (
                         datasetLabel +
-                        " " +
+                        " : " +
                         number_format(tooltipItem.yLabel) +
                         " บาท"
                     );
@@ -277,60 +307,54 @@ let barChart2 = new Chart(bar2, {
     },
 });
 
-const pieChart1 = new Chart(pie1, {
-    type: 'pie',
-    data: {
-      labels: labelRooms,
-      datasets: [{
-        data: [55, 30, 30],
-        backgroundColor: pieBgColor,
-        hoverBorderColor: "rgba(234, 236, 244, 1)",
-      }],
-    },
-    options: {
-      maintainAspectRatio: true,
-      tooltips: {
-        backgroundColor: "rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        borderColor: '#dddfeb',
-        borderWidth: 10,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false,
-        caretPadding: 10,
-      },
-      legend: {
-        display: false
-      },
-      cutoutPercentage: 0,
-    },
-  });
+pieChartArea(pie1, labelRooms, pieDatasets1, pieBgColor, " ครั้ง");
+pieChartArea(pie2, labelRooms, pieDatasets2, pieBgColor, " บาท");
 
-  const pieChart2 = new Chart(pie2, {
-    type: 'pie',
-    data: {
-      labels: labelRooms,
-      datasets: [{
-        data: [55, 30, 20],
-        backgroundColor: pieBgColor,
-        hoverBorderColor: "rgba(234, 236, 244, 1)",
-      }],
-    },
-    options: {
-      maintainAspectRatio: true,
-      tooltips: {
-        backgroundColor: "rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        borderColor: '#dddfeb',
-        borderWidth: 10,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false,
-        caretPadding: 10,
-      },
-      legend: {
-        display: false
-      },
-      cutoutPercentage: 0,
-    },
-  });
+function pieChartArea(pieId, labelRooms, pieDatasets, pieBgColor, unit) {
+    new Chart(pieId, {
+        type: "pie",
+        data: {
+            labels: labelRooms,
+            datasets: [
+                {
+                    data: pieDatasets,
+                    backgroundColor: pieBgColor,
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                },
+            ],
+        },
+        options: {
+            maintainAspectRatio: true,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: "#dddfeb",
+                borderWidth: 10,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        let dataset = data.datasets[tooltipItem.datasetIndex];
+                        let total = dataset.data.reduce(function (
+                            previousValue,
+                            currentValue
+                        ) {
+                            return previousValue + currentValue;
+                        });
+                        let value = dataset.data[tooltipItem.index];
+                        let percentage = ((value / total) * 100).toFixed(2);
+                        return (
+                            data.labels[tooltipItem.index] + " : " + value + unit + " (" + percentage + "%)"
+                        );
+                    },
+                },
+            },
+            legend: {
+                display: false,
+            },
+            cutoutPercentage: 0,
+        },
+    });
+}

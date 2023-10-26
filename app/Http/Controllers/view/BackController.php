@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Expr\Cast\Bool_;
 
 class BackController extends Controller
 {
@@ -86,6 +87,7 @@ class BackController extends Controller
         $allCustomer = Booking::get()->groupBy('card_id');
         $bookingAll = Booking::get();
         $incomes = Booking::where('status_id', 4)->sum('price');
+        $bookingCompleteAll = Booking::where('status_id', 4)->get();
 
         $bookingComplete = Booking::join('rooms', 'rooms.id', 'bookings.room_id')
                             ->whereYear('date_checkin', date('Y'))
@@ -252,6 +254,7 @@ class BackController extends Controller
                         'allRoom' => $allRoom,
                         'allCustomer' => $allCustomer,
                         'bookingAll' => $bookingAll,
+                        'bookingCompleteAll' => $bookingCompleteAll,
                         'rooms' => $rooms,
                         'bookingComplete' => $bookingComplete,
                         'income' => number_format($incomes, 0),

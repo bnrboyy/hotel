@@ -196,7 +196,7 @@
             </div>
         </div>
 
-        <div id="data" roomsData="{{ json_encode($rooms) }}" bookingsData="{{ json_encode($bookingComplete) }}"></div>
+        <div id="data" roomsData="{{ json_encode($rooms) }}" bookingsData="{{ json_encode($bookingComplete) }}" bookingCompleteAll="{{ json_encode($bookingCompleteAll) }}"></div>
     </div>
 @endsection
 
@@ -207,7 +207,6 @@
     <script src="js/sb-admin-2.min.js"></script>
     <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="js/demo/chart-area.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
 
     <script>
         const year = document.querySelectorAll('.year');
