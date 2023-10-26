@@ -80,7 +80,7 @@ function previewSlip(_src) {
     Swal.fire({
         imageUrl: `${_src}`,
         imageWidth: 350,
-        imageHeight: 400,
+        // imageHeight: 400,
         imageClass: "slide-img",
         showConfirmButton: false,
         animation: false,
