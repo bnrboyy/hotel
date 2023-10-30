@@ -7,12 +7,23 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-12 my-4 px-2">
+            <div class="col-12 mt-4 mb-3 px-2 ">
                 <h2 class="fw-bold">รายละเอียดการจอง</h2>
-                <div style="font-size: 14px;">
-                    <a href="{{ route('home') }}" class="text-secondary text-decoration-none">หน้าหลัก</a>
-                    <span class="text-secondary"> > </span>
-                    <a class="text-secondary text-decoration-none">การจอง</a>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div style="font-size: 14px;">
+                        <a href="{{ route('home') }}" class="text-secondary text-decoration-none">หน้าหลัก</a>
+                        <span class="text-secondary"> > </span>
+                        <a class="text-secondary text-decoration-none">การจอง</a>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="font-size: 18px;">
+                        <span class="text-warning" style="font-size: 16px;">ชำระเงินภายใน</span>
+                        <div class="text-center" style="width: 65px;">
+                            <span class="time-minute"></span>
+                            <span class="">:</span>
+                            <span class="time-second"></span>
+                        </div>
+                        <span class="">นาที</span>
+                    </div>
                 </div>
             </div>
             <div class="col-12">
@@ -114,7 +125,8 @@
                                                         </span>
                                                     </div>
                                                     <div class="col-md-4 facilities mb-2">
-                                                        <h6 class="mb-1" style="font-size: 12px;">สิ่งอำนวยความสะดวก</h6>
+                                                        <h6 class="mb-1" style="font-size: 12px;">สิ่งอำนวยความสะดวก
+                                                        </h6>
                                                         @foreach ($room->facs as $fac)
                                                             <span class="badge rounded-pill bg-light text-wrap text-dark"
                                                                 style="font-size: 12px; font-weight: 400;">
@@ -135,7 +147,8 @@
                                 <div class="row g-0 p-3 align-items-center justify-content-center">
                                     <h2 class="text-center">ที่ต้องชำระ {{ $room->price * $diff_date }} ฿</h2>
                                     <div class="col-md-10 mb-4">
-                                        <img src="{{ $bank_details->bank_image }}" class="d-block w-100 h-100 mb-2 rounded">
+                                        <img src="{{ $bank_details->bank_image }}"
+                                            class="d-block w-100 h-100 mb-2 rounded">
                                         <h6>{{ $bank_details->bank_name }}</h6>
                                         <h6>ชื่อบัญชี : {{ $bank_details->account_name }}</h6>
                                         <h6>เลขที่บัญชี : {{ $bank_details->account_number }}</h6>
@@ -153,9 +166,11 @@
                                             </figure>
                                         </div>
                                         <h6 class="text-center text-slip">อัพโหลดสลิป</h6>
-                                        <h6 class="text-center text-slip text-secondary" style="font-size: 13px; font-weight: 400;">(jpeg,png,jpg)</h6>
+                                        <h6 class="text-center text-slip text-secondary"
+                                            style="font-size: 13px; font-weight: 400;">(jpeg,png,jpg)</h6>
                                     </div>
-                                    <h6 class="text-danger text-center not-available d-none">มีคนจองไปแล้วเมื่อสักครู่หากคุณชำระเงินไปแล้วกรุณา<span><a
+                                    <h6 class="text-danger text-center not-available d-none">
+                                        มีคนจองไปแล้วเมื่อสักครู่หากคุณชำระเงินไปแล้วกรุณา<span><a
                                                 href="#">ติดต่อเจ้าหน้าที่</a></span>เพื่อขอรับเงินคืน</h6>
                                     <div class="col-8 col-md-8 mb-4 rounded">
                                         <div class="d-flex justify-content-evenly">
@@ -185,158 +200,118 @@
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/frontoffice/booking-details.js"></script>
     <script src="/js/preview-img.js"></script>
 
-    {{-- <script>
-        const isAvailable = @json($isAvailable); // from laravel controller
-        const details_only = @json($details_only); // from laravel controller
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const date_checkin = document.getElementById("date-checkin");
-        const date_checkout = document.getElementById("date-checkout");
-        const btn_search = document.querySelector(".btn-search");
-        const btn_book = document.querySelector(".btn-book");
-        const cant_book = document.querySelector(".cant-book");
-
-        let detailsURL = "";
-
-        function setDateSelected(date_checkin) {
-            const checkin = dayjs(date_checkin);
-            const tomorrow = checkin.add(1, "day");
-            const formatted = tomorrow.format("YYYY-MM-DD");
-
-            date_checkout.setAttribute("min", formatted);
-            date_checkout.removeAttribute("disabled");
-        }
-
-        const urls = {
-            checkin: urlParams.get("checkin"),
-            checkout: urlParams.get("checkout"),
-            room_id: urlParams.get('id'),
-        };
-
-        const someNullParam = Object.values(urls).some((value) => value === null);
-
-        if (someNullParam) {
-            date_checkin.value = "";
-            date_checkout.setAttribute("disabled", "");
-            btn_book.setAttribute("disabled", "");
-            detailsURL = '/roomdetails?id='
-        } else {
-            date_checkin.value = urls.checkin;
-            date_checkout.value = urls.checkout;
-            detailsURL =
-                `/roomdetails?checkin=${urls.checkin}&checkout=${urls.checkout}&adult=${urls.adult}&children=${urls.children}&id=`
-
-            setDateSelected(urls.checkin);
-        }
-
-        if (details_only) {
-            btn_book.setAttribute("disabled", "");
-            cant_book.classList.add('d-none')
-        } else {
-            if (!isAvailable) {
-                btn_book.setAttribute("disabled", "");
-                cant_book.classList.remove('d-none')
-            } else {
-                btn_book.removeAttribute("disabled");
-                cant_book.classList.add('d-none')
-            }
-        }
-
-        date_checkin.addEventListener("change", function() {
-            if (date_checkout.value) {
-                date_checkout.value = "";
-            }
-            btn_book.setAttribute("disabled", "");
-            setDateSelected(date_checkin.value);
-        });
-
-        date_checkout.addEventListener("input", function(event) {
-            btn_search.click();
-        });
-
-        function checkroom(event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-
-            const data = {
-                checkin: formData.get("checkin"),
-                checkout: formData.get("checkout"),
-                room_id: urls.room_id,
-            };
-
-            window.location.href = `/roomdetails?checkin=${data.checkin}&checkout=${data.checkout}&id=${data.room_id}`;
-        }
-
-        function booking(_id) {
-            const data = {
-                checkin: urls.checkin,
-                checkout: urls.checkout,
-                room_id: urls.room_id,
-            }
-
-            window.location.href = `/booking?checkin=${data.checkin}&checkout=${data.checkout}&id=${data.room_id}`;
-        }
-    </script> --}}
     <script>
-        const isAvailable = @json($isAvailable); // from laravel controller
+        window.onload = () => {
+            // localStorage.clear();
+            const isAvailable = @json($isAvailable); // from laravel controller
+            const tempbook_id = @json(''); // from laravel controller
 
-        const btn_confirm = document.querySelector(".btn-confirm");
-        const loading = document.querySelector(".loading");
-        const not_available = document.querySelector(".not-available");
-        const text_confirm = document.querySelector(".text-btn-confirm");
+            const btn_confirm = document.querySelector(".btn-confirm");
+            const loading = document.querySelector(".loading");
+            const not_available = document.querySelector(".not-available");
+            const text_confirm = document.querySelector(".text-btn-confirm");
 
-        if (!isAvailable) {
-            btn_confirm.classList.add('d-none');
-            not_available.classList.remove('d-none')
-        } else {
-            btn_confirm.classList.remove('d-none');
-            not_available.classList.add('d-none')
-        }
+            const show_minute = document.querySelector(".time-minute");
+            const show_second = document.querySelector(".time-second");
+            const minute_local = localStorage.getItem('minute');
+            const second_local = localStorage.getItem('second');
 
-        function confirmBooking(event) {
-            event.preventDefault();
+            let minutes = minute_local ? parseInt(minute_local) : 15;
+            let seconds = second_local ? parseInt(second_local) : 0;
 
-            const form = event.target;
-            const formData = new FormData(form);
+            const interval = setInterval(() => {
+                if (seconds < 0) {
+                    minutes--;
+                    seconds = 59;
+                }
 
-            btn_confirm.setAttribute('disabled', '')
-            loading.classList.remove('d-none')
-            text_confirm.classList.add('d-none')
+                if (minutes <= 0 && seconds <= 0) {
+                    clearInterval(interval);
+                    localStorage.clear();
+                    show_minute.innerText = '00';
+                    show_second.innerText = '00';
 
-            axios.post('/confirmbooking', formData).then(({ data }) => {
-                setTimeout(() => {
-                    if (data.status) {
+                    setTimeout(() => {
+                        // axios.get('removetempbooking').then((res) => {
+
+                        // }).catch(err => console.log(err))
+                        window.location.href = '/rooms';
+                    }, 3000)
+                } else {
+                    show_minute.innerText = minutes.toString().padStart(2, '0');
+                    show_second.innerText = seconds.toString().padStart(2, '0');
+                    seconds--;
+
+                    localStorage.setItem('minute', minutes);
+                    localStorage.setItem('second', seconds);
+                }
+
+            }, 1000);
+
+            const clear_interval = interval;
+
+            if (!isAvailable) {
+                btn_confirm.classList.add('d-none');
+                not_available.classList.remove('d-none')
+            } else {
+                btn_confirm.classList.remove('d-none');
+                not_available.classList.add('d-none')
+            }
+
+            function confirmBooking(event) {
+                event.preventDefault();
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+                btn_confirm.setAttribute('disabled', '')
+                loading.classList.remove('d-none')
+                text_confirm.classList.add('d-none')
+
+                axios.post('/confirmbooking', formData).then(({
+                    data
+                }) => {
+                    clearInterval(clear_interval);
+                    localStorage.clear();
+
+                    setTimeout(() => {
+                        if (data.status) {
+                            loading.classList.add('d-none')
+                            localStorage.setItem('card_id', formData.get('card_id'))
+                            localStorage.setItem('phone', formData.get('phone'))
+                            Swal.fire({
+                                title: 'จองห้องสำเร็จ!',
+                                icon: 'success'
+                            }).then(() => {
+                                window.location.href =
+                                    `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
+                            })
+                        }
+                    }, 500);
+                }).catch(({
+                    response
+                }) => {
+                    clearInterval(clear_interval);
+                    localStorage.clear();
+
+                    setTimeout(() => {
                         loading.classList.add('d-none')
-                        localStorage.setItem('card_id', formData.get('card_id'))
-                        localStorage.setItem('phone', formData.get('phone'))
-                        Swal.fire({
-                            title: 'จองห้องสำเร็จ!',
-                            icon: 'success'
-                        }).then(() => {
-                            window.location.href = `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
-                        })
-                    }
-                }, 500);
-            }).catch(({response}) => {
-                setTimeout(() => {
-                    loading.classList.add('d-none')
-                    if(response.status === 403) {
-                        btn_confirm.classList.add('d-none');
-                        not_available.classList.remove('d-none')
-                        return false;
-                    } else {
-                        btn_confirm.classList.remove('d-none');
-                        not_available.classList.add('d-none')
-                        return false;
-                    }
-                }, 500);
-            })
-
-            // return;
+                        if (response.status === 403) {
+                            btn_confirm.classList.add('d-none');
+                            not_available.classList.remove('d-none')
+                            return false;
+                        } else {
+                            btn_confirm.classList.remove('d-none');
+                            not_available.classList.add('d-none')
+                            return false;
+                        }
+                    }, 500);
+                })
+                // return;
+            }
         }
     </script>
 @endsection

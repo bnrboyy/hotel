@@ -99,14 +99,6 @@ class BackController extends Controller
             $book->month = substr($book->date_checkin, 5, -3);
         }
 
-
-            // ->select('rooms.name', 'rooms.id', 'bookings.date_checkin', 'bookings.date_checkout' , DB::raw('count(bookings.id) as booking_count'))
-            // ->whereYear('date_checkin', date('Y'))
-            // ->where('bookings.status_id', 4)
-            // ->groupBy('rooms.name', 'rooms.id')
-            // ->get();
-
-
         if ($user) {
             switch ($page) {
                 case 'settings':
