@@ -11,6 +11,7 @@ use App\Models\Facilitie;
 use App\Models\Feature;
 use App\Models\Gallery;
 use App\Models\Room;
+use App\Models\TempBooking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,6 +20,7 @@ class FrontController extends Controller
 {
     public function getHome(Request $request)
     {
+        $this->removeTempBooking();
         $facilities = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->limit(5)->get();
         $carousel = Carousel::where(['display' => 1])->orderBy('priority', 'ASC')->get()->all();
 
@@ -37,7 +39,6 @@ class FrontController extends Controller
             $room->features = $features;
             $room->facs = $facs;
             $room->gallery = $gallery;
-
         }
 
         return view('frontoffice.home', [
@@ -50,6 +51,7 @@ class FrontController extends Controller
 
     public function facilitiesPage(Request $request)
     {
+        $this->removeTempBooking();
         $facilities = Facilitie::where(['display' => 1])->orderBy('priority', 'ASC')->get();
 
         return view('frontoffice.facilities', [
@@ -60,11 +62,13 @@ class FrontController extends Controller
 
     public function aboutPage(Request $request)
     {
+        $this->removeTempBooking();
         return view('frontoffice.about');
     }
 
     public function contactPage(Request $request)
     {
+        $this->removeTempBooking();
         $contact_settings = Contact::where(['id' => 1])->get()->first();
 
         return view('frontoffice.contactus', ['contact' => $contact_settings]);
@@ -72,6 +76,7 @@ class FrontController extends Controller
 
     public function roomPage(Request $request)
     {
+        $this->removeTempBooking();
 
         $validator = Validator::make($request->all(), [
             'checkin' => 'string|required',
@@ -152,6 +157,7 @@ class FrontController extends Controller
 
     public function roomDetailsPage(Request $request)
     {
+        $this->removeTempBooking();
 
         $validator = Validator::make($request->all(), [
             'checkin' => 'string|required',
@@ -278,6 +284,9 @@ class FrontController extends Controller
             $bank_details = Bank::orderBy('priority', 'ASC')->first();
         }
 
+        // สร้าง temp booking
+        $this->createTempBooking($request);
+
         return view('frontoffice.booking-details', [
             'room' => $room,
             'checkin' => date('d-m-Y', strtotime($request->checkin)),
@@ -290,6 +299,7 @@ class FrontController extends Controller
 
     public function bookingSearchPage(Request $request)
     {
+        $this->removeTempBooking();
         $validator = Validator::make($request->all(), [
             'phone' => 'numeric|required',
             'card_id' => 'numeric|required',
@@ -314,5 +324,50 @@ class FrontController extends Controller
         return view('frontoffice.booking-search', [
             'bookings' => $bookings
         ]);
+    }
+
+
+    /* Private Function */
+    private function createTempBooking(Request $request)
+    {
+        // session()->forget('temp_id');
+
+        if (!session()->has('temp_id')) {
+            $temp_id = 'Temp-' . str_shuffle(time()); // random temp_id
+
+            // หาจำนวนคืนที่เข้าพัก
+            $start_date = $request->checkin;
+            $end_date = $request->checkout;
+            $secondsDiff = strtotime($end_date) - strtotime($start_date);
+            $diff_date = $secondsDiff / (60 * 60 * 24);
+
+            $current_date = $request->checkin;
+            $booking_date = "";
+            for ($i = 0; $i < $diff_date; $i++) {
+                $booking_date .= "," . date('Y-m-d', strtotime($current_date));
+                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+            }
+
+            // dd(session('temp_id'));
+            $TempBooking = new TempBooking();
+            $TempBooking->temp_id = $temp_id;
+            $TempBooking->room_id = $request->id;
+            $TempBooking->ip_address = $request->ip();
+            $TempBooking->date_checkin = date('Y-m-d', strtotime($request->checkin));
+            $TempBooking->date_checkout = date('Y-m-d', strtotime($request->checkout));
+            $TempBooking->booking_date = $booking_date;
+            $TempBooking->days = $diff_date;
+            $TempBooking->booking_type = 'Online';
+            $TempBooking->save();
+
+            session(['temp_id' => $temp_id]);
+        }
+    }
+
+    private function removeTempBooking()
+    {
+        if (session()->has('temp_id')) {
+            TempBooking::where('temp_id', session('temp_id'))->delete();
+        }
     }
 }

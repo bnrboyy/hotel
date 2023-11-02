@@ -12,7 +12,7 @@
             <div class="swiper-wrapper">
                 @foreach ($slide_img as $slide)
                     <div class="swiper-slide" style="max-height: 585px;">
-                        <img src="{{ $slide->image }}" class="w-100 h-100 d-block" style="object-fit: fill;"/>
+                        <img src="{{ $slide->image }}" class="w-100 h-100 d-block" style="object-fit: fill;" />
                     </div>
                 @endforeach
             </div>
@@ -31,22 +31,26 @@
                     <div class="row align-items-end">
                         <div class="col-lg-3">
                             <label class="form-label" style="font-weight: 500;">เช็คอิน</label>
-                            <input type="date" name="checkin" min="{{ date('Y-m-d') }}" id="date-checkin" class="form-control shadow-none pointer" required>
+                            <input type="date" name="checkin" min="{{ date('Y-m-d') }}" id="date-checkin"
+                                class="form-control shadow-none pointer" required>
                         </div>
                         <div class="col-lg-3">
                             <label class="form-label" style="font-weight: 500;">เช็คเอ้าท์</label>
-                            <input type="date" name="checkout" id="date-checkout" class="form-control shadow-none pointer" required disabled>
+                            <input type="date" name="checkout" id="date-checkout"
+                                class="form-control shadow-none pointer" required disabled>
                         </div>
                         <div class="col-lg-3">
                             <label class="form-label" style="font-weight: 500;">ผู้ใหญ่/คน</label>
-                            <select class="form-select shadow-none pointer text-center" id="select-adult" name="adult" required>
+                            <select class="form-select shadow-none pointer text-center" id="select-adult" name="adult"
+                                required>
                                 <option value="1">1</option>
                                 <option value="2" selected>2</option>
                             </select>
                         </div>
                         <div class="col-lg-3">
                             <label class="form-label" style="font-weight: 500;">เด็ก/คน</label>
-                            <select class="form-select shadow-none pointer text-center" id="select-children" name="children" required>
+                            <select class="form-select shadow-none pointer text-center" id="select-children" name="children"
+                                required>
                                 <option value="0">0</option>
                                 <option value="1" selected>1</option>
                                 <option value="2">2</option>
@@ -64,7 +68,7 @@
     <!-- OUR ROOMS -->
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold">ห้องพัก</h2>
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
             @foreach ($rooms as $room)
                 <div class="col-lg-4 col-md-6 my-3">
                     <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
@@ -85,7 +89,8 @@
                             <div class="features mb-2">
                                 <h5 class="mb-1">คุณสมบัติห้อง</h5>
                                 @foreach ($room->features as $fea)
-                                    <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">
+                                    <span class="badge rounded-pill bg-light text-wrap text-dark"
+                                        style="font-size: 14px; font-weight: 400;">
                                         {{ $fea->name }}
                                     </span>
                                 @endforeach
@@ -93,7 +98,8 @@
                             <div class="facilities mb-4">
                                 <h5 class="mb-1">สิ่งอำนวยความสะดวก</h5>
                                 @foreach ($room->facs as $fac)
-                                    <span class="badge rounded-pill bg-light text-wrap text-dark" style="font-size: 14px; font-weight: 400;">
+                                    <span class="badge rounded-pill bg-light text-wrap text-dark"
+                                        style="font-size: 14px; font-weight: 400;">
                                         {{ $fac->name }}
                                     </span>
                                 @endforeach
@@ -109,15 +115,18 @@
                                 </span>
                             </div> --}}
                             <div class="d-flex justify-content-evenly mb-2">
-                                <a href="{{ route('rooms') }}" class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
-                                <a href="/roomdetails?id={{ $room->id }}" class="btn btn-sm btn-outline-dark shadow-none">รายละเอียด</a>
+                                <a href="{{ route('rooms') }}"
+                                    class="btn btn-sm text-white custom-bg shadow-none">จองห้อง</a>
+                                <a href="/roomdetails?id={{ $room->id }}"
+                                    class="btn btn-sm btn-outline-dark shadow-none">รายละเอียด</a>
                             </div>
                         </div>
                     </div>
                 </div>
             @endforeach
             <div class="col-lg-12 text-center mt-5">
-                <a href="{{ route('rooms') }}" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูห้องเพิ่มเติม >>></a>
+                <a href="{{ route('rooms') }}"
+                    class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูห้องเพิ่มเติม >>></a>
             </div>
         </div>
     </div>
@@ -134,7 +143,8 @@
                 </div>
             @endforeach
             <div class="col-lg-12 text-center mt-5">
-                <a href="{{ route('facilities') }}" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูเพิ่มเติม >>></a>
+                <a href="{{ route('facilities') }}"
+                    class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">ดูเพิ่มเติม >>></a>
             </div>
         </div>
     </div>
@@ -241,9 +251,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-8 p-4 mb-lg-0 mb-3 bg-white rounded">
-                <iframe class="w-100 rounded"
-                    src="{{ $contactUs->iframe }}"
-                    height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe class="w-100 rounded" src="{{ $contactUs->iframe }}" height="450" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div class="col-lg-4 col-md-4">
                 <div class="bg-white p-4 rounded mb-4">
@@ -287,6 +296,8 @@
 
 @section('scripts')
     <script>
+        localStorage.clear();
+
         var swiper = new Swiper(".swiper-container", {
             spaceBetween: 30,
             effect: "fade",
@@ -313,7 +324,7 @@
             centeredSlides: true,
             slidesPerView: "auto",
             slidesPerView: 3,
-            loop:true,
+            loop: true,
             coverflowEffect: {
                 rotate: 50,
                 stretch: 0,

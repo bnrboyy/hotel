@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('temp_id');
             $table->integer('room_id');
+            $table->string('ip_address')->nullable();
             $table->date('date_checkin');
             $table->date('date_checkout');
             $table->text('booking_date')->comment('วันที่เข้าพักทั้งหมด');

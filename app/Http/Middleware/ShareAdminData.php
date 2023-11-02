@@ -32,6 +32,9 @@ class ShareAdminData
         $booking_cancel = Booking::whereIn('status_id', [5])->count();
         $unseen_messages = LeaveMessage::where('seen', 0)->count();
 
+        /* frontoffice */
+        $temp_id = session('temp_id');
+
         View::share([
                 'shareUser' => $user,
                 'shareSite' => $site_settings,
@@ -43,7 +46,7 @@ class ShareAdminData
                 'shareBookingHistory' => $booking_history,
                 'shareBookingCancel' => $booking_cancel,
                 'share_messages' => $unseen_messages,
-
+                'share_tempId' => $temp_id,
             ]);
 
         return $next($request);

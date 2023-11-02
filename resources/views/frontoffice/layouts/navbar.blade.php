@@ -2,7 +2,7 @@
     <div class="nav-container container-fluid">
         {{-- <a class="navbar-brand me-5 fw-bold fs-3" href="{{ route('home') }}">{{ $shareSite->site_title }}</a> --}}
         <a class="navbar-brand fw-bold fs-3 p-0" href="{{ route('home') }}">
-            <figure style="width: 186px;">
+            <figure style="width: 186px; margin: 0 !important;">
                 <img src="images/logo/logo.png" alt="" style="width: 100%;">
             </figure>
         </a>
