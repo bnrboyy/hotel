@@ -204,6 +204,9 @@
     <script src="/js/preview-img.js"></script>
 
     <script>
+        const minute_local = localStorage.getItem('minute');
+        const second_local = localStorage.getItem('second');
+
         window.onload = () => {
             // localStorage.clear();
             const isAvailable = @json($isAvailable); // from laravel controller
@@ -216,8 +219,6 @@
 
             const show_minute = document.querySelector(".time-minute");
             const show_second = document.querySelector(".time-second");
-            const minute_local = localStorage.getItem('minute');
-            const second_local = localStorage.getItem('second');
 
             let minutes = minute_local ? parseInt(minute_local) : 15;
             let seconds = second_local ? parseInt(second_local) : 0;
@@ -251,7 +252,7 @@
 
             }, 1000);
 
-            const clear_interval = interval;
+            var clear_interval = interval;
 
             if (!isAvailable) {
                 btn_confirm.classList.add('d-none');

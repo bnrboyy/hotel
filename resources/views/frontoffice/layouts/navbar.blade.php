@@ -2,7 +2,9 @@
     <div class="nav-container container-fluid">
         {{-- <a class="navbar-brand me-5 fw-bold fs-3" href="{{ route('home') }}">{{ $shareSite->site_title }}</a> --}}
         <a class="navbar-brand fw-bold fs-3 p-0" href="{{ route('home') }}">
-            <img src="images/logo/logo.png" alt="" style="width: 186px;">
+            <figure style="width: 186px;">
+                <img src="images/logo/logo.png" alt="" style="width: 100%;">
+            </figure>
         </a>
         <button class="navbar-toggler shadow-none border-none border-0" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
