@@ -36,6 +36,7 @@ Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('r
 Route::get('/bookingdetails', [FrontController::class, 'bookingDetailsPage'])->name('booking-details');
 
 /* Controllers */
+Route::delete('/deletetempbook/{temp_id}', [UserBookingController::class, 'deleteTempBooking']);
 Route::post('/confirmbooking', [UserBookingController::class, 'createBookOrder']);
 
 

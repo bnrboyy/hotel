@@ -5,14 +5,40 @@ namespace App\Http\Controllers\frontoffice;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Room;
+use App\Models\TempBooking;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Image;
 
 class UserBookingController extends Controller
 {
+    public function deleteTempBooking(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            TempBooking::where('temp_id', $request->temp_id)->delete();
+            session()->forget('temp_id');
+
+            DB::commit();
+            return response()->json([
+                'message' => 'success',
+                'status' => true,
+                'description' => 'Delete temp booking successfully.',
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'message' => 'error',
+                'status' => false,
+                'errorsMessage' => $e->getMessage()
+            ], 501);
+        }
+    }
+
     public function createBookOrder(Request $request)
     {
         $validator = Validator::make($request->all(), [

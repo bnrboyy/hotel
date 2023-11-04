@@ -46,6 +46,7 @@ class FrontController extends Controller
             'facilities' => $facilities,
             'rooms' => $rooms,
             'contactUs' => $contactUs,
+            'temp_id' => session('temp_id'),
         ]);
     }
 
@@ -56,6 +57,7 @@ class FrontController extends Controller
 
         return view('frontoffice.facilities', [
             'facilities' => $facilities,
+            'temp_id' => session('temp_id'),
 
         ]);
     }
@@ -71,7 +73,10 @@ class FrontController extends Controller
         $this->removeTempBooking();
         $contact_settings = Contact::where(['id' => 1])->get()->first();
 
-        return view('frontoffice.contactus', ['contact' => $contact_settings]);
+        return view('frontoffice.contactus', [
+            'contact' => $contact_settings,
+            'temp_id' => session('temp_id'),
+        ]);
     }
 
     public function roomPage(Request $request)
@@ -92,6 +97,7 @@ class FrontController extends Controller
         if (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp)) {
             return view('frontoffice.rooms', [
                 'rooms' => [],
+                'temp_id' => session('temp_id'),
             ]);
         }
 
@@ -152,6 +158,7 @@ class FrontController extends Controller
 
         return view('frontoffice.rooms', [
             'rooms' => $roomAvailable,
+            'temp_id' => session('temp_id'),
         ]);
     }
 
@@ -187,6 +194,7 @@ class FrontController extends Controller
                 'room' => $room,
                 'isAvailable' => false,
                 'details_only' => true,
+                'temp_id' => session('temp_id'),
             ]);
         }
 
@@ -199,6 +207,7 @@ class FrontController extends Controller
                 'room' => $room,
                 'isAvailable' => false,
                 'details_only' => false,
+                'temp_id' => session('temp_id'),
             ]);
         }
 
@@ -235,6 +244,7 @@ class FrontController extends Controller
             'room' => $room,
             'isAvailable' => $isAvailable,
             'details_only' => false,
+            'temp_id' => session('temp_id'),
         ]);
     }
 
@@ -294,6 +304,7 @@ class FrontController extends Controller
             'diff_date' => $diff_date,
             'isAvailable' => $isAvailable,
             'bank_details' => $bank_details,
+            'temp_id' => session('temp_id'),
         ]);
     }
 
@@ -308,6 +319,7 @@ class FrontController extends Controller
         if ($validator->fails()) {
             return view('frontoffice.booking-search', [
                 'bookings' => [],
+                'temp_id' => session('temp_id'),
             ]);
         }
 
@@ -322,7 +334,8 @@ class FrontController extends Controller
         // dd($bookings);
 
         return view('frontoffice.booking-search', [
-            'bookings' => $bookings
+            'bookings' => $bookings,
+            'temp_id' => session('temp_id'),
         ]);
     }
 
@@ -361,6 +374,7 @@ class FrontController extends Controller
             $TempBooking->save();
 
             session(['temp_id' => $temp_id]);
+            session()->put('tempId_timeout', now()->addMinutes(20));
         }
     }
 
@@ -368,6 +382,7 @@ class FrontController extends Controller
     {
         if (session()->has('temp_id')) {
             TempBooking::where('temp_id', session('temp_id'))->delete();
+            session()->forget('temp_id');
         }
     }
 }

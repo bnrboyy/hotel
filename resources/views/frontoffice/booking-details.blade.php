@@ -204,13 +204,12 @@
     <script src="/js/preview-img.js"></script>
 
     <script>
-        const minute_local = localStorage.getItem('minute');
-        const second_local = localStorage.getItem('second');
-
         window.onload = () => {
             // localStorage.clear();
+            const minute_local = localStorage.minute;
+            const second_local = localStorage.second;
+            console.log(minute_local, second_local)
             const isAvailable = @json($isAvailable); // from laravel controller
-            const tempbook_id = @json(''); // from laravel controller
 
             const btn_confirm = document.querySelector(".btn-confirm");
             const loading = document.querySelector(".loading");
@@ -231,15 +230,16 @@
 
                 if (minutes <= 0 && seconds <= 0) {
                     clearInterval(interval);
-                    localStorage.clear();
+                    localStorage.removeItem('minute');
+                    localStorage.removeItem('second');
+                    console.log('clear')
                     show_minute.innerText = '00';
                     show_second.innerText = '00';
 
                     setTimeout(() => {
-                        // axios.get('removetempbooking').then((res) => {
-
-                        // }).catch(err => console.log(err))
-                        window.location.href = '/rooms';
+                        axios.delete(`/deletetempbook/${temp_id}`).then((res) => {
+                            window.location.href = '/rooms';
+                        }).catch(err => console.log(err))
                     }, 3000)
                 } else {
                     show_minute.innerText = minutes.toString().padStart(2, '0');
@@ -252,7 +252,7 @@
 
             }, 1000);
 
-            var clear_interval = interval;
+            // var clear_interval = interval;
 
             if (!isAvailable) {
                 btn_confirm.classList.add('d-none');
