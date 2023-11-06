@@ -31,11 +31,12 @@ Route::get('/facilities', [FrontController::class, 'facilitiesPage'])->name('fac
 Route::get('/about', [FrontController::class, 'aboutPage'])->name('about');
 Route::get('/bookingsearch', [FrontController::class, 'bookingSearchPage'])->name('bookingsearch');
 Route::get('/contactus', [FrontController::class, 'contactPage'])->name('contactus');
-Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
 Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('room-details');
 Route::get('/bookingdetails', [FrontController::class, 'bookingDetailsPage'])->name('booking-details');
+Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
 
 /* Controllers */
+Route::get('/checkbooktimeout', [UserBookingController::class, 'checkBookTimeout']);
 Route::delete('/deletetempbook/{temp_id}', [UserBookingController::class, 'deleteTempBooking']);
 Route::post('/confirmbooking', [UserBookingController::class, 'createBookOrder']);
 
@@ -53,10 +54,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/signin', [AdminController::class, 'signIn']);
     Route::post('/register', [AdminController::class, 'register']);
 
-
     /* Route middleware admin */
     Route::middleware('auth-admin:admin')->group(function () {
-
         Route::middleware('admin-check')->group(function () {
             /* Controllers */
             Route::get('/', [BackController::class, 'adminPage'])->name('admin');

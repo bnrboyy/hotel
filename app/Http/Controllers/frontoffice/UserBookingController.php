@@ -114,7 +114,8 @@ class UserBookingController extends Controller
             $order->slip = $slip_image;
             $order->save();
 
-            $this->sendLineNotify($order, $room);
+            // $this->sendLineNotify($order, $room);
+            $this->removeTempBooking();
 
             DB::commit();
             return response([
@@ -124,11 +125,51 @@ class UserBookingController extends Controller
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
+            $this->removeTempBooking();
+
             return response([
                 'message' => 'error',
                 'status' => false,
                 'errorMessage' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function checkBookTimeout(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "temp_id" => "string|required",
+        ]);
+
+        $temp_booking = TempBooking::where('temp_id', $request->temp_id)->first();
+
+        if ($validator->fails() || !session()->has('temp_id') || !$temp_booking) {
+            return response([
+                'message' => 'error',
+                'status' => false,
+                'errorMessage' => 'Booking timeout!'
+            ], 408);
+        }
+
+        // หาระยะห่างเวลาการจองจากตาราง temp_bookings
+        $time_current = now();
+        $timebook = $temp_booking->created_at;
+        $diffminute = $timebook->diffInMinutes($time_current);
+
+        if ($diffminute >= 16) {
+            TempBooking::where('temp_id', $request->temp_id)->delete();
+            session()->forget('temp_id');
+
+            return response([
+                'message' => 'Booking timeout!',
+            ], 408);
+        }
+
+        return response([
+            'temp_id' => $request->temp_id,
+            'temp_booking' => $temp_booking,
+            'validate' => $validator->fails(),
+            'diffminute' => $diffminute,
+        ]);
     }
 }

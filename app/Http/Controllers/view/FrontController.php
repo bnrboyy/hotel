@@ -12,9 +12,11 @@ use App\Models\Feature;
 use App\Models\Gallery;
 use App\Models\Room;
 use App\Models\TempBooking;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class FrontController extends Controller
 {
@@ -101,6 +103,10 @@ class FrontController extends Controller
             ]);
         }
 
+        $now = Carbon::now();
+        $tempLimit = $now->subMinutes(16);
+
+        $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
         $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
         $roomAvailable = $rooms;
 
@@ -140,7 +146,6 @@ class FrontController extends Controller
 
             if (count($bookings) > 0) {
                 foreach ($bookings as $book_key => $book_value) {
-                    // $room_ids[] = $book_value->room_id;
                     foreach ($rooms as $room_key => $room_value) {
                         if (($room_value->id === $book_value->room_id) || ($room_value->adult < $request->adult || $room_value->children < $request->children)) {
                             unset($roomAvailable[$room_key]);
@@ -151,6 +156,30 @@ class FrontController extends Controller
                 foreach ($rooms as $room_key => $room_value) {
                     if (($room_value->adult < $request->adult || $room_value->children < $request->children)) {
                         unset($roomAvailable[$room_key]);
+                    }
+                }
+            }
+
+            if (count($tempBooking) > 0) { // temp booking
+                $roomTemp_ids = [];
+
+                foreach ($tempBooking as $temp) {
+                    $current_date = $request->checkin;
+                    for ($i = 0; $i < $diff_date; $i++) {
+                        if (Str::contains($temp->booking_date, $current_date)) { // เปรียบเทียบ String
+                            $roomTemp_ids[] = $temp->room_id;
+                        }
+                        $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                    }
+                }
+
+                if (count($roomTemp_ids) > 0) {
+                    foreach ($roomTemp_ids as $id_key => $id) {
+                        foreach ($roomAvailable as $room_key => $room_value) {
+                            if ($id === $room_value->id) {
+                                unset($roomAvailable[$room_key]);
+                            }
+                        }
                     }
                 }
             }
@@ -182,7 +211,6 @@ class FrontController extends Controller
         $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();
         $facs = Facilitie::whereIn('id', $fac_ids)->orderBy('priority', 'ASC')->get();
         $gallery = $room->gallery;
-        // $gallery = Gallery::where('room_id', $room->id)->orderBy('default', 'DESC')->get();
 
         $room->features = $features;
         $room->facs = $facs;
@@ -201,6 +229,10 @@ class FrontController extends Controller
         $current_timestamp = strtotime(date('Y-m-d'));
         $checkin_timestamp = strtotime($request->checkin);
         $checkout_timestamp = strtotime($request->checkout);
+
+        $now = Carbon::now();
+        $tempLimit = $now->subMinutes(16);
+        $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->where('room_id', $request->id)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
 
         if (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp)) {
             return view('frontoffice.room-details', [
@@ -240,6 +272,18 @@ class FrontController extends Controller
             $isAvailable = true;
         }
 
+        if (count($tempBooking) > 0) { // เช็ค temp booking
+            foreach ($tempBooking as $temp) {
+                $current_date = $request->checkin;
+                for ($i = 0; $i < $diff_date; $i++) {
+                    if (Str::contains($temp->booking_date, $current_date)) { // เปรียบเทียบ String
+                        $isAvailable = false;
+                    }
+                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                }
+            }
+        }
+
         return view('frontoffice.room-details', [
             'room' => $room,
             'isAvailable' => $isAvailable,
@@ -256,6 +300,36 @@ class FrontController extends Controller
             'checkout' => 'string|required',
             'id' => 'numeric|required',
         ]);
+
+        $now = Carbon::now();
+        $tempLimit = $now->subMinutes(16);
+        $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->where('room_id', $request->id)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
+
+        if ((count($tempBooking) > 0 && !session()->has('temp_id'))) {
+            // หาจำนวนคืนที่เข้าพัก
+            $start_date = $request->checkin;
+            $end_date = $request->checkout;
+            $start_timeStamp = strtotime($start_date);
+            $end_timeStamp = strtotime($end_date);
+            $secondsDiff = $end_timeStamp - $start_timeStamp;
+            $diff_date = $secondsDiff / (60 * 60 * 24);
+            $isAvailable = true;
+
+            foreach ($tempBooking as $temp) {
+                $current_date = $request->checkin;
+                for ($i = 0; $i < $diff_date; $i++) {
+                    if (Str::contains($temp->booking_date, $current_date)) { // เปรียบเทียบ String
+                        $isAvailable = false;
+                    }
+                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                }
+            }
+
+            if (!$isAvailable) {
+                $this->removeTempBooking();
+                return redirect()->route('rooms'); // กลับไปที่หน้า Rooms
+            }
+        }
 
         $current_timestamp = strtotime(date('Y-m-d'));
         $checkin_timestamp = strtotime($request->checkin);
@@ -375,14 +449,6 @@ class FrontController extends Controller
 
             session(['temp_id' => $temp_id]);
             session()->put('tempId_timeout', now()->addMinutes(20));
-        }
-    }
-
-    private function removeTempBooking()
-    {
-        if (session()->has('temp_id')) {
-            TempBooking::where('temp_id', session('temp_id'))->delete();
-            session()->forget('temp_id');
         }
     }
 }

@@ -13,10 +13,8 @@
     <!-- Navbar -->
     @include('frontoffice.layouts.navbar')
 
-
     <!-- Content Section -->
     @yield('content')
-
 
     <!-- Footer -->
     @include('frontoffice.layouts.footer')

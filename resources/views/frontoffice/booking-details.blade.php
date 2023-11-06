@@ -200,119 +200,131 @@
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/js/frontoffice/booking-details.js"></script>
+    {{-- <script src="/js/frontoffice/booking-details.js"></script> --}}
     <script src="/js/preview-img.js"></script>
 
     <script>
-        window.onload = () => {
-            // localStorage.clear();
-            const minute_local = localStorage.minute;
-            const second_local = localStorage.second;
-            console.log(minute_local, second_local)
-            const isAvailable = @json($isAvailable); // from laravel controller
+        // window.onload = () => {
+        //     localStorage.clear();
+        // }
+        const minute_local = localStorage.minute;
+        const second_local = localStorage.second;
+        const isAvailable = @json($isAvailable); // from laravel controller
 
-            const btn_confirm = document.querySelector(".btn-confirm");
-            const loading = document.querySelector(".loading");
-            const not_available = document.querySelector(".not-available");
-            const text_confirm = document.querySelector(".text-btn-confirm");
+        const btn_confirm = document.querySelector(".btn-confirm");
+        const loading = document.querySelector(".loading");
+        const not_available = document.querySelector(".not-available");
+        const text_confirm = document.querySelector(".text-btn-confirm");
 
-            const show_minute = document.querySelector(".time-minute");
-            const show_second = document.querySelector(".time-second");
+        const show_minute = document.querySelector(".time-minute");
+        const show_second = document.querySelector(".time-second");
 
-            let minutes = minute_local ? parseInt(minute_local) : 15;
-            let seconds = second_local ? parseInt(second_local) : 0;
+        let minutes = minute_local ? parseInt(minute_local) : 15;
+        let seconds = second_local ? parseInt(second_local) : 0;
 
-            const interval = setInterval(() => {
-                if (seconds < 0) {
-                    minutes--;
-                    seconds = 59;
-                }
-
-                if (minutes <= 0 && seconds <= 0) {
-                    clearInterval(interval);
-                    localStorage.removeItem('minute');
-                    localStorage.removeItem('second');
-                    console.log('clear')
-                    show_minute.innerText = '00';
-                    show_second.innerText = '00';
-
-                    setTimeout(() => {
-                        axios.delete(`/deletetempbook/${temp_id}`).then((res) => {
-                            window.location.href = '/rooms';
-                        }).catch(err => console.log(err))
-                    }, 3000)
-                } else {
-                    show_minute.innerText = minutes.toString().padStart(2, '0');
-                    show_second.innerText = seconds.toString().padStart(2, '0');
-                    seconds--;
-
-                    localStorage.setItem('minute', minutes);
-                    localStorage.setItem('second', seconds);
-                }
-
-            }, 1000);
-
-            // var clear_interval = interval;
-
-            if (!isAvailable) {
-                btn_confirm.classList.add('d-none');
-                not_available.classList.remove('d-none')
-            } else {
-                btn_confirm.classList.remove('d-none');
-                not_available.classList.add('d-none')
-            }
-
-            function confirmBooking(event) {
-                event.preventDefault();
-
-                const form = event.target;
-                const formData = new FormData(form);
-
-                btn_confirm.setAttribute('disabled', '')
-                loading.classList.remove('d-none')
-                text_confirm.classList.add('d-none')
-
-                axios.post('/confirmbooking', formData).then(({
-                    data
-                }) => {
-                    clearInterval(clear_interval);
-                    localStorage.clear();
-
-                    setTimeout(() => {
-                        if (data.status) {
-                            loading.classList.add('d-none')
-                            localStorage.setItem('card_id', formData.get('card_id'))
-                            localStorage.setItem('phone', formData.get('phone'))
-                            Swal.fire({
-                                title: 'จองห้องสำเร็จ!',
-                                icon: 'success'
-                            }).then(() => {
-                                window.location.href =
-                                    `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
-                            })
-                        }
-                    }, 500);
-                }).catch(({
-                    response
-                }) => {
-                    clearInterval(clear_interval);
-                    localStorage.clear();
-
-                    setTimeout(() => {
-                        loading.classList.add('d-none')
-                        if (response.status === 403) {
-                            btn_confirm.classList.add('d-none');
-                            not_available.classList.remove('d-none')
-                            return false;
-                        } else {
-                            btn_confirm.classList.remove('d-none');
-                            not_available.classList.add('d-none')
-                            return false;
-                        }
-                    }, 500);
+        const interval = setInterval(() => {
+            if (seconds % 10 === 0) {
+                // check booking timeout
+                axios.get(`/checkbooktimeout?temp_id=${temp_id}`).then((res) => {
+                    console.log(res);
+                }).catch(err => {
+                    if (err.response.status === 408) {
+                        clearInterval(interval);
+                        localStorage.removeItem('minute');
+                        localStorage.removeItem('second');
+                        console.log('clear')
+                        window.location.href = '/rooms'
+                    };
                 })
-                // return;
             }
+
+            if (seconds < 0) {
+                minutes--;
+                seconds = 59;
+            }
+            if (minutes <= 0 && seconds <= 0) {
+                clearInterval(interval);
+                localStorage.removeItem('minute');
+                localStorage.removeItem('second');
+                console.log('clear')
+                show_minute.innerText = '00';
+                show_second.innerText = '00';
+
+                setTimeout(() => {
+                    axios.delete(`/deletetempbook/${temp_id}`).then((res) => {
+                        window.location.href = '/rooms';
+                    }).catch(err => console.log(err))
+                }, 3000)
+            } else {
+                show_minute.innerText = minutes.toString().padStart(2, '0');
+                show_second.innerText = seconds.toString().padStart(2, '0');
+                seconds--;
+
+                localStorage.setItem('minute', minutes);
+                localStorage.setItem('second', seconds);
+            }
+
+        }, 1000);
+
+        if (!isAvailable) {
+            btn_confirm.classList.add('d-none');
+            not_available.classList.remove('d-none')
+        } else {
+            btn_confirm.classList.remove('d-none');
+            not_available.classList.add('d-none')
+        }
+
+
+        function confirmBooking(event) {
+
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            clearInterval(interval);
+            localStorage.removeItem('minute');
+            localStorage.removeItem('second');
+
+            btn_confirm.setAttribute('disabled', '')
+            loading.classList.remove('d-none')
+            text_confirm.classList.add('d-none')
+
+            axios.post('/confirmbooking', formData).then(({
+                data
+            }) => {
+
+                setTimeout(() => {
+                    if (data.status) {
+                        loading.classList.add('d-none')
+                        localStorage.setItem('card_id', formData.get('card_id'))
+                        localStorage.setItem('phone', formData.get('phone'))
+                        Swal.fire({
+                            title: 'จองห้องสำเร็จ!',
+                            icon: 'success'
+                        }).then(() => {
+                            window.location.href =
+                                `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
+                        })
+                    }
+                }, 500);
+            }).catch(({
+                response
+            }) => {
+                setTimeout(() => {
+                    loading.classList.add('d-none')
+                    if (response.status === 403) {
+                        btn_confirm.classList.add('d-none');
+                        not_available.classList.remove('d-none')
+                        return false;
+                    } else {
+                        btn_confirm.classList.remove('d-none');
+                        not_available.classList.add('d-none')
+                        return false;
+                    }
+                }, 500);
+            })
+            // return;
         }
     </script>
 @endsection

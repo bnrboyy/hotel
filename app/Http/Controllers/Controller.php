@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Room;
+use App\Models\TempBooking;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -117,5 +118,13 @@ class Controller extends BaseController
         $result = file_get_contents($LINE_API, FALSE, $context);
         $res = json_decode($result);
         return $res;
+    }
+
+    public function removeTempBooking()
+    {
+        if (session()->has('temp_id')) {
+            TempBooking::where('temp_id', session('temp_id'))->delete();
+            session()->forget('temp_id');
+        }
     }
 }
