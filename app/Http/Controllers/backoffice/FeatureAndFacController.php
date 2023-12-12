@@ -304,13 +304,12 @@ class FeatureAndFacController extends Controller
 
     public function deleteFac(Request $request, $id)
     {
-
-
-        $facilities = Facilitie::where('id', $id)->delete();
+        $facilities = Facilitie::find($id);
 
         /* Delete file. */
         if (file_exists($facilities->icon)) {
             File::delete($facilities->icon);
+            $facilities->delete();
         }
 
         return response([

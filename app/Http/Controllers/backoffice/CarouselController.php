@@ -37,6 +37,9 @@ class CarouselController extends Controller
             $resizedImage = Image::make($files['image'])->resize($width, $height);
 
             $path = 'upload/backoffice/carousel/'; // กำหนดพาธที่จะบันทึกไฟล์
+            if (!file_exists($path)) {
+                File::makeDirectory($path, $mode = 0777, true, true);
+            }
             $path_upload = public_path($path); // กำหนดพาธที่จะบันทึกไฟล์
             $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
             $resizedImage->save($path_upload . $filename);
@@ -152,8 +155,10 @@ class CarouselController extends Controller
             $height = 590;
             // ปรับขนาดรูปภาพ
             $resizedImage = Image::make($files['image'])->resize($width, $height);
-
             $path = 'upload/backoffice/carousel/'; // กำหนดพาธที่จะบันทึกไฟล์
+            if (!file_exists($path)) {
+                File::makeDirectory($path, $mode = 0777, true, true);
+            }
             $path_upload = public_path($path); // กำหนดพาธที่จะบันทึกไฟล์
             $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
             $resizedImage->save($path_upload . $filename);
