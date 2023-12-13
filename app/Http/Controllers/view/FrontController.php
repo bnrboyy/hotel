@@ -29,8 +29,8 @@ class FrontController extends Controller
         $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->limit(3)->get();
 
         foreach ($rooms as $room) {
-            $fea_ids = explode(', ', $room->feature_ids);
-            $fac_ids = explode(', ', $room->fac_ids);
+            $fea_ids = explode(', ', $room->feature_ids); // "1,2,3,4" => [1,2,3,4]
+            $fac_ids = explode(', ', $room->fac_ids); // "1,2,3,4" => [1,2,3,4]
 
             $contactUs = Contact::get()->first();
             $features = Feature::whereIn('id', $fea_ids)->orderBy('priority', 'ASC')->get();

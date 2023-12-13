@@ -3,7 +3,7 @@ const date_checkout = document.getElementById("date-checkout");
 
 date_checkin.addEventListener("change", function () {
     const checkin = dayjs(date_checkin.value);
-    const tomorrow = checkin.add(1, "day");
+    const tomorrow = checkin.add(1, "day"); //บวกอีก1วัน
     const formatted = tomorrow.format("YYYY-MM-DD");
 
     if (date_checkout.value) {
@@ -12,7 +12,7 @@ date_checkin.addEventListener("change", function () {
 
     date_checkout.setAttribute('min', formatted)
 
-    date_checkout.removeAttribute("disabled");
+    date_checkout.removeAttribute("disabled"); //สามารถเลือกวันที่ได้
 });
 
 
