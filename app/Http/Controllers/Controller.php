@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\TempBooking;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class Controller extends BaseController
 {
@@ -63,6 +65,10 @@ class Controller extends BaseController
         $diff_date = $secondsDiff / (60 * 60 * 24);
         $isAvailable = true;
 
+        $now = Carbon::now(); // วันเวลาปัจจุบัน
+        $tempLimit = $now->subMinutes(16); // ลบไป 16 นาที
+        $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
+
         $bookings = DB::table('bookings')
             ->select('bookings.*')
             ->where(function ($query) use ($request, $diff_date) {
@@ -78,6 +84,19 @@ class Controller extends BaseController
             foreach ($bookings as $book_key => $book_value) {
                 if ($book_value->room_id === $room->id) {
                     $isAvailable = false;
+                }
+            }
+        }
+
+        /* กรองห้องที่กำลังจะชำละเงินภายใน 15 นาที */
+        if (count($tempBooking) > 0) { // temp booking
+            foreach ($tempBooking as $temp) {
+                $current_date = $request->checkin;
+                for ($i = 0; $i < $diff_date; $i++) {
+                    if (Str::contains($temp->booking_date, $current_date) && $temp->room_id === $room->id) { // เปรียบเทียบ String
+                        $isAvailable = false;
+                    }
+                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
                 }
             }
         }
