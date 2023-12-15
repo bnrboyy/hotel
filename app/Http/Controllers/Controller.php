@@ -88,12 +88,13 @@ class Controller extends BaseController
             }
         }
 
+
         /* กรองห้องที่กำลังจะชำละเงินภายใน 15 นาที */
         if (count($tempBooking) > 0) { // temp booking
             foreach ($tempBooking as $temp) {
                 $current_date = $request->checkin;
                 for ($i = 0; $i < $diff_date; $i++) {
-                    if (Str::contains($temp->booking_date, $current_date) && $temp->room_id === $room->id) { // เปรียบเทียบ String
+                    if (Str::contains($temp->booking_date, $current_date) && $temp->room_id === $room->id && $temp->temp_id !== session('temp_id')) { // เปรียบเทียบ String
                         $isAvailable = false;
                     }
                     $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
