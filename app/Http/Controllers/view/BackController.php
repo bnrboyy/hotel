@@ -90,10 +90,10 @@ class BackController extends Controller
         $bookingCompleteAll = Booking::where('status_id', 4)->get();
 
         $bookingComplete = Booking::join('rooms', 'rooms.id', 'bookings.room_id')
-                            ->whereYear('date_checkin', date('Y'))
-                            ->select('bookings.*', 'rooms.name AS room_name')
-                            ->where('bookings.status_id', 4)
-                            ->get();
+            ->whereYear('date_checkin', date('Y'))
+            ->select('bookings.*', 'rooms.name AS room_name')
+            ->where('bookings.status_id', 4)
+            ->get();
 
         foreach ($bookingComplete as $book) {
             $book->month = substr($book->date_checkin, 5, -3);
@@ -241,7 +241,6 @@ class BackController extends Controller
                     break;
 
                 default:
-                    // dd($bookingComplete);
                     return view('backoffice.dashboard', [
                         'allRoom' => $allRoom,
                         'allCustomer' => $allCustomer,

@@ -11,6 +11,7 @@ use App\Models\Facilitie;
 use App\Models\Feature;
 use App\Models\Gallery;
 use App\Models\Room;
+use App\Models\Settings;
 use App\Models\TempBooking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,12 +63,6 @@ class FrontController extends Controller
             'temp_id' => session('temp_id'),
 
         ]);
-    }
-
-    public function aboutPage(Request $request)
-    {
-        $this->removeTempBooking();
-        return view('frontoffice.about');
     }
 
     public function contactPage(Request $request)

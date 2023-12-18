@@ -36,18 +36,18 @@ class ShareAdminData
         $temp_id = session('temp_id');
 
         View::share([
-                'shareUser' => $user,
-                'shareSite' => $site_settings,
-                'shareContact' => $contact_settings,
-                'shareBookingNew' => $booking_new,
-                'shareBookingPending' => $booking_history,
-                'shareBookingVerified' => $booking_verified,
-                'shareBookingInprogress' => $booking_inprogress,
-                'shareBookingHistory' => $booking_history,
-                'shareBookingCancel' => $booking_cancel,
-                'share_messages' => $unseen_messages,
-                'share_tempId' => $temp_id,
-            ]);
+            'shareUser' => $user,
+            'shareSite' => $site_settings,
+            'shareContact' => $contact_settings,
+            'shareBookingNew' => $booking_new,
+            'shareBookingPending' => $booking_history,
+            'shareBookingVerified' => $booking_verified,
+            'shareBookingInprogress' => $booking_inprogress,
+            'shareBookingHistory' => $booking_history,
+            'shareBookingCancel' => $booking_cancel,
+            'share_messages' => $unseen_messages,
+            'share_tempId' => $temp_id,
+        ]);
 
         return $next($request);
     }
