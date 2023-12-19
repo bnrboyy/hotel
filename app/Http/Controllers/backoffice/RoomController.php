@@ -109,16 +109,16 @@ class RoomController extends Controller
             'children' => 'numeric|required',
             'area' => 'numeric|required',
             'description' => 'string|nullable',
-            'feature_ids' => 'array|required',
-            'fac_ids' => 'array|required',
+            'feature_ids' => 'array|required', // [1 ,2 ,4 ,6]
+            'fac_ids' => 'array|required', // [1 ,2 ,4 ,6]
         ]);
 
         if ($validator->fails()) {
             return $this->sendErrorValidators('Invalid params', $validator->errors());
         }
 
-        $feature_ids = implode(', ', $request->feature_ids);
-        $fac_ids = implode(', ', $request->fac_ids);
+        $feature_ids = implode(', ', $request->feature_ids); // [1,2,4,6] => "1,2,4,6"
+        $fac_ids = implode(', ', $request->fac_ids); // [1,2,4,6] => "1,2,4,6"
 
         try {
             DB::beginTransaction();

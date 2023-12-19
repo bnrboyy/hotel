@@ -44,8 +44,8 @@ class BackController extends Controller
         }
 
         /* Feature&Fac page */
-        $features = Feature::orderBy('priority', 'ASC')->get();
-        $facilities = Facilitie::orderBy('priority', 'ASC')->get();
+        $features = Feature::orderBy('priority', 'ASC')->get(); // เอามาทั้งหมด
+        $facilities = Facilitie::orderBy('priority', 'ASC')->get(); // เอามาทั้งหมด
 
         /* Rooms page */
         $rooms = Room::orderBy('created_at', 'ASC')->get();
