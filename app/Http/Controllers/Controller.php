@@ -39,7 +39,7 @@ class Controller extends BaseController
             $fullName = $preName . $name . $postName;
             $newImageName = $fullName . $extName;
             if (file_exists($folderPath . $newImageName)) {
-                for ($ii = 1; true; $ii++) {
+                for ($ii = 1; true; $ii++) { // ถ้าชื่อไฟล์ซ้ำ /room1.png => room1(7).png (upload/frontoffice/slip/...)
                     $editNameDuplicate = $fullName . "({$ii})" . $extName;
                     if (!file_exists($folderPath . $editNameDuplicate)) {
                         $newImageName = $editNameDuplicate;
@@ -48,7 +48,7 @@ class Controller extends BaseController
                 }
             }
             if ($image->move($folderPath, $newImageName)) {
-                return $folderPath . $newImageName;
+                return $folderPath . $newImageName; // upload/frontoffice/slip/...
             }
         }
         return false;
@@ -107,7 +107,6 @@ class Controller extends BaseController
 
     public function sendLineNotify(Booking $booking, Room $room)
     {
-        // dd($booking);
         $message = "👇👇 มีรายการจองห้องพักใหม่ 👇👇 \n\n"
             . "No. ►► " . $booking->booking_number . "\n"
             . "เลขอ้างอิงการจอง ►► " . $booking->card_id . "\n"

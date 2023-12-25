@@ -15,7 +15,7 @@ use Image;
 
 class UserBookingController extends Controller
 {
-    public function deleteTempBooking(Request $request)
+    public function deleteTempBooking(Request $request) // ลบ Booking temp
     {
         try {
             DB::beginTransaction();
@@ -39,7 +39,7 @@ class UserBookingController extends Controller
         }
     }
 
-    public function createBookOrder(Request $request)
+    public function createBookOrder(Request $request) // สร้าง booking
     {
         $validator = Validator::make($request->all(), [
             "image" => "image|required|mimes:jpeg,png,jpg",
@@ -62,9 +62,9 @@ class UserBookingController extends Controller
             ], 404);
         }
 
-        $room = Room::where(['id' => $request->room_id])->first();
+        $room = Room::where(['id' => $request->room_id])->first(); // ค้นหาห้อง
 
-        $isAvailable = $this->checkAvailableRoom($request, $room);
+        $isAvailable = $this->checkAvailableRoom($request, $room); // return true หรือ false
 
         if (!$isAvailable) {
             return response([
@@ -82,17 +82,16 @@ class UserBookingController extends Controller
             $booking_date = "";
             for ($i = 0; $i < $request->days; $i++) {
                 $booking_date .= "," . date('Y-m-d', strtotime($current_date));
-                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // บวกขึ้น 1 วัน
             }
 
-            $files = $request->allFiles();
+            $files = $request->allFiles(); // ประกาศตัวแปรเก็บรูปภาพ
             $slip_image = "";
             if (isset($files['image'])) {
                 /* Upload Image */
                 $newFolder = "upload/frontoffice/slip/";
                 $slip_image = $this->uploadImage($newFolder, $files['image'], "newslip", "", "");
             }
-
 
             $order = new Booking();
             $order->room_id = $request->room_id;
@@ -111,10 +110,10 @@ class UserBookingController extends Controller
             $order->card_id = $request->card_id;
             $order->line_id = $request->line_id;
             $order->payment_type = "transfer";
-            $order->slip = $slip_image;
+            $order->slip = $slip_image; // upload/frontoffice/slip/...png,jpg,jpeg
             $order->save();
 
-            // $this->sendLineNotify($order, $room);
+            $this->sendLineNotify($order, $room);
             $this->removeTempBooking();
 
             DB::commit();
@@ -135,7 +134,7 @@ class UserBookingController extends Controller
         }
     }
 
-    public function checkBookTimeout(Request $request)
+    public function checkBookTimeout(Request $request) // ตรวจสอบเวลาการจอง
     {
         $validator = Validator::make($request->all(), [
             "temp_id" => "string|required",

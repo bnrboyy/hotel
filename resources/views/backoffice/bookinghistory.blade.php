@@ -168,7 +168,7 @@
                     </tbody>
                 </table>
 
-                {{-- Booking Online --}}
+                {{-- Booking walkin --}}
                 <table id="booking-walkin" class="table table-striped table-booking" type="walkin"
                     style="width:100%">
                     <thead>
