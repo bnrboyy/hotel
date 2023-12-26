@@ -119,7 +119,7 @@ class BackController extends Controller
                     break;
 
                 case 'admins':
-                    return view('backoffice.admins', ['banks' => $banks, 'admins' => $admins]);
+                    return view('backoffice.admins', ['admins' => $admins]);
                     break;
 
                 case 'messages':
