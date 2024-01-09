@@ -35,5 +35,5 @@
             </a><br>
         </div>
     </div>
-    <h5 class="text-center bg-dark text-white p-3 m-0 fw-normal fs-6">Designed and Developed by bnrboyy</h5>
+    <h5 class="text-center bg-dark text-white p-3 m-0 fw-normal fs-6">{{ $shareSite->site_title }}</h5>
 </footer>
