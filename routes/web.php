@@ -24,11 +24,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* views */
-
+/* views หน้าบ้าน */
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 Route::get('/facilities', [FrontController::class, 'facilitiesPage'])->name('facilities');
-Route::get('/about', [FrontController::class, 'aboutPage'])->name('about');
 Route::get('/bookingsearch', [FrontController::class, 'bookingSearchPage'])->name('bookingsearch');
 Route::get('/contactus', [FrontController::class, 'contactPage'])->name('contactus');
 Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('room-details');
@@ -39,13 +37,6 @@ Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
 Route::get('/checkbooktimeout', [UserBookingController::class, 'checkBookTimeout']);
 Route::delete('/deletetempbook/{temp_id}', [UserBookingController::class, 'deleteTempBooking']);
 Route::post('/confirmbooking', [UserBookingController::class, 'createBookOrder']);
-
-
-
-/* Route middleware users */
-Route::middleware('auth:web')->group(function () {
-});
-
 
 Route::prefix('admin')->group(function () {
     /* Views */

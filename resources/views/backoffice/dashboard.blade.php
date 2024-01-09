@@ -184,7 +184,7 @@
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วยรายได้ทั้งหมด</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">สัดส่วนรายได้ทั้งหมด</h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">

@@ -3,7 +3,7 @@ const date_checkout = document.getElementById("date-checkout");
 
 date_checkin.addEventListener("change", function () {
     const checkin = dayjs(date_checkin.value);
-    const tomorrow = checkin.add(1, "day");
+    const tomorrow = checkin.add(1, "day"); //บวกอีก1วัน
     const formatted = tomorrow.format("YYYY-MM-DD");
 
     if (date_checkout.value) {
@@ -12,7 +12,7 @@ date_checkin.addEventListener("change", function () {
 
     date_checkout.setAttribute('min', formatted)
 
-    date_checkout.removeAttribute("disabled");
+    date_checkout.removeAttribute("disabled"); //สามารถเลือกวันที่ได้
 });
 
 
@@ -20,7 +20,6 @@ function searchrooms(event) {
     event.preventDefault();
 
     const form = event.target;
-
     const formData = new FormData(form);
 
     const data = {
@@ -30,5 +29,6 @@ function searchrooms(event) {
         children: formData.get('children'),
     }
 
-    window.location.href = `/rooms?checkin=${data.checkin}&checkout=${data.checkout}&adult=${data.adult}&children=${data.children}`;
+    const path = `/rooms?checkin=${data.checkin}&checkout=${data.checkout}&adult=${data.adult}&children=${data.children}`;
+    window.location.href = path;
 }

@@ -177,7 +177,7 @@ class FeatureAndFacController extends Controller
     public function getFeatureById(Request $request, $id)
     {
         try {
-            $feature = Feature::where(['id' => $id])->get()->first();
+            $feature = Feature::where(['id' => $id])->first();
 
             if (!$feature) {
                 return response([
@@ -247,7 +247,7 @@ class FeatureAndFacController extends Controller
         try {
             DB::beginTransaction();
 
-            $data = $request->only(['display']);
+            $data = $request->only(['display']); // ['display' => true]
             $facUpdate = Facilitie::find($id);
 
             if (!$facUpdate) {
@@ -304,13 +304,12 @@ class FeatureAndFacController extends Controller
 
     public function deleteFac(Request $request, $id)
     {
-
-
-        $facilities = Facilitie::where('id', $id)->delete();
+        $facilities = Facilitie::find($id);
 
         /* Delete file. */
         if (file_exists($facilities->icon)) {
             File::delete($facilities->icon);
+            $facilities->delete();
         }
 
         return response([

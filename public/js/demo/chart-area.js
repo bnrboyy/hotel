@@ -27,15 +27,12 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
-const roomsData = JSON.parse(
-    document.getElementById("data").getAttribute("roomsData")
-);
-const bookingsData = JSON.parse(
-    document.getElementById("data").getAttribute("bookingsData")
-);
-const bookingCompleteAll = JSON.parse(
-    document.getElementById("data").getAttribute("bookingCompleteAll")
-);
+const dataEl = document.getElementById("data");
+
+const roomsData = JSON.parse(dataEl.getAttribute("roomsData"))
+const bookingsData = JSON.parse(dataEl.getAttribute("bookingsData"))
+const bookingCompleteAll = JSON.parse(dataEl.getAttribute("bookingCompleteAll"))
+
 const mouthNumbers = [
     "01",
     "02",

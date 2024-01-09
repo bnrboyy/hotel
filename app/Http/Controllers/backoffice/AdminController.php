@@ -176,7 +176,7 @@ class AdminController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'ต้องแอดมินสูงสุดอย่างน้อย 1 บัญชี',
+                    'description' => 'ต้องมีแอดมินสูงสุดอย่างน้อย 1 บัญชี',
                 ], 403);
             }
 

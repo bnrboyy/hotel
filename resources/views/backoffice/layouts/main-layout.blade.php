@@ -153,14 +153,7 @@
         </div>
     </div>
 
-
-
-
-
-
-
     @include('backoffice.layouts.scripts')
-
     <script>
         const queryString = window.location.search;
         const params = new URLSearchParams(queryString);

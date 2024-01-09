@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Expr\Cast\Bool_;
 
 class BackController extends Controller
 {
@@ -44,8 +43,8 @@ class BackController extends Controller
         }
 
         /* Feature&Fac page */
-        $features = Feature::orderBy('priority', 'ASC')->get();
-        $facilities = Facilitie::orderBy('priority', 'ASC')->get();
+        $features = Feature::orderBy('priority', 'ASC')->get(); // เอามาทั้งหมด
+        $facilities = Facilitie::orderBy('priority', 'ASC')->get(); // เอามาทั้งหมด
 
         /* Rooms page */
         $rooms = Room::orderBy('created_at', 'ASC')->get();
@@ -90,10 +89,10 @@ class BackController extends Controller
         $bookingCompleteAll = Booking::where('status_id', 4)->get();
 
         $bookingComplete = Booking::join('rooms', 'rooms.id', 'bookings.room_id')
-                            ->whereYear('date_checkin', date('Y'))
-                            ->select('bookings.*', 'rooms.name AS room_name')
-                            ->where('bookings.status_id', 4)
-                            ->get();
+            ->whereYear('date_checkin', date('Y'))
+            ->select('bookings.*', 'rooms.name AS room_name')
+            ->where('bookings.status_id', 4)
+            ->get();
 
         foreach ($bookingComplete as $book) {
             $book->month = substr($book->date_checkin, 5, -3);
@@ -119,7 +118,7 @@ class BackController extends Controller
                     break;
 
                 case 'admins':
-                    return view('backoffice.admins', ['banks' => $banks, 'admins' => $admins]);
+                    return view('backoffice.admins', ['admins' => $admins]);
                     break;
 
                 case 'messages':
@@ -241,7 +240,6 @@ class BackController extends Controller
                     break;
 
                 default:
-                    // dd($bookingComplete);
                     return view('backoffice.dashboard', [
                         'allRoom' => $allRoom,
                         'allCustomer' => $allCustomer,

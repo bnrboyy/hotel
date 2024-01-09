@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\TempBooking;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class Controller extends BaseController
 {
@@ -37,7 +39,7 @@ class Controller extends BaseController
             $fullName = $preName . $name . $postName;
             $newImageName = $fullName . $extName;
             if (file_exists($folderPath . $newImageName)) {
-                for ($ii = 1; true; $ii++) {
+                for ($ii = 1; true; $ii++) { // ถ้าชื่อไฟล์ซ้ำ /room1.png => room1(7).png (upload/frontoffice/slip/...)
                     $editNameDuplicate = $fullName . "({$ii})" . $extName;
                     if (!file_exists($folderPath . $editNameDuplicate)) {
                         $newImageName = $editNameDuplicate;
@@ -46,7 +48,7 @@ class Controller extends BaseController
                 }
             }
             if ($image->move($folderPath, $newImageName)) {
-                return $folderPath . $newImageName;
+                return $folderPath . $newImageName; // upload/frontoffice/slip/...
             }
         }
         return false;
@@ -62,6 +64,10 @@ class Controller extends BaseController
         $secondsDiff = $end_timeStamp - $start_timeStamp;
         $diff_date = $secondsDiff / (60 * 60 * 24);
         $isAvailable = true;
+
+        $now = Carbon::now(); // วันเวลาปัจจุบัน
+        $tempLimit = $now->subMinutes(16); // ลบไป 16 นาที
+        $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
 
         $bookings = DB::table('bookings')
             ->select('bookings.*')
@@ -82,12 +88,25 @@ class Controller extends BaseController
             }
         }
 
+
+        /* กรองห้องที่กำลังจะชำละเงินภายใน 15 นาที */
+        if (count($tempBooking) > 0) { // temp booking
+            foreach ($tempBooking as $temp) {
+                $current_date = $request->checkin;
+                for ($i = 0; $i < $diff_date; $i++) {
+                    if (Str::contains($temp->booking_date, $current_date) && $temp->room_id === $room->id && $temp->temp_id !== session('temp_id')) { // เปรียบเทียบ String
+                        $isAvailable = false;
+                    }
+                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                }
+            }
+        }
+
         return $isAvailable;
     }
 
     public function sendLineNotify(Booking $booking, Room $room)
     {
-        // dd($booking);
         $message = "👇👇 มีรายการจองห้องพักใหม่ 👇👇 \n\n"
             . "No. ►► " . $booking->booking_number . "\n"
             . "เลขอ้างอิงการจอง ►► " . $booking->card_id . "\n"

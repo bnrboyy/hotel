@@ -109,16 +109,16 @@ class RoomController extends Controller
             'children' => 'numeric|required',
             'area' => 'numeric|required',
             'description' => 'string|nullable',
-            'feature_ids' => 'array|required',
-            'fac_ids' => 'array|required',
+            'feature_ids' => 'array|required', // [1 ,2 ,4 ,6]
+            'fac_ids' => 'array|required', // [1 ,2 ,4 ,6]
         ]);
 
         if ($validator->fails()) {
             return $this->sendErrorValidators('Invalid params', $validator->errors());
         }
 
-        $feature_ids = implode(', ', $request->feature_ids);
-        $fac_ids = implode(', ', $request->fac_ids);
+        $feature_ids = implode(', ', $request->feature_ids); // [1,2,4,6] => "1,2,4,6"
+        $fac_ids = implode(', ', $request->fac_ids); // [1,2,4,6] => "1,2,4,6"
 
         try {
             DB::beginTransaction();
@@ -226,6 +226,9 @@ class RoomController extends Controller
             $resizedImage = Image::make($files['image'])->resize($width, $height);
 
             $path = 'upload/backoffice/room/'; // กำหนดพาธที่จะบันทึกไฟล์
+            if (!file_exists($path)) {
+                File::makeDirectory($path, $mode = 0777, true, true);
+            }
             $path_upload = public_path($path); // กำหนดพาธที่จะบันทึกไฟล์
             $filename = $files['image']->getClientOriginalName(); // ใช้ชื่อเดิมของไฟล์
             $resizedImage->save($path_upload . $filename);
