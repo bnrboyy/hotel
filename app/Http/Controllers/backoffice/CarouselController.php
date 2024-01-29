@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Image;
 
+
 class CarouselController extends Controller
 {
     public function create(Request $request)
@@ -34,6 +35,7 @@ class CarouselController extends Controller
             $width = 1920;
             $height = 590;
             // ปรับขนาดรูปภาพ
+
             $resizedImage = Image::make($files['image'])->resize($width, $height);
 
             $path = 'upload/backoffice/carousel/'; // กำหนดพาธที่จะบันทึกไฟล์
@@ -57,8 +59,8 @@ class CarouselController extends Controller
 
             $newData = Carousel::create([
                 'image' => $image,
-                'priority' => (int)$request->priority,
-                'display' => (int)$request->display,
+                'priority' => (int) $request->priority,
+                'display' => (int) $request->display,
             ]);
 
             return response([
@@ -71,7 +73,7 @@ class CarouselController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -91,13 +93,13 @@ class CarouselController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Carousel has been deleted successfully.'
+                'description' => 'Carousel has been deleted successfully.',
             ], 200);
         } catch (Exception $e) {
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -112,7 +114,7 @@ class CarouselController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Carousel not found!.'
+                    'description' => 'Carousel not found!.',
                 ], 404);
             }
 
@@ -127,7 +129,7 @@ class CarouselController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -181,14 +183,16 @@ class CarouselController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Carousel not found!.'
+                    'description' => 'Carousel not found!.',
                 ], 404);
             }
 
-            if (isset($files['image'])) $carousel->image = $image;
+            if (isset($files['image'])) {
+                $carousel->image = $image;
+            }
 
-            $carousel->display = (int)$request->display;
-            $carousel->priority = (int)$request->priority;
+            $carousel->display = (int) $request->display;
+            $carousel->priority = (int) $request->priority;
             $carousel->save();
 
             DB::commit();
@@ -203,7 +207,7 @@ class CarouselController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }

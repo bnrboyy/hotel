@@ -20,6 +20,7 @@ function searchrooms(event) {
     event.preventDefault();
 
     const form = event.target;
+
     const formData = new FormData(form);
 
     const data = {
@@ -29,6 +30,5 @@ function searchrooms(event) {
         children: formData.get('children'),
     }
 
-    const path = `/rooms?checkin=${data.checkin}&checkout=${data.checkout}&adult=${data.adult}&children=${data.children}`;
-    window.location.href = path;
+    window.location.href = `/rooms?checkin=${data.checkin}&checkout=${data.checkout}&adult=${data.adult}&children=${data.children}`;
 }

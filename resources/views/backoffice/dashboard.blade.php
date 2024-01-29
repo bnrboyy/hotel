@@ -23,8 +23,11 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    <h4>รายการจองทั้งหมด</h4></div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($bookingAll) }} รายการ <span style="color: #4e73df; font-size: 14px;">Online : {{ $bookingOnline }}, Walk-in : {{ $bookingWalkin }}</span></div>
+                                    <h4>รายการจองทั้งหมด</h4>
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($bookingAll) }} รายการ <span
+                                        style="color: #4e73df; font-size: 14px;">Online : {{ $bookingOnline }}, Walk-in :
+                                        {{ $bookingWalkin }}</span></div>
                             </div>
                             <div class="col-auto">
                                 <i class="bi bi-calendar-check fa-2x text-gray-300"></i>
@@ -41,7 +44,8 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    <h4>รายได้ทั้งหมด</h4></div>
+                                    <h4>รายได้ทั้งหมด</h4>
+                                </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $income }} บาท</div>
                             </div>
                             <div class="col-auto">
@@ -59,7 +63,8 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    <h4>จำนวนลูกค้า</h4></div>
+                                    <h4>จำนวนลูกค้า</h4>
+                                </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($allCustomer) }}</div>
                             </div>
                             <div class="col-auto">
@@ -108,8 +113,7 @@
             <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">จำนวนครั้งที่เข้าพัก</h6>
                         <h6 class="year m-0 font-weight-bold text-primary"></h6>
 
@@ -146,8 +150,7 @@
             <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4" style="height: 414.19px;">
                     <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">สัดส่วนการเข้าพักทั้งหมด</h6>
                     </div>
                     <!-- Card Body -->
@@ -165,8 +168,7 @@
             <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">เปรียบเทียบรายได้</h6>
                         <h6 class="year m-0 font-weight-bold text-primary"></h6>
                     </div>
@@ -182,8 +184,7 @@
             <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4" style="height: 414.19px;">
                     <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">สัดส่วนรายได้ทั้งหมด</h6>
                     </div>
                     <!-- Card Body -->
@@ -196,7 +197,8 @@
             </div>
         </div>
 
-        <div id="data" roomsData="{{ json_encode($rooms) }}" bookingsData="{{ json_encode($bookingComplete) }}" bookingCompleteAll="{{ json_encode($bookingCompleteAll) }}"></div>
+        <div id="data" roomsData="{{ json_encode($rooms) }}" bookingsData="{{ json_encode($bookingComplete) }}"
+            bookingCompleteAll="{{ json_encode($bookingCompleteAll) }}"></div>
     </div>
 @endsection
 

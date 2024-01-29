@@ -91,6 +91,13 @@
                             <label class="form-label" style="font-weight: 500;">ข้อความ</label>
                             <textarea name="message" class="form-control shadow-none" rows="5" style="resize: none;" required></textarea>
                         </div>
+
+                        <div>
+                    
+                            <div class="g-recaptcha" data-sitekey="6Ld181gpAAAAAOEb3gPA2zsZw5goon4j7E5_rLO6"></div>
+                        </div>
+
+                        
                         <button class="btn text-white shadow-none custom-bg mt-3" type="submit">ส่งข้อความ</button>
                         <input id="btn-reset" type="reset" style="display: none">
                     </form>

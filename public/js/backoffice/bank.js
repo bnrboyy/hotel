@@ -110,8 +110,10 @@ function updBankDisplay(_id, _checked) {
 }
 
 function deleteBank(_el, _id) {
+
     const url = `/admin/deletebank/`;
     onDelete(_el, _id, url);
+
 }
 
 function previewBank(_src) {

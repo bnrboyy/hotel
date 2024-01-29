@@ -88,9 +88,10 @@ function roomDetails(room_id) {
 }
 
 function book(room_id) {
+    
     // const originalScrollPosition = window.scrollY;
     const isNullParams = someNullParam;
-    if (isNullParams || !date_checkout.value || !date_checkin.value) {
+    if (isNullParams || !date_checkout.value || !date_checkin.value   ) {
         Swal.fire({
             icon: "info",
             text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",

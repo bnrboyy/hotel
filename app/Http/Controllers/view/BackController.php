@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+
 class BackController extends Controller
 {
     public function adminPage(Request $request)
@@ -43,8 +44,8 @@ class BackController extends Controller
         }
 
         /* Feature&Fac page */
-        $features = Feature::orderBy('priority', 'ASC')->get(); // เอามาทั้งหมด
-        $facilities = Facilitie::orderBy('priority', 'ASC')->get(); // เอามาทั้งหมด
+        $features = Feature::orderBy('priority', 'ASC')->get();
+        $facilities = Facilitie::orderBy('priority', 'ASC')->get();
 
         /* Rooms page */
         $rooms = Room::orderBy('created_at', 'ASC')->get();
@@ -69,6 +70,50 @@ class BackController extends Controller
         $booking_walkin = $this->getBookingByType('Walk-in');
         $statuses = BookingStatus::orderBy('id', 'ASC')->get();
 
+
+
+
+         /* list_checkin_today page */
+         $bookings = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+         ->join('rooms', 'rooms.id', 'bookings.room_id')
+         ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+         ->whereIn('bookings.status_id', [ 2, 3, 4])
+         ->orderBy('bookings.created_at', 'DESC')
+         ->get();
+
+         
+    $today = now()->toDateString();;
+    $list_checkin_today = $this->getBookingByCheckin($today);
+    $booking_online = $this->getBookingByType('Online');
+    $booking_walkin = $this->getBookingByType('Walk-in');
+    $statuses = BookingStatus::orderBy('id', 'ASC')->get();
+
+
+    
+
+
+    /* list_checkout_today page */
+    $bookings = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+    ->join('rooms', 'rooms.id', 'bookings.room_id')
+    ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+    ->whereIn('bookings.status_id', [ 2, 3, 4])
+    ->orderBy('bookings.created_at', 'DESC')
+    ->get();
+
+    
+$today = now()->toDateString();;
+$list_checkout_today = $this->getBookingByCheckout($today);
+$booking_online = $this->getBookingByType('Online');
+$booking_walkin = $this->getBookingByType('Walk-in');
+$statuses = BookingStatus::orderBy('id', 'ASC')->get();
+
+  
+
+
+
+
+
+
         /* bookinghistory page */
         $bookinghistory = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
             ->join('rooms', 'rooms.id', 'bookings.room_id')
@@ -79,7 +124,6 @@ class BackController extends Controller
 
         $bookinghistory_online = $this->getBookingHistoryByType('Online');
         $bookinghistory_walkin = $this->getBookingHistoryByType('Walk-in');
-
 
         /* Dashboard page */
         $allRoom = Room::count();
@@ -109,7 +153,9 @@ class BackController extends Controller
                     break;
 
                 case 'rooms':
+
                     return view('backoffice.rooms', [
+
                         'features' => $features_room,
                         'facilities' => $facilities_room,
                         'rooms' => $rooms,
@@ -118,7 +164,7 @@ class BackController extends Controller
                     break;
 
                 case 'admins':
-                    return view('backoffice.admins', ['admins' => $admins]);
+                    return view('backoffice.admins', ['banks' => $banks, 'admins' => $admins]);
                     break;
 
                 case 'messages':
@@ -152,6 +198,29 @@ class BackController extends Controller
                         'statuses' => $statuses,
                     ]);
                     break;
+                case 'list_checkin_today':
+                    return view('backoffice.list_checkin_today', [
+                        'bookings' => $bookings,
+                        'list_checkin_today' => $list_checkin_today,
+                        'booking_online' => $booking_online,
+                        'booking_walkin' => $booking_walkin,
+                        'statuses' => $statuses,
+                        'today' => $today,
+                        
+                    ]);
+                    break;
+
+                case 'list_checkout_today':
+                    return view('backoffice.list_checkout_today', [
+                        'bookings' => $bookings,
+                        'list_checkout_today' => $list_checkout_today,
+                        'booking_online' => $booking_online,
+                        'booking_walkin' => $booking_walkin,
+                        'statuses' => $statuses,
+                        'today' => $today,
+                            
+                    ]);
+                    break;
 
                 case 'bookinghistory':
                     return view('backoffice.bookinghistory', [
@@ -161,6 +230,10 @@ class BackController extends Controller
                         'statuses' => $statuses,
                     ]);
                     break;
+
+
+
+
 
                 case 'booking':
                     $validator = Validator::make($request->all(), [
@@ -240,6 +313,7 @@ class BackController extends Controller
                     break;
 
                 default:
+                    // dd($bookingComplete);
                     return view('backoffice.dashboard', [
                         'allRoom' => $allRoom,
                         'allCustomer' => $allCustomer,
@@ -260,12 +334,45 @@ class BackController extends Controller
 
     public function loginPage(Request $request)
     {
+       
+        
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin');
         }
 
         return view('backoffice.login');
+    
     }
+
+    private function getBookingByCheckin($date_checkin)
+    {
+        $result = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+            ->join('rooms', 'rooms.id', 'bookings.room_id')
+            ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+            ->whereIn('bookings.status_id', [ 2, 3 , 4])
+            ->where('bookings.date_checkin', $date_checkin)
+            ->orderBy('bookings.created_at', 'DESC')
+            ->get();
+
+
+        return $result;
+    }
+
+
+    private function getBookingByCheckout($date_checkout)
+    {
+        $result = Booking::join('booking_statuses AS bs', 'bs.id', 'bookings.status_id')
+            ->join('rooms', 'rooms.id', 'bookings.room_id')
+            ->select('bookings.*', 'rooms.name AS room_name', 'bs.name AS status_name', 'bs.bg_color AS bg_color')
+            ->whereIn('bookings.status_id', [ 2, 3 , 4])
+            ->where('bookings.date_checkout', $date_checkout)
+            ->orderBy('bookings.created_at', 'DESC')
+            ->get();
+
+
+        return $result;
+    }
+
 
     private function getBookingByType($type)
     {
@@ -277,6 +384,7 @@ class BackController extends Controller
             ->orderBy('bookings.created_at', 'DESC')
             ->get();
 
+            
         return $result;
     }
 
@@ -290,6 +398,7 @@ class BackController extends Controller
             ->orderBy('bookings.created_at', 'DESC')
             ->get();
 
+            
         return $result;
     }
 

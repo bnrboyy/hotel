@@ -65,11 +65,12 @@
                                 </div>
                                 <div class="col-lg-6 col-12">
                                     <div class="mt-3">
-                                        <label class="form-label" style="font-weight: 500;">*เลขบัตรประชาชน4ตัวท้าย <span
+                                        <label class="form-label" style="font-weight: 500;">*เลขบัตรประชาชน <span
                                                 class="text-secondary">(ใช้เป็นเลขอ้างอิงการจอง)</span></label>
-                                        <input name="card_id" type="number" class="form-control form-room shadow-none"
+                                        <input name="card_id" type="number" class="form-control form-room shadow-none "
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                            onKeyPress="if(this.value.length>=4) return false;" minlength="4" required>
+                                            onKeyPress="if(this.value.length>=13) return false;" minlength="13" required>
+                                        <input type="hidden" id="four_id_input" name="four_id" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12 mb-4">
@@ -84,13 +85,16 @@
                                         <div class="row g-0 align-items-center">
                                             <div class="col-12 p-3 pb-0">
                                                 <h6 class="text-secondary" style="font-size: 14px;">รายละเอียดการจอง</h6>
-                                                <h6 style="font-size: 14px; font-weight: 300;">Check-in :
+                                                <h6 style="font-size: 14px; font-weight: 300;">เช็คอิน :
                                                     {{ $checkin }}</h6>
-                                                <h6 style="font-size: 14px; font-weight: 300;">Check-out :
+                                                <h6 style="font-size: 14px; font-weight: 300;">เช็คเอาท์ :
                                                     {{ $checkout }}</h6>
-                                                <h6 style="font-size: 14px; font-weight: 300;">Day : {{ $diff_date }}
+                                                <h6 style="font-size: 14px; font-weight: 300;">คืน : {{ $diff_date }}
                                                 </h6>
-                                                <h6 style="font-size: 16px; font-weight: 500;">Price :
+                                                <h6 style="font-size: 14px; font-weight: 300;">ราคา/คืน :
+                                                    {{ $room->price }}
+                                                </h6>
+                                                <h6 style="font-size: 16px; font-weight: 500;">ราคาทั้งหมด :
                                                     {{ $room->price * $diff_date }} ฿</h6>
                                             </div>
                                         </div>
@@ -172,6 +176,12 @@
                                     <h6 class="text-danger text-center not-available d-none">
                                         มีคนจองไปแล้วเมื่อสักครู่หากคุณชำระเงินไปแล้วกรุณา<span><a
                                                 href="#">ติดต่อเจ้าหน้าที่</a></span>เพื่อขอรับเงินคืน</h6>
+
+                                                <div class="col-8 col-md-12 mb-4">
+                                                    <div class="g-recaptcha" style="transform: scale(0.8);" data-sitekey="6Ld181gpAAAAAOEb3gPA2zsZw5goon4j7E5_rLO6"></div>
+                                                </div>
+
+
                                     <div class="col-8 col-md-8 mb-4 rounded">
                                         <div class="d-flex justify-content-evenly">
                                             <button type="submit"
@@ -185,6 +195,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <input type="hidden" name="checkin" value="{{ $checkin }}">
                         <input type="hidden" name="checkout" value="{{ $checkout }}">
                         <input type="hidden" name="room_id" value="{{ $room->id }}">
@@ -207,9 +218,18 @@
         // window.onload = () => {
         //     localStorage.clear();
         // }
+
+
         const minute_local = localStorage.minute;
         const second_local = localStorage.second;
         const isAvailable = @json($isAvailable); // from laravel controller
+
+
+
+
+
+
+
 
         const btn_confirm = document.querySelector(".btn-confirm");
         const loading = document.querySelector(".loading");
@@ -218,6 +238,7 @@
 
         const show_minute = document.querySelector(".time-minute");
         const show_second = document.querySelector(".time-second");
+
 
         let minutes = minute_local ? parseInt(minute_local) : 15;
         let seconds = second_local ? parseInt(second_local) : 0;
@@ -275,12 +296,39 @@
         }
 
 
+
+
+
+
+
         function confirmBooking(event) {
 
             event.preventDefault();
 
+            //รับค่า card_id มา
+            const card_id = document.querySelector('input[name="card_id"]').value;
+            
+
+            if(card_id.length >= 13) {
+
+                const four_id = card_id.slice(-4); //เอาเลข 4 ตัวท้ายมา
+
+                // ใส่ค่า four_id ลงใน <input> ที่มี name เป็น "four_id"
+                document.querySelector('input[name="four_id"]').value = four_id;
+
+            }
+            else {
+                console.log("ความยาวของ card_id ต้องไม่น้อยกว่า 13 ตัว");
+                alert("เลขบัตรประชาชนไม่ถูกต้อง");
+                document.querySelector('input[name="card_id"]').value = ''; // เคลียร์ค่าใน input
+                return false;
+
+            }
+
             const form = event.target;
             const formData = new FormData(form);
+
+
 
             clearInterval(interval);
             localStorage.removeItem('minute');
@@ -297,14 +345,14 @@
                 setTimeout(() => {
                     if (data.status) {
                         loading.classList.add('d-none')
-                        localStorage.setItem('card_id', formData.get('card_id'))
+                        localStorage.setItem('four_id', formData.get('four_id'))
                         localStorage.setItem('phone', formData.get('phone'))
                         Swal.fire({
                             title: 'จองห้องสำเร็จ!',
                             icon: 'success'
                         }).then(() => {
                             window.location.href =
-                                `/bookingsearch?phone=${formData.get('phone')}&card_id=${formData.get('card_id')}`;
+                                `/bookingsearch?phone=${formData.get('phone')}&four_id=${formData.get('four_id')}`;
                         })
                     }
                 }, 500);

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Image;
+use Intervention\Image\Facades\Image;
 
 class RoomController extends Controller
 {
@@ -38,9 +38,9 @@ class RoomController extends Controller
         try {
             $newData = Room::create([
                 'name' => $request->name,
-                'price' => (int)$request->price,
-                'adult' => (int)$request->adult,
-                'children' => (int)$request->children,
+                'price' => (int) $request->price,
+                'adult' => (int) $request->adult,
+                'children' => (int) $request->children,
                 'area' => $request->area,
                 'description' => $request->description,
                 'feature_ids' => $feature_ids,
@@ -59,7 +59,7 @@ class RoomController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -79,7 +79,7 @@ class RoomController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Room not found!.'
+                    'description' => 'Room not found!.',
                 ], 404);
             }
 
@@ -94,7 +94,7 @@ class RoomController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -109,16 +109,16 @@ class RoomController extends Controller
             'children' => 'numeric|required',
             'area' => 'numeric|required',
             'description' => 'string|nullable',
-            'feature_ids' => 'array|required', // [1 ,2 ,4 ,6]
-            'fac_ids' => 'array|required', // [1 ,2 ,4 ,6]
+            'feature_ids' => 'array|required',
+            'fac_ids' => 'array|required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendErrorValidators('Invalid params', $validator->errors());
         }
 
-        $feature_ids = implode(', ', $request->feature_ids); // [1,2,4,6] => "1,2,4,6"
-        $fac_ids = implode(', ', $request->fac_ids); // [1,2,4,6] => "1,2,4,6"
+        $feature_ids = implode(', ', $request->feature_ids);
+        $fac_ids = implode(', ', $request->fac_ids);
 
         try {
             DB::beginTransaction();
@@ -129,7 +129,7 @@ class RoomController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Room not found!.'
+                    'description' => 'Room not found!.',
                 ], 404);
             }
 
@@ -154,7 +154,7 @@ class RoomController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -177,20 +177,35 @@ class RoomController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Room display has been updated successfully.'
+                'description' => 'Room display has been updated successfully.',
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
 
+    public function deleteRoom(Request $request, $id)
+    {
+
+        $rooms = Room::where('id', $id)->first();
+
+        $rooms->delete();
+
+        return response([
+            'message' => 'ok',
+            'status' => true,
+            'description' => "Bank has been deleted successfully.",
+        ], 200);
+    }
+
     public function getGalleryById($id)
     {
+
         $room = Room::find($id);
         $gallery = $room->gallery;
 
@@ -250,7 +265,7 @@ class RoomController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Room not found!.'
+                    'description' => 'Room not found!.',
                 ], 404);
             }
 
@@ -272,7 +287,7 @@ class RoomController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -315,14 +330,14 @@ class RoomController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Gallery has been updated successfully.'
+                'description' => 'Gallery has been updated successfully.',
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }

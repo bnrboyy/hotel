@@ -11,36 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Image;
 
 class UserBookingController extends Controller
 {
-    public function deleteTempBooking(Request $request) // ลบ Booking temp
+   
+
+    public function createBookOrder(Request $request)
     {
-        try {
-            DB::beginTransaction();
 
-            TempBooking::where('temp_id', $request->temp_id)->delete();
-            session()->forget('temp_id');
-
-            DB::commit();
-            return response()->json([
-                'message' => 'success',
-                'status' => true,
-                'description' => 'Delete temp booking successfully.',
-            ], 201);
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json([
-                'message' => 'error',
-                'status' => false,
-                'errorsMessage' => $e->getMessage()
-            ], 501);
-        }
-    }
-
-    public function createBookOrder(Request $request) // สร้าง booking
-    {
         $validator = Validator::make($request->all(), [
             "image" => "image|required|mimes:jpeg,png,jpg",
             "fname" => "string|required",
@@ -48,23 +26,25 @@ class UserBookingController extends Controller
             "phone" => "string|required",
             "email" => "email|required",
             "card_id" => "numeric|required",
+            "four_id" => "numeric|required",
             "line_id" => "string|nullable",
             "checkin" => "string|required",
             "checkout" => "string|required",
             "room_id" => "numeric|required",
+            'g-recaptcha-response' => 'required|captcha', 
         ]);
 
         if ($validator->fails()) {
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => 'Invalid params!'
+                'errorMessage' => 'Invalid params!',
             ], 404);
         }
 
-        $room = Room::where(['id' => $request->room_id])->first(); // ค้นหาห้อง
+        $room = Room::where(['id' => $request->room_id])->first();
 
-        $isAvailable = $this->checkAvailableRoom($request, $room); // return true หรือ false
+        $isAvailable = $this->checkAvailableRoom($request, $room);
 
         if (!$isAvailable) {
             return response([
@@ -82,10 +62,10 @@ class UserBookingController extends Controller
             $booking_date = "";
             for ($i = 0; $i < $request->days; $i++) {
                 $booking_date .= "," . date('Y-m-d', strtotime($current_date));
-                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // บวกขึ้น 1 วัน
+                $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
             }
 
-            $files = $request->allFiles(); // ประกาศตัวแปรเก็บรูปภาพ
+            $files = $request->allFiles();
             $slip_image = "";
             if (isset($files['image'])) {
                 /* Upload Image */
@@ -108,19 +88,20 @@ class UserBookingController extends Controller
             $order->cus_phone = $request->phone;
             $order->email = $request->email;
             $order->card_id = $request->card_id;
+            $order->four_id = $request->four_id;
             $order->line_id = $request->line_id;
             $order->payment_type = "transfer";
-            $order->slip = $slip_image; // upload/frontoffice/slip/...png,jpg,jpeg
+            $order->slip = $slip_image;
             $order->save();
 
-            $this->sendLineNotify($order, $room);
+            $this->sendLineNotify($order, $room); //ส่งข้อความไปไลน์
             $this->removeTempBooking();
 
             DB::commit();
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Order has been created successfully.'
+                'description' => 'Order has been created successfully.',
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -129,12 +110,12 @@ class UserBookingController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
 
-    public function checkBookTimeout(Request $request) // ตรวจสอบเวลาการจอง
+    public function checkBookTimeout(Request $request)
     {
         $validator = Validator::make($request->all(), [
             "temp_id" => "string|required",
@@ -146,7 +127,7 @@ class UserBookingController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => 'Booking timeout!'
+                'errorMessage' => 'Booking timeout!',
             ], 408);
         }
 
@@ -170,5 +151,30 @@ class UserBookingController extends Controller
             'validate' => $validator->fails(),
             'diffminute' => $diffminute,
         ]);
+    }
+
+    
+    public function deleteTempBooking(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            TempBooking::where('temp_id', $request->temp_id)->delete();
+            session()->forget('temp_id');
+
+            DB::commit();
+            return response()->json([
+                'message' => 'success',
+                'status' => true,
+                'description' => 'Delete temp booking successfully.',
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'message' => 'error',
+                'status' => false,
+                'errorsMessage' => $e->getMessage(),
+            ], 501);
+        }
     }
 }

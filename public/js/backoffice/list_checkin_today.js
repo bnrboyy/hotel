@@ -1,76 +1,108 @@
-// new DataTable("#bookings");
+
 $(document).ready(function () {
-    $("#booking-all").DataTable({
+
+    $("#booking-today").DataTable({
         order: [], // กำหนด order เป็นรายการว่าง
     });
-
-    $("#booking-online").DataTable({
+    
+    $("#booking-date").DataTable({
         order: [], // กำหนด order เป็นรายการว่าง
     });
+    
+    
+ 
 
-    $("#booking-walkin").DataTable({
-        order: [], // กำหนด order เป็นรายการว่าง
-    });
+    $("#booking-today_wrapper").removeClass('d-none');
+    $("#booking-date_wrapper").addClass('d-none');
 
-    $("#booking-all_wrapper").removeClass('d-none');
-    $("#booking-online_wrapper").addClass('d-none');
-    $("#booking-walkin_wrapper").addClass('d-none');
-
-    $(".select-booking-type").change(function () {
+    $(".filterDate").change(function () {
         const type = this.value; //เอาค่าใน value
-        if (type === "all") {
-            $("#booking-all_wrapper").removeClass('d-none');
-            $("#booking-online_wrapper").addClass('d-none');
-            $("#booking-walkin_wrapper").addClass('d-none');
+        console.log(type);
+        if (type === null) {
+            $("#booking-today_wrapper").removeClass('d-none');
+            $("#booking-date_wrapper").addClass('d-none');
+           
 
-        } else if (type === "online") {
-            $("#booking-all_wrapper").addClass('d-none');
-            $("#booking-online_wrapper").removeClass('d-none');
-            $("#booking-walkin_wrapper").addClass('d-none');
-
-        } else {
-            $("#booking-all_wrapper").addClass('d-none');
-            $("#booking-online_wrapper").addClass('d-none');
-            $("#booking-walkin_wrapper").removeClass('d-none');
+        }  else {
+            $("#booking-today_wrapper").addClass('d-none');
+            $("#booking-date_wrapper").removeClass('d-none');
 
         }
+
+        
     });
 });
 
+
+
+// เลือกวันที่เช็คอิน
+function filterBookings() {
+    const filterDateInput = document.getElementById('filterDate');
+    const selectedDate = filterDateInput.value;
+    const options1 = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; // เพิ่ม minute };
+    const formattedSelectedDate = new Date(selectedDate).toLocaleDateString('th-TH', options1);
+
+    
+
+    const bookings = document.querySelectorAll('.table-booking tbody tr');
+
+    bookings.forEach(booking => {
+
+        const checkinText = booking.querySelector('.checkdete p:first-child').innerText;
+        // const checkinDate = new Date(checkinText).toLocaleDateString('th-TH', options);
+
+       
+        if (checkinText === formattedSelectedDate) {
+            booking.style.display = 'table-row';
+            
+
+        } else {
+            booking.style.display = 'none';
+        }
+    });
+}
+
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+const today = new Date().toLocaleDateString('th-TH', options);
+    document.getElementById('currentDate').innerText = today;
+
+
 //-----------------------------------------------------------//
 
-//วันเช็คอินเช็คเอาท์
-//รายการ checkin หลายรายการ แสดงวันที่ในทุกๆ รายการ
+// วันเช็คอินเช็คเอาท์
+// รายการ checkin หลายรายการ แสดงวันที่ในทุกๆ รายการ
 const checkdeteElements = document.querySelectorAll('.checkdete');
-const createAtElemants = document.querySelectorAll('.createAt');
-
 
 
 
 // วนลูปผ่านทุก checkdete element เพื่อแปลงวันที่ในทั้งสอง <p> เป็นภาษาไทย
 checkdeteElements.forEach(checkdeteElement => {
     // ดึงข้อความที่มีอยู่ใน <p> เพื่อให้ได้วันที่
-    const checkinText = checkdeteElement.querySelector('p:first-child').innerText;
-    const checkoutText = checkdeteElement.querySelector('p:last-child').innerText;
+    const checkinText1 = checkdeteElement.querySelector('p:first-child').innerText;
+    const checkoutText1 = checkdeteElement.querySelector('p:last-child').innerText;
 
 
     // แปลงข้อความวันที่เป็น Date object
-    const checkinDate = new Date(checkinText);
-    const checkoutDate = new Date(checkoutText);
+    const checkinDate1 = new Date(checkinText1);
+    const checkoutDate1 = new Date(checkoutText1);
 
 
     // กำหนดรูปแบบและภาษาที่ต้องการให้แสดง
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedCheckinDate = checkinDate.toLocaleDateString('th-TH', options);
-    const formattedCheckoutDate = checkoutDate.toLocaleDateString('th-TH', options);
+    const formattedCheckinDate1 = checkinDate1.toLocaleDateString('th-TH', options);
+    const formattedCheckoutDate1 = checkoutDate1.toLocaleDateString('th-TH', options);
 
 
     // แสดงวันที่ในรูปแบบภาษาไทย
-    checkdeteElement.querySelector('p:first-child').innerText = `เช็คอิน : ${formattedCheckinDate}`;
-    checkdeteElement.querySelector('p:last-child').innerText = `เช็คเอาท์ : ${formattedCheckoutDate}`;
+    checkdeteElement.querySelector('p:first-child').innerText = `${formattedCheckinDate1}`;
+    checkdeteElement.querySelector('p:last-child').innerText = `${formattedCheckoutDate1}`;
 
 });
 
+
+
+
+const createAtElemants = document.querySelectorAll('.createAt');
 // วันที่จอง
 createAtElemants.forEach(createAtElement => {
     // ดึงข้อความที่มีอยู่ใน <p> เพื่อให้ได้วันที่
@@ -93,6 +125,8 @@ createAtElemants.forEach(createAtElement => {
 
 
 //---------------------------------------------------------------//
+
+
 
 
 
@@ -135,16 +169,6 @@ function updateBookStatus(_el, _id) {
         .catch((err) => console.log(err));
 }
 
-function previewSlip(_src) {
-    Swal.fire({
-        imageUrl: `${_src}`,
-        imageWidth: 350,
-        // imageHeight: 400,
-        imageClass: "slide-img",
-        showConfirmButton: false,
-        animation: false,
-    });
-}
 
 function getBooking(_el, _id) {
     // console.log('el' , _el);
@@ -160,28 +184,4 @@ function getBooking(_el, _id) {
         })
         .catch((err) => console.log(err));
 }
-
-function deleteBooking(_el, _id) {
-
-    axios
-        .delete(`/admin/deletebooking/${_id}`)
-        .then(({ data }) => {
-            if (data.status) {
-                const row = _el.closest("tr");
-                toastr.success("ลบประวัติการจองสำเร็จ");
-
-                if (row) {
-                    // Get the table to which the row belongs
-                    const table = row.closest("table");
-                    // Delete the row from the table
-                    table.deleteRow(row.rowIndex);
-                }
-            }
-        })
-        .catch((err) => console.log(err));
-}
-
-
-
-
 

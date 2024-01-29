@@ -20,7 +20,7 @@ class AdminController extends Controller
             'username' => 'string|required',
             'email' => 'required|email|unique:admins',
             'password' => 'required',
-            'c_password' => 'required|same:password',
+            'c_password' => 'required|same:password', //same คือ ต้องเหมือนกับ password
             'admin_role' => 'string|required',
             'admin_status' => 'string|required',
         ]);
@@ -34,7 +34,7 @@ class AdminController extends Controller
             $adminCreated = Admin::create([
                 'username' => strtolower($request->username),
                 'email' => strtolower($request->email),
-                'password' => Hash::make($request->password),
+                'password' => Hash::make($request->password), //แปลงรหัสไม่ให้แสดง 4%£"%4+54$
                 'admin_role' => $request->admin_role,
                 'status' => $request->admin_status,
                 'profile_image' => $request->admin_role === "แอดมินสูงสุด" ? '/images/backoffice/superadmin.png' : '/images/backoffice/admin.png',
@@ -45,55 +45,66 @@ class AdminController extends Controller
                 'message' => 'success',
                 'status' => true,
                 'description' => 'Admin account has been created successfully.',
-                'account' => $adminCreated
+                'account' => $adminCreated,
             ], 201);
         } catch (Exception $e) {
             DB::rollback();
             return response()->json([
                 'message' => 'error',
                 'status' => false,
-                'errorsMessage' => $e->getMessage()
+                'errorsMessage' => $e->getMessage(),
             ], 501);
         }
     }
 
     public function signIn(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+{
+    // ตรวจสอบความถูกต้องของข้อมูลแบบฟอร์ม
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required',
+        'g-recaptcha-response' => 'required|captcha', // เพิ่มตรวจสอบ reCAPTCHA response
+    ]);
 
-        if ($validator->fails()) {
-            return $this->sendErrorValidators('Invalid params', $validator->errors());
-        }
-
-        $adminUser = Admin::where(['email' => $request->email])->first();
-
-        if ($adminUser->status === "ปิดใช้งาน") {
-            return response([
-                'message' => 'error',
-                'status' => false,
-                'errorMessage' => 'Forbidden'
-            ], 403);
-        }
-
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::guard('admin')->user();
-            return response([
-                'message' => 'success',
-                'status' => true,
-                'description' => 'Sign-In Successfully!',
-                'user_name' => $user,
-            ], 200);
-        } else {
-            return response([
-                'message' => 'error',
-                'status' => false,
-                'description' => 'Authorization failed!'
-            ], 401);
-        }
+    if ($validator->fails() || empty($request->input('g-recaptcha-response'))) {
+        // เงื่อนไขที่เพิ่มขึ้น: ถ้าไม่ได้กด reCAPTCHA หรือ reCAPTCHA response ว่างเปล่า
+        return response([
+            'message' => 'error',
+            'status' => false,
+            'errorMessage' => 'reCAPTCHA',
+        ], 404);
     }
+
+
+    $adminUser = Admin::where(['email' => $request->email])->first();
+
+    if ($adminUser->status === "ปิดใช้งาน") {
+        return response([
+            'message' => 'error',
+            'status' => false,
+            'errorMessage' => 'Forbidden',
+        ], 403);
+    }
+
+   
+
+    // ทำการตรวจสอบการลงชื่อเข้าใช้ด้วย reCAPTCHA
+    if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        $user = Auth::guard('admin')->user();
+        return response([
+            'message' => 'success',
+            'status' => true,
+            'description' => 'Sign-In Successfully!',
+            'user_name' => $user,
+        ], 200);
+    } else {
+        return response([
+            'message' => 'error',
+            'status' => false,
+            'description' => 'Authorization failed!',
+        ], 401);
+    }
+}
 
     public function onLogout(Request $request)
     {
@@ -123,7 +134,7 @@ class AdminController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Admin not found!.'
+                    'description' => 'Admin not found!.',
                 ], 404);
             }
 
@@ -138,7 +149,7 @@ class AdminController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
@@ -161,23 +172,18 @@ class AdminController extends Controller
             DB::beginTransaction();
 
             $admin = Admin::find($request->admin_id);
-            $superadmin = Admin::where('admin_role', 'แอดมินสูงสุด')->count();
-            $inactiveAdmin = Admin::where('status', 'เปิดใช้งาน')->count();
+            $superadmin = Admin::where('admin_role', 'แอดมินสูงสุด')
+                ->where('status', 'เปิดใช้งาน')
+                ->count();
 
-            if ($inactiveAdmin <= 1 && $admin->status === 'เปิดใช้งาน' && $request->admin_status === "ปิดใช้งาน") {
-                return response([
-                    'message' => 'error',
-                    'status' => false,
-                    'description' => 'ต้องเปิดใช้งานอย่างน้อย 1 บัญชี',
-                ], 403);
-            }
-
-            if ($superadmin <= 1 && $admin->admin_role === 'แอดมินสูงสุด' && $request->admin_role === "แอดมิน") {
-                return response([
-                    'message' => 'error',
-                    'status' => false,
-                    'description' => 'ต้องมีแอดมินสูงสุดอย่างน้อย 1 บัญชี',
-                ], 403);
+            if ($superadmin <= 1) {
+                if ($admin->admin_role === 'แอดมินสูงสุด' && $admin->status === 'เปิดใช้งาน' && $request->admin_status === "ปิดใช้งาน") {
+                    return response([
+                        'message' => 'error',
+                        'status' => false,
+                        'description' => 'ต้องแอดมินสูงสุดอย่างน้อย 1 บัญชี',
+                    ], 403);
+                }
             }
 
             if (!$admin) {
@@ -193,21 +199,20 @@ class AdminController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Admin has been updated successfully.'
+                'description' => 'Admin has been updated successfully.',
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
 
     public function deleteAdmin(Request $request, $id)
     {
-
 
         $count_Admin = Admin::count();
         $superadmin = Admin::where('admin_role', 'แอดมินสูงสุด')->count();
@@ -220,7 +225,6 @@ class AdminController extends Controller
                 'description' => "ไม่สามารถลบข้อมูลแถวสุดท้ายได้",
             ], 403);
         }
-
 
         if ($admin->admin_role === 'แอดมินสูงสุด' && $superadmin <= 1) {
             return response([
@@ -238,6 +242,5 @@ class AdminController extends Controller
             'description' => "Bank has been deleted successfully.",
         ], 200);
     }
-
 
 }

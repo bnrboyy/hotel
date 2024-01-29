@@ -16,6 +16,8 @@
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
 
 
+{{-- reCaptcha --}}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 
 

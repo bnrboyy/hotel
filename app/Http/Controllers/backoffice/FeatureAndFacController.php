@@ -177,7 +177,7 @@ class FeatureAndFacController extends Controller
     public function getFeatureById(Request $request, $id)
     {
         try {
-            $feature = Feature::where(['id' => $id])->first();
+            $feature = Feature::where(['id' => $id])->get()->first();
 
             if (!$feature) {
                 return response([
@@ -247,7 +247,7 @@ class FeatureAndFacController extends Controller
         try {
             DB::beginTransaction();
 
-            $data = $request->only(['display']); // ['display' => true]
+            $data = $request->only(['display']);
             $facUpdate = Facilitie::find($id);
 
             if (!$facUpdate) {
