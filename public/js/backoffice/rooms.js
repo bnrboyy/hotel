@@ -190,23 +190,8 @@ function updateRoom(event) {
 }
 
 function deleteRoom(_id) {
-
-
-    axios.delete(`/admin/deleteroom/${_id}`).then((response) => {
-        if (response.status === 200) {
-            Swal.fire({
-                icon: "success",
-                title: "ลบห้องสำเร็จ",
-            }).then(() => window.location.reload());
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "ลบห้องไม่สำเร็จ",
-            }).then(() => window.location.reload());
-        }
-    });
+    console.log(_id)
 }
-
 
 async function getGallery(_id) {
     const response = await axios.get(`admin/gallery/${_id}`)

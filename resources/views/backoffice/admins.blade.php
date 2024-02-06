@@ -9,7 +9,7 @@
     <div class="d-flex flex-column gap-3">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
-                <div class="mt-5">
+                <div class="">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title m-0 mb-4">
                             #ผู้ดูแลระบบทั้งหมด
@@ -171,11 +171,8 @@
 @endsection
 
 @section('script')
-    {{-- <script src="/js/backoffice/bank.js"></script> --}}
-
     <script>
         new DataTable("#admin");
-
         const modals = document.querySelectorAll(".modal");
         const admin_id = document.querySelector("#admin-id");
         const username = document.querySelectorAll("#username");
@@ -226,7 +223,7 @@
             const formData = new FormData(form);
 
             axios
-                .post("/admin/admincreate", formData)
+                .post("admin/admincreate", formData)
                 .then(({
                     data
                 }) => {
@@ -241,6 +238,7 @@
                 .catch(({
                     response
                 }) => {
+                    console.log(response)
                     close_modal.forEach((btn) => btn.click());
                     if (response.status === 422) {
                         toastr.error("Email นี้มีผู้ใช้งานอยู่แล้ว");
@@ -280,8 +278,6 @@
             axios
                 .post(`/admin/adminupdate`, formData)
                 .then(({
-
-
                     data
                 }) => {
                     if (data.status) {

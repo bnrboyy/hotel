@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\TempBooking;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class Controller extends BaseController
 {
@@ -21,11 +23,11 @@ class Controller extends BaseController
         return response()->json([
             'status' => false,
             'message' => $message,
-            'errorMessage' => $errorMessages,
+            'errorMessage' => $errorMessages
         ], 422);
     }
 
-    public function uploadImage($folderPath = "upload/", $image = null, $preName = "", $postName = "", $customName = null)
+    public function uploadImage($folderPath = "upload/", $image = NULL, $preName = "", $postName = "", $customName = NULL)
     {
         if ($image) {
             /* Checking folder */
@@ -33,11 +35,11 @@ class Controller extends BaseController
                 File::makeDirectory($folderPath, $mode = 0777, true, true);
             }
             $extName = "." . $image->extension();
-            $name = ($customName !== null) ? str_replace($extName, "", $customName) : time();
+            $name = ($customName !== NULL) ? str_replace($extName, "", $customName) : time();
             $fullName = $preName . $name . $postName;
             $newImageName = $fullName . $extName;
             if (file_exists($folderPath . $newImageName)) {
-                for ($ii = 1; true; $ii++) {
+                for ($ii = 1; true; $ii++) { // ถ้าชื่อไฟล์ซ้ำ /room1.png => room1(7).png (upload/frontoffice/slip/...)
                     $editNameDuplicate = $fullName . "({$ii})" . $extName;
                     if (!file_exists($folderPath . $editNameDuplicate)) {
                         $newImageName = $editNameDuplicate;
@@ -46,7 +48,7 @@ class Controller extends BaseController
                 }
             }
             if ($image->move($folderPath, $newImageName)) {
-                return $folderPath . $newImageName;
+                return $folderPath . $newImageName; // upload/frontoffice/slip/...
             }
         }
         return false;
@@ -62,6 +64,10 @@ class Controller extends BaseController
         $secondsDiff = $end_timeStamp - $start_timeStamp;
         $diff_date = $secondsDiff / (60 * 60 * 24);
         $isAvailable = true;
+
+        $now = Carbon::now(); // วันเวลาปัจจุบัน
+        $tempLimit = $now->subMinutes(16); // ลบไป 16 นาที
+        $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
 
         $bookings = DB::table('bookings')
             ->select('bookings.*')
@@ -82,43 +88,55 @@ class Controller extends BaseController
             }
         }
 
+
+        /* กรองห้องที่กำลังจะชำละเงินภายใน 15 นาที */
+        if (count($tempBooking) > 0) { // temp booking
+            foreach ($tempBooking as $temp) {
+                $current_date = $request->checkin;
+                for ($i = 0; $i < $diff_date; $i++) {
+                    if (Str::contains($temp->booking_date, $current_date) && $temp->room_id === $room->id && $temp->temp_id !== session('temp_id')) { // เปรียบเทียบ String
+                        $isAvailable = false;
+                    }
+                    $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                }
+            }
+        }
+
         return $isAvailable;
     }
 
     public function sendLineNotify(Booking $booking, Room $room)
     {
-        // dd($booking);
         $message = "👇👇 มีรายการจองห้องพักใหม่ 👇👇 \n\n"
-        . "No. ►► " . $booking->booking_number . "\n"
-        . "เลขอ้างอิงการจอง ►► " . $booking->card_id . "\n"
-        . "ประเภทการจอง ►► " . "【 Online 】" . "\n"
-        // . "สถานะ ►► " . "รอการตรวจสอบ" . "\n"
-        . "ชื่อ-นามสกุล ผู้จอง ►► " . $booking->cus_fname . " " . $booking->cus_lname . "\n"
-        . "เบอร์โทร ►► " . $booking->cus_phone . "\n"
-        . "ห้องพัก ►► " . $room->name . "\n"
-        . "เช็คอิน ►► " . $booking->date_checkin . "\n"
-        . "เช็คเอาท์ ►► " . $booking->date_checkout . "\n"
-        . "ระยะเวลาเข้าพัก ►► " . $booking->days . ' วัน' . "\n"
-        . "ราคารวม ►► " . $booking->price . ' บาท' . "\n";
+            . "No. ►► " . $booking->booking_number . "\n"
+            . "เลขอ้างอิงการจอง ►► " . $booking->card_id . "\n"
+            . "ประเภทการจอง ►► " . "【 Online 】" . "\n"
+            // . "สถานะ ►► " . "รอการตรวจสอบ" . "\n"
+            . "ชื่อ-นามสกุล ผู้จอง ►► " . $booking->cus_fname . " " . $booking->cus_lname . "\n"
+            . "เบอร์โทร ►► " . $booking->cus_phone . "\n"
+            . "ห้องพัก ►► " . $room->name . "\n"
+            . "เช็คอิน ►► " . $booking->date_checkin . "\n"
+            . "เช็คเอาท์ ►► " . $booking->date_checkout . "\n"
+            . "ระยะเวลาเข้าพัก ►► " . $booking->days . ' วัน' . "\n"
+            . "ราคารวม ►► " . $booking->price . ' บาท' . "\n";
 
         $LINE_API = "https://notify-api.line.me/api/notify";
-        $LINE_TOKEN = "m70EtTZS2dna8TPfXIaTdK05bhVZN1oWgSoaqJtJzRz";
+        $LINE_TOKEN = "dVyvQN5pvqOLLOna8JDTck2rvI43Dr4vfP4rcddMETr";
         $queryData = array('message' => $message);
         $queryData = http_build_query($queryData, '', '&');
         $headerOptions = array(
             'http' => array(
                 'method' => 'POST',
                 'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
-                . "Authorization: Bearer " . $LINE_TOKEN . "\r\n"
-                . "Content-Length: " . strlen($queryData) . "\r\n",
-                'content' => $queryData,
-            ),
+                    . "Authorization: Bearer " . $LINE_TOKEN . "\r\n"
+                    . "Content-Length: " . strlen($queryData) . "\r\n",
+                'content' => $queryData
+            )
         );
         $context = stream_context_create($headerOptions);
-        $result = file_get_contents($LINE_API, false, $context);
+        $result = file_get_contents($LINE_API, FALSE, $context);
         $res = json_decode($result);
         return $res;
-
     }
 
     public function removeTempBooking()

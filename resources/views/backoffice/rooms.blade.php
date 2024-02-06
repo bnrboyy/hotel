@@ -40,10 +40,10 @@
                             <tr>
                                 <td style="width: 100px;">{{ $room->id }}</td>
                                 <td style="width: 200px;">{{ $room->name }}</td>
-                                <td style="width: 200px;">{{ $room->price }}</td>
+                                <td>{{ $room->price }}</td>
                                 <td style="width: 200px;">{{ $room->adult }}</td>
                                 <td style="width: 200px;">{{ $room->children }}</td>
-                                <td style="width: 200px;">{{ $room->area }}</td>
+                                <td>{{ $room->area }}</td>
                                 <td style="width: 200px;">
                                     <div class="form-check form-switch">
                                         <input onchange="upd_room_display({{ $room->id }}, this.checked)"
@@ -57,14 +57,10 @@
                                         <button class="btn-modal btn btn-warning shadow-none" data-bs-toggle="modal"
                                             onclick="getRoom('{{ $room->id }}')" data-bs-target="#roomedit-s"><i
                                                 class="bi bi-pencil-square"></i></button>
-                                        <button onclick="getGallery('{{ $room->id }}')"
-                                            class="btn-modal btn btn-info shadow-none" data-bs-toggle="modal"
+                                        <button onclick="getGallery('{{ $room->id }}')" class="btn-modal btn btn-info shadow-none" data-bs-toggle="modal"
                                             data-bs-target="#images-s"><i class="bi bi-images"></i></button>
-
-
-                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด')
-                                            <button class="btn btn-danger shadow-none"
-                                                onclick="deleteRoom({{ $room->id }})"><i
+                                        @if ($shareUser->admin_role === 'แอดมินสูงสุด' && false)
+                                            <button class="btn btn-danger shadow-none" onclick="deleteRoom({{ $room->id }})"><i
                                                     class="bi bi-trash-fill"></i></button>
                                         @endif
                                     </div>
@@ -330,6 +326,7 @@
             </form>
         </div>
     </div>
+
 @endsection
 
 @section('script')

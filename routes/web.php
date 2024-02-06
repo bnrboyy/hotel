@@ -22,13 +22,11 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
- */
+*/
 
-/* views */
-
+/* views หน้าบ้าน */
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 Route::get('/facilities', [FrontController::class, 'facilitiesPage'])->name('facilities');
-Route::get('/about', [FrontController::class, 'aboutPage'])->name('about');
 Route::get('/bookingsearch', [FrontController::class, 'bookingSearchPage'])->name('bookingsearch');
 Route::get('/contactus', [FrontController::class, 'contactPage'])->name('contactus');
 Route::get('/roomdetails', [FrontController::class, 'roomDetailsPage'])->name('room-details');
@@ -39,10 +37,6 @@ Route::get('/rooms', [FrontController::class, 'roomPage'])->name('rooms');
 Route::get('/checkbooktimeout', [UserBookingController::class, 'checkBookTimeout']);
 Route::delete('/deletetempbook/{temp_id}', [UserBookingController::class, 'deleteTempBooking']);
 Route::post('/confirmbooking', [UserBookingController::class, 'createBookOrder']);
-
-/* Route middleware users */
-Route::middleware('auth:web')->group(function () {
-});
 
 Route::prefix('admin')->group(function () {
     /* Views */
@@ -98,13 +92,12 @@ Route::prefix('admin')->group(function () {
             Route::get('/roomone/{id}', [RoomController::class, 'getRoomById']);
             Route::get('/gallery/{id}', [RoomController::class, 'getGalleryById']);
             Route::post('/room/create', [RoomController::class, 'createRoom']);
-            Route::delete('/deleteroom/{id}', [RoomController::class, 'deleteRoom']);
-
             Route::post('/room/update', [RoomController::class, 'updateRoom']);
             Route::post('/room/addimage', [RoomController::class, 'addImage']);
             Route::patch('/updateroomdisplay/{id}', [RoomController::class, 'updateRoomDisplay']);
             Route::patch('/updategaldefault/{id}', [RoomController::class, 'updateGalleryDefault']);
             Route::delete('/deletegal/{id}', [RoomController::class, 'deleteGallery']);
+
 
             /* Admins */
             Route::get('/adminone/{id}', [AdminController::class, 'getAdminById']);
@@ -113,11 +106,10 @@ Route::prefix('admin')->group(function () {
             Route::delete('/deleteadmin/{id}', [AdminController::class, 'deleteAdmin']);
 
             /* booking */
-           
             Route::post('/updatebookstatus', [BookingController::class, 'updatebookingStatus']);
             Route::get('/bookingone/{id}', [BookingController::class, 'getBookingById']);
             Route::post('/prebooking', [BookingController::class, 'preBooking']);
-            Route::delete('/deletebooking/{id}', [BookingController::class, 'deleteBooking']);
+
             Route::post('/confirmbooking', [BookingController::class, 'createBookOrderAdmin']);
         });
     });

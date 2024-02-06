@@ -11,6 +11,7 @@ use App\Models\Facilitie;
 use App\Models\Feature;
 use App\Models\Gallery;
 use App\Models\Room;
+use App\Models\Settings;
 use App\Models\TempBooking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,12 +65,6 @@ class FrontController extends Controller
         ]);
     }
 
-    public function aboutPage(Request $request)
-    {
-        $this->removeTempBooking();
-        return view('frontoffice.about');
-    }
-
     public function contactPage(Request $request)
     {
         $this->removeTempBooking();
@@ -103,8 +98,8 @@ class FrontController extends Controller
             ]);
         }
 
-        $now = Carbon::now();
-        $tempLimit = $now->subMinutes(16);
+        $now = Carbon::now(); // วันเวลาปัจจุบัน
+        $tempLimit = $now->subMinutes(16); // ลบไป 16 นาที
 
         $tempBooking = TempBooking::where('created_at', '>', $tempLimit)->get(); // temp booking ที่ล็อกไว้ให้ชำละเงิน
         $rooms = Room::where(['display' => 1])->orderBy('price', 'ASC')->get();
@@ -125,17 +120,17 @@ class FrontController extends Controller
 
         if (!$validator->fails()) {
             // หาจำนวนคืนที่เข้าพัก
-            $start_date = $request->checkin;
-            $end_date = $request->checkout;
-            $start_timeStamp = strtotime($start_date);
-            $end_timeStamp = strtotime($end_date);
-            $secondsDiff = $end_timeStamp - $start_timeStamp;
-            $diff_date = $secondsDiff / (60 * 60 * 24);
+            $start_date = $request->checkin; // 2023-12-14
+            $end_date = $request->checkout; // 2023-12-15
+            $start_timeStamp = strtotime($start_date); //17474834834
+            $end_timeStamp = strtotime($end_date); //17474834834
+            $secondsDiff = $end_timeStamp - $start_timeStamp; // ผลต่างที่เป็นวินาที
+            $diff_date = $secondsDiff / (60 * 60 * 24); // ได้จำนวนวัน
 
-            $bookings = DB::table('bookings')
+            $bookings = DB::table('bookings') // หาการจอง
                 ->select('bookings.*')
                 ->where(function ($query) use ($request, $diff_date) {
-                    $current_date = $request->checkin;
+                    $current_date = $request->checkin; // เริ่ม 2023-12-14
                     for ($i = 0; $i < $diff_date; $i++) {
                         $query->orWhere('booking_date', 'like', '%' . $current_date . '%');
                         $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
@@ -144,7 +139,8 @@ class FrontController extends Controller
                 ->whereIn('status_id', [1, 2, 3])
                 ->get();
 
-            if (count($bookings) > 0) {
+            /* กรองห้องว่าง */
+            if (count($bookings) > 0) { // ถ้ามี booking ซ้ำ เอาห้องที่ตรงกันออก
                 foreach ($bookings as $book_key => $book_value) {
                     foreach ($rooms as $room_key => $room_value) {
                         if (($room_value->id === $book_value->room_id) || ($room_value->adult < $request->adult || $room_value->children < $request->children)) {
@@ -152,7 +148,7 @@ class FrontController extends Controller
                         }
                     }
                 }
-            } else { // กรองจำนวนผู้เข้าพัก
+            } else { // ถ้ามี booking ไม่ซ้ำ กรองจำนวนผู้เข้าพัก
                 foreach ($rooms as $room_key => $room_value) {
                     if (($room_value->adult < $request->adult || $room_value->children < $request->children)) {
                         unset($roomAvailable[$room_key]);
@@ -160,6 +156,7 @@ class FrontController extends Controller
                 }
             }
 
+            /* กรองห้องที่กำลังจะชำละเงินภายใน 15 นาที */
             if (count($tempBooking) > 0) { // temp booking
                 $roomTemp_ids = [];
 
@@ -167,7 +164,7 @@ class FrontController extends Controller
                     $current_date = $request->checkin;
                     for ($i = 0; $i < $diff_date; $i++) {
                         if (Str::contains($temp->booking_date, $current_date)) { // เปรียบเทียบ String
-                            $roomTemp_ids[] = $temp->room_id;
+                            $roomTemp_ids[] = $temp->room_id; // [1,2,3]
                         }
                         $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
                     }
@@ -299,7 +296,6 @@ class FrontController extends Controller
             'checkin' => 'string|required',
             'checkout' => 'string|required',
             'id' => 'numeric|required',
-            
         ]);
 
         $now = Carbon::now();
@@ -354,6 +350,7 @@ class FrontController extends Controller
         $room->features = $features;
         $room->facs = $facs;
 
+
         // หาจำนวนคืนที่เข้าพัก
         $start_date = $request->checkin;
         $end_date = $request->checkout;
@@ -376,7 +373,6 @@ class FrontController extends Controller
             'checkin' => date('d-m-Y', strtotime($request->checkin)),
             'checkout' => date('d-m-Y', strtotime($request->checkout)),
             'diff_date' => $diff_date,
-            'ราคา/คืน' => $room->price,
             'isAvailable' => $isAvailable,
             'bank_details' => $bank_details,
             'temp_id' => session('temp_id'),
@@ -388,7 +384,7 @@ class FrontController extends Controller
         $this->removeTempBooking();
         $validator = Validator::make($request->all(), [
             'phone' => 'numeric|required',
-            'four_id' => 'numeric|required',
+            'card_id' => 'numeric|required',
         ]);
 
         if ($validator->fails()) {
@@ -398,11 +394,9 @@ class FrontController extends Controller
             ]);
         }
 
-        $contactUs = Contact::get()->first();
-
         $bookings = Booking::join('booking_statuses', 'booking_statuses.id', '=', 'bookings.status_id')
             ->join('rooms', 'rooms.id', '=', 'bookings.room_id')
-            ->where(['cus_phone' => $request->phone, 'four_id' => $request->four_id])
+            ->where(['cus_phone' => $request->phone, 'card_id' => $request->card_id])
             ->select('bookings.*', 'booking_statuses.name AS status_name', 'booking_statuses.bg_color AS bg_color', 'rooms.name AS room_title')
             ->orderBy('bookings.status_id', 'ASC')
             ->orderBy('bookings.booking_number', 'DESC')
@@ -412,10 +406,10 @@ class FrontController extends Controller
 
         return view('frontoffice.booking-search', [
             'bookings' => $bookings,
-            'contactUs' => $contactUs,
             'temp_id' => session('temp_id'),
         ]);
     }
+
 
     /* Private Function */
     private function createTempBooking(Request $request)

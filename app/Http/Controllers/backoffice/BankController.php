@@ -44,7 +44,7 @@ class BankController extends Controller
                 'account_name' => $request->account_name,
                 'account_number' => $request->account_number,
                 'display' => true,
-                'priority' => (int) $request->priority,
+                'priority' => (int)$request->priority,
                 'bank_image' => $image,
             ]);
 
@@ -58,7 +58,7 @@ class BankController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
@@ -81,14 +81,14 @@ class BankController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Bank display has been updated successfully.',
+                'description' => 'Bank display has been updated successfully.'
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
@@ -102,7 +102,7 @@ class BankController extends Controller
                 return response([
                     'message' => 'error',
                     'status' => false,
-                    'description' => 'Bank not found!.',
+                    'description' => 'Bank not found!.'
                 ], 404);
             }
 
@@ -117,7 +117,7 @@ class BankController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
@@ -157,9 +157,7 @@ class BankController extends Controller
                 return response()->json(['message' => 'Bank not found'], 404);
             }
 
-            if (isset($files['image'])) {
-                $bank->bank_image = $image;
-            }
+            if (isset($files['image'])) $bank->bank_image = $image;
 
             $bank->bank_name = $request->bankname;
             $bank->account_name = $request->account_name;
@@ -171,20 +169,21 @@ class BankController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Bank has been updated successfully.',
+                'description' => 'Bank has been updated successfully.'
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
 
     public function deleteBank(Request $request, $id)
     {
+
 
         $count_bank = Bank::count();
         if ($count_bank <= 1) {

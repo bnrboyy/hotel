@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backoffice;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Booking;
 use App\Models\BookingStatus;
 use App\Models\Facilitie;
@@ -10,7 +11,7 @@ use App\Models\Feature;
 use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -44,7 +45,7 @@ class BookingController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
@@ -108,7 +109,7 @@ class BookingController extends Controller
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
@@ -128,7 +129,7 @@ class BookingController extends Controller
 
         if ($validator->fails() || (($checkin_timestamp !== false && $checkin_timestamp < $current_timestamp) || ($checkout_timestamp !== false && $checkout_timestamp < $checkin_timestamp) || ($checkin_timestamp !== false && $checkin_timestamp === $checkout_timestamp))) {
             return response([
-                'message' => 'Invalid params',
+                'message' => 'Invalid params'
             ], 401);
         }
 
@@ -136,7 +137,7 @@ class BookingController extends Controller
 
         if (!$room) {
             return response([
-                'message' => 'room not found',
+                'message' => 'room not found'
             ], 200);
         }
 
@@ -157,20 +158,19 @@ class BookingController extends Controller
         $isAvailable = $this->checkAvailableRoom($request, $room);
 
         $preBook = [
-            'ห้อง : ' . $room->name,
-            'เช็คอิน : ' . date('d-m-Y', strtotime($request->checkin)),
-            'เช็คเอาท์ :' . ' ' . date('d-m-Y', strtotime($request->checkout)),
-            'คืน : ' . $diff_date,
-            'ราคา/คืน :' . $room->price,
-            'ราคาทั้งหมด : ' . $room->price * $diff_date . ' ฿',
+            'Room : ' . $room->name,
+            'Check-in : ' . date('d-m-Y', strtotime($request->checkin)),
+            'Check-out :' . ' ' . date('d-m-Y', strtotime($request->checkout)),
+            'Day : ' . $diff_date,
+            'Price : ' . $room->price * $diff_date . ' ฿',
         ];
 
         $preValue = [
             $room->id,
             date('Y-m-d', strtotime($request->checkin)),
             date('Y-m-d', strtotime($request->checkout)),
-            (int) $diff_date,
-            (int) $room->price,
+            (int)$diff_date,
+            (int)$room->price,
         ];
 
         return response([
@@ -196,7 +196,6 @@ class BookingController extends Controller
             "phone" => "string|required",
             "email" => "email|required",
             "card_id" => "numeric|required",
-            "four_id" => "numeric|required",
             "checkin" => "string|required",
             "checkout" => "string|required",
         ]);
@@ -226,7 +225,7 @@ class BookingController extends Controller
                 $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
             }
 
-            $price = (int) $request->price_per_date * (int) $request->days;
+            $price = (int)$request->price_per_date * (int)$request->days;
 
             $order = new Booking();
             $order->room_id = $request->room_id;
@@ -243,7 +242,6 @@ class BookingController extends Controller
             $order->cus_phone = $request->phone;
             $order->email = $request->email;
             $order->card_id = $request->card_id;
-            $order->four_id = $request->four_id;
             $order->payment_type = $request->payment_type;
             // $order->slip = $slip_image;
             $order->save();
@@ -251,35 +249,14 @@ class BookingController extends Controller
             return response([
                 'message' => 'ok',
                 'status' => true,
-                'description' => 'Order walk-in has been created successfully.',
+                'description' => 'Order walk-in has been created successfully.'
             ], 201);
         } catch (Exception $e) {
             return response([
                 'message' => 'error',
                 'status' => false,
-                'errorMessage' => $e->getMessage(),
+                'errorMessage' => $e->getMessage()
             ], 500);
         }
     }
-
-    public function deleteBooking(Request $request, $id)
-    {
-
-        // ค้นหาข้อมูลการจองที่ต้องการลบจาก ID
-        $booking = Booking::where('id', $id)->first();
-
-        if (file_exists($booking->slip)) {
-            File::delete($booking->slip);
-
-        }
-
-        $booking->delete();
-
-        return response([
-            'message' => 'ok',
-            'status' => true,
-            'description' => "booking has been deleted successfully.",
-        ], 200);
-    }
-
 }

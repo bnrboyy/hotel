@@ -1,7 +1,6 @@
 @extends('backoffice.layouts.main-layout')
 
 @section('style')
-    <link rel="stylesheet" href="css/backoffice/booking.css">
 @endsection
 
 @section('content')
@@ -10,10 +9,6 @@
         <i class="bi bi-building-fill-check fs-3 me-2"></i>
         <h3 class="">จองห้องแบบ Walk-in</h3>
     </div>
-
-    <div id="calendar"></div>
-   
-
     <div class="row">
         <div class="col-lg-4 col-md-12 mb-lg-0 mb-4 px-lg-rounded">
             <div class="container-fluid flex-lg-column bg-white shadow py-2 rounded">
@@ -128,23 +123,12 @@
                                 style="height: 40px; font-size: 18px;">จองห้อง</button>
                             <button data-bs-toggle="modal" data-bs-target="#bookingform-s"
                                 class="btn-modal btn-sm btn-form-modal w-100 text-white custom-bg shadow-none mb-2 d-none"></button>
-
-      
-                                   
-
-
-                                
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
-
-
-
-
- 
 
     <!-- Booking form Modal -->
     <div class="modal fade" id="bookingform-s" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -191,28 +175,24 @@
                                 </div>
                                 <div class="col-lg-6 col-12">
                                     <div class="mt-3">
-                                        <label class="form-label"
-                                            style="font-weight: 500;">*เลขบัตรประจำตัวประชาชน</label>
+                                        <label class="form-label" style="font-weight: 500;">*เลขอ้างอิงการจอง</label>
                                         <input name="card_id" type="number" class="form-control form-room shadow-none"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                            onKeyPress="if(this.value.length>=13) return false;" minlength="13" required>
-                                        <input type="hidden" id="four_id_input" name="four_id" value="">
+                                            onKeyPress="if(this.value.length>=4) return false;" minlength="4" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12 mt-3">
                                     <label class="form-label" style="font-weight: 500;">*การชำระเงิน</label>
                                     <div class="form-check">
-                                        <input class="form-check-input shadow-none" type="radio" name="payment_type"
-                                            value="cash" id="cash" checked>
+                                        <input class="form-check-input shadow-none" type="radio" name="payment_type" value="cash" id="cash" checked>
                                         <label class="form-check-label" for="cash">
-                                            เงินสด
+                                          เงินสด
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input shadow-none" type="radio" name="payment_type"
-                                            value="transfer" id="transfer">
+                                        <input class="form-check-input shadow-none" type="radio" name="payment_type" value="transfer" id="transfer">
                                         <label class="form-check-label" for="transfer">
-                                            โอนจ่าย
+                                          โอนจ่าย
                                         </label>
                                     </div>
                                 </div>
@@ -224,7 +204,6 @@
                                             <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
                                             <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
                                             <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
                                             <h5 class="text-prebook" style="font-weight: 500;"></h5>
                                         </div>
                                     </div>
@@ -234,74 +213,10 @@
 
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button onclick="closeModal()" type="button"
-                            class="btn-close-modal btn bg-secondary text-white shadow-none"
+                        <button onclick="closeModal()" type="button" class="btn-close-modal btn bg-secondary text-white shadow-none"
                             data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit"
-                            class="btn btn-confirm custom-bg d-flex align-items-center justify-content-center text-white shadow-none"
-                            style="width: 117px;">
-                            <div class="spinner-border loading d-none" role="status" style="width: 20px; height: 20px;">
-                            </div>
-                            <div class="text-btn-confirm">ยืนยันการจอง</div>
-                        </button>
-                    </div>
-                </div>
-                <input class="pre-value" type="hidden" name="room_id">
-                <input class="pre-value" type="hidden" name="checkin">
-                <input class="pre-value" type="hidden" name="checkout">
-                <input class="pre-value" type="hidden" name="days">
-                <input class="pre-value" type="hidden" name="price_per_date">
-            </form>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-    <div class="modal fade" id="dateform-s" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form onsubmit="return confirmBook(event)">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">ข้อมูลผู้จอง / รายละเอียด</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-12 mb-0">
-                            
-                                <div class="col-12 card mb-4 border-0">
-                                    <div class="row g-0 align-items-center">
-                                        <div class="col-12 p-3 pb-0">
-                                            <h6 class="text-secondary" style="font-size: 14px;">รายละเอียดการจอง</h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
-                                            <h6 class="text-prebook" style="font-size: 14px; font-weight: 300;"></h6>
-                                            <h5 class="text-prebook" style="font-weight: 500;"></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button onclick="closeModal()" type="button"
-                            class="btn-close-modal btn bg-secondary text-white shadow-none"
-                            data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit"
-                            class="btn btn-confirm custom-bg d-flex align-items-center justify-content-center text-white shadow-none"
-                            style="width: 117px;">
-                            <div class="spinner-border loading d-none" role="status" style="width: 20px; height: 20px;">
-                            </div>
+                        <button type="submit" class="btn btn-confirm custom-bg d-flex align-items-center justify-content-center text-white shadow-none" style="width: 117px;">
+                            <div class="spinner-border loading d-none" role="status" style="width: 20px; height: 20px;"></div>
                             <div class="text-btn-confirm">ยืนยันการจอง</div>
                         </button>
                     </div>

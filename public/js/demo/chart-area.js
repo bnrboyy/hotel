@@ -2,7 +2,7 @@
 Chart.defaults.global.defaultFontFamily = "Kanit";
 Chart.defaults.global.defaultFontColor = "#858796";
 
-function number_format(number, decimals, dec_point, thousands_sep) { //ไม่ได้เขียน
+function number_format(number, decimals, dec_point, thousands_sep) {
     // *     example: number_format(1234.56, 2, ',', ' ');
     // *     return: '1 234,56'
     number = (number + "").replace(",", "").replace(" ", "");
@@ -27,15 +27,12 @@ function number_format(number, decimals, dec_point, thousands_sep) { //ไม่
     return s.join(dec);
 }
 
-const roomsData = JSON.parse(
-    document.getElementById("data").getAttribute("roomsData")
-);
-const bookingsData = JSON.parse(
-    document.getElementById("data").getAttribute("bookingsData")
-);
-const bookingCompleteAll = JSON.parse(
-    document.getElementById("data").getAttribute("bookingCompleteAll")
-);
+const dataEl = document.getElementById("data");
+
+const roomsData = JSON.parse(dataEl.getAttribute("roomsData"))
+const bookingsData = JSON.parse(dataEl.getAttribute("bookingsData"))
+const bookingCompleteAll = JSON.parse(dataEl.getAttribute("bookingCompleteAll"))
+
 const mouthNumbers = [
     "01",
     "02",

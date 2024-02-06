@@ -146,92 +146,29 @@ function openBookForm(_id) {
     }
 }
 
-
-
-
-//ปฏิทิน
-function generateCalendar(year, month) {
-    const calendarContainer = document.getElementById('calendar');
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonth = new Date(year, month, 1).getDay();
-
-    let calendarHTML = '<table>';
-    calendarHTML += '<tr><th colspan="7">' + new Date(year, month, 1).toLocaleString('en-us', { month: 'long', year: 'numeric' }) + '</th></tr>';
-    calendarHTML += '<tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>';
-    
-    let dayCounter = 1;
-    for (let i = 0; i < 6; i++) {
-      calendarHTML += '<tr>';
-      for (let j = 0; j < 7; j++) {
-        if (i === 0 && j < firstDayOfMonth) {
-          calendarHTML += '<td></td>';
-        } else if (dayCounter <= daysInMonth) {
-          calendarHTML += '<td>' + dayCounter + '</td>';
-          dayCounter++;
-        } else {
-          calendarHTML += '<td></td>';
-        }
-      }
-      calendarHTML += '</tr>';
+function book(room_id) {
+    const isNullParams = someNullParam;
+    if (isNullParams || !date_checkout.value || !date_checkin.value) {
+        Swal.fire({
+            icon: "info",
+            text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",
+        }).then(() => {
+            return false;
+        });
+    } else {
+        console.log(`${bookingDetailsURL}${room_id}`);
+        window.location.href = `${bookingDetailsURL}${room_id}`;
     }
-
-    calendarHTML += '</table>';
-    calendarContainer.innerHTML = calendarHTML;
-  }
-
-  // ให้แสดงปฏิทินสำหรับเดือนและปีปัจจุบัน
-  const currentDate = new Date();
-  generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-
-
-
-
-// function book(room_id) {
-//     const isNullParams = someNullParam;
-//     if (isNullParams || !date_checkout.value || !date_checkin.value) {
-//         Swal.fire({
-//             icon: "info",
-//             text: "กรุณาเลือกวัน เช็คอิน - เช็คเอ้าท์",
-//         }).then(() => {
-//             return false;
-//         });
-//     } else {
-//         console.log(`${bookingDetailsURL}${room_id}`);
-//         window.location.href = `${bookingDetailsURL}${room_id}`;
-//     }
-// }
+}
 
 function confirmBook(event) {
     event.preventDefault();
-
- //รับค่า card_id มา
- const card_id = document.querySelector('input[name="card_id"]').value;
- 
-
- if(card_id.length >= 13) {
-
-     const four_id = card_id.slice(-4); //เอาเลข 4 ตัวท้ายมา
-
-     // ใส่ค่า four_id ลงใน <input> ที่มี name เป็น "four_id"
-     document.querySelector('input[name="four_id"]').value = four_id;
-
- }
- else {
-     console.log("ความยาวของ card_id ต้องไม่น้อยกว่า 13 ตัว");
-     alert("เลขบัตรประชาชนไม่ถูกต้อง");
-     document.querySelector('input[name="card_id"]').value = ''; // เคลียร์ค่าใน input
-return false;
-
- }
-
-
     const form = event.target;
     const formData = new FormData(form);
 
     loading.classList.remove('d-none')
     text_confirm.classList.add('d-none')
     btn_confirm.setAttribute('disabled', '')
-
 
     axios
         .post(`/admin/confirmbooking`, formData)

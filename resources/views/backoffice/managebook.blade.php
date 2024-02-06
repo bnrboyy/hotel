@@ -14,8 +14,7 @@
                         #รายการจองทั้งหมด
                     </h5>
                     <div class="col-2 mb-3">
-                        <select class="form-select select-booking-type shadow-none" id="admin-role" name="admin_role"
-                            style="cursor: pointer;">
+                        <select class="form-select select-booking-type shadow-none" id="admin-role" name="admin_role" style="cursor: pointer;">
                             <option value="all">รายการจองทั้งหมด</option>
                             <option value="online">จองแบบออนไลน์</option>
                             <option value="walk-in">จองแบบ Walk-in</option>
@@ -42,30 +41,20 @@
                     <tbody>
                         @foreach ($bookings as $booking)
                             <tr>
-                                <td style="width: 100px;">{{ $booking->booking_number }} <br> {{ $booking->booking_type }}
-                                </td>
+                                <td style="width: 100px;">{{ $booking->booking_number }} <br> {{ $booking->booking_type }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
                                 <td>{{ $booking->cus_phone }}</td>
                                 <td style="width: 200px;">
                                     <p>ห้อง : {{ $booking->room_name }}</p>
                                     <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
-                                    <p>ราคา/คืน : {{ $booking->price_per_date }} บาท</p>
                                     <p>ราคารวม : {{ $booking->price }} บาท</p>
                                 </td>
-                                <td style="width: 260px;">
-                                    <div class="checkdete">
-                                        <p>เช็คอิน : {{ $booking->date_checkin }}</p>
-
-                                        <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
-                                    </div>
+                                <td style="width: 200px;">
+                                    <p>เช็คอิน : {{ $booking->date_checkin }}</p>
+                                    <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
                                 </td>
-
-                                <td style="width: 230px;">
-                                    <div class="createAt">
-                                        <p>{{ $booking->created_at }}</p>
-                                    </div>
-                                </td>
+                                <td style="width: 120px;">{{ $booking->created_at }}</td>
                                 <td class="td-status">
                                     <span style="width: 112px;"
                                         class="badge rounded-pill d-flex align-items-center justify-content-between bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
@@ -124,30 +113,20 @@
                     <tbody>
                         @foreach ($booking_online as $booking)
                             <tr>
-                                <td style="width: 100px;">{{ $booking->booking_number }} <br> {{ $booking->booking_type }}
-                                </td>
+                                <td style="width: 100px;">{{ $booking->booking_number }} <br> {{ $booking->booking_type }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
                                 <td>{{ $booking->cus_phone }}</td>
                                 <td style="width: 200px;">
                                     <p>ห้อง : {{ $booking->room_name }}</p>
                                     <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
-                                    <p>ราคา/คืน : {{ $booking->price_per_date }} บาท</p>
                                     <p>ราคารวม : {{ $booking->price }} บาท</p>
                                 </td>
-                                <td style="width: 260px;">
-                                    <div class="checkdete">
-                                        <p>เช็คอิน : {{ $booking->date_checkin }}</p>
-
-                                        <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
-                                    </div>
+                                <td style="width: 200px;">
+                                    <p>เช็คอิน : {{ $booking->date_checkin }}</p>
+                                    <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
                                 </td>
-
-                                <td style="width: 230px;">
-                                    <div class="createAt">
-                                        <p>{{ $booking->created_at }}</p>
-                                    </div>
-                                </td>
+                                <td style="width: 120px;">{{ $booking->created_at }}</td>
                                 <td class="td-status">
                                     <span style="width: 112px;"
                                         class="badge rounded-pill d-flex align-items-center justify-content-between bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
@@ -206,31 +185,20 @@
                     <tbody>
                         @foreach ($booking_walkin as $booking)
                             <tr>
-                                <td style="width: 100px;">{{ $booking->booking_number }} <br>
-                                    {{ $booking->booking_type }}
-                                </td>
+                                <td style="width: 100px;">{{ $booking->booking_number }} <br> {{ $booking->booking_type }}</td>
                                 <td style="width: 100px;">{{ $booking->card_id }}</td>
                                 <td style="width: 200px;">{{ $booking->cus_fname . ' ' . $booking->cus_lname }}</td>
                                 <td>{{ $booking->cus_phone }}</td>
                                 <td style="width: 200px;">
                                     <p>ห้อง : {{ $booking->room_name }}</p>
                                     <p>จำนวนวันที่เข้าพัก : {{ $booking->days }} วัน</p>
-                                    <p>ราคา/คืน : {{ $booking->price_per_date }} บาท</p>
                                     <p>ราคารวม : {{ $booking->price }} บาท</p>
                                 </td>
-                                <td style="width: 260px;">
-                                    <div class="checkdete">
-                                        <p>เช็คอิน : {{ $booking->date_checkin }}</p>
-
-                                        <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
-                                    </div>
+                                <td style="width: 200px;">
+                                    <p>เช็คอิน : {{ $booking->date_checkin }}</p>
+                                    <p>เช็คเอาท์ : {{ $booking->date_checkout }}</p>
                                 </td>
-
-                                <td style="width: 230px;">
-                                    <div class="createAt">
-                                        <p>{{ $booking->created_at }}</p>
-                                    </div>
-                                </td>
+                                <td style="width: 120px;">{{ $booking->created_at }}</td>
                                 <td class="td-status">
                                     <span style="width: 112px;"
                                         class="badge rounded-pill d-flex align-items-center justify-content-between bg-{{ $booking->bg_color }}">{{ $booking->status_name }}
@@ -256,8 +224,8 @@
                                     <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2"
                                         style="height: 163px !important;">
                                         <button class="btn-modal btn btn-primary shadow-none" data-bs-toggle="modal"
-                                            onclick="getBooking(this, {{ $booking->id }})"
-                                            data-bs-target="#message-s"><i class="bi bi-eye-fill"></i></button>
+                                            onclick="getBooking(this, {{ $booking->id }})" data-bs-target="#message-s"><i
+                                                class="bi bi-eye-fill"></i></button>
                                         @if ($shareUser->admin_role === 'แอดมินสูงสุด' && false)
                                             <button class="btn btn-danger shadow-none"
                                                 onclick="deleteBook(this, {{ $booking->id }})"><i

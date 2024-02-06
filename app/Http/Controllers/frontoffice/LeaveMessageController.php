@@ -17,17 +17,10 @@ class LeaveMessageController extends Controller
             'email' => 'string|required',
             'subject' => 'string|required',
             'message' => 'string|required',
-            'g-recaptcha-response' => 'required|captcha', // เพิ่มตรวจสอบ reCAPTCHA response
         ]);
 
-        if ($validator->fails()|| empty($request->input('g-recaptcha-response'))) {
-            
-
-            return response([
-                'message' => 'error',
-                'status' => false,
-                'errorMessage' => 'reCAPTCHA',
-            ], 404);
+        if ($validator->fails()) {
+            return $this->sendErrorValidators('Invalid params', $validator->errors());
         }
 
         try {
